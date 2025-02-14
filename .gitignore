@@ -18,3 +18,4 @@ venv.bak/
 .vscode/
 *.env
 *.local
+migrations/
