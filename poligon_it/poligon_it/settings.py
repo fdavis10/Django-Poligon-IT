@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'fontawesomefree',
     'main.apps.MainConfig',
 ]
 
@@ -129,9 +130,9 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_URL='/poligon_it/static/'
+STATIC_URL='/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'poligon_it/static/'
+    BASE_DIR / 'static/'
 ]
 
 MEDIA_URL = 'media/'

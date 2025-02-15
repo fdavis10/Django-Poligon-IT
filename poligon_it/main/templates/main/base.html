@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    {% comment %} bootstrap {% endcomment %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    {% comment %} css {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% comment %} template css {% endcomment %}
+    {% block extra_css %}{% endblock extra_css %}
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script> 
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light top-navbar">
+    <div class="container">
+      <!-- Логотип -->
+      <a class="navbar-brand" href="/"><img src="{% static 'img/logo.png' %}"></a>
+  
+      <!-- Кнопка для мобильного меню -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Основное меню -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown megamenu">
+            <a class="nav-link dropdown-toggle" href="#" id="megaMenuToggle">
+                <i class="fa-solid fa-bars"></i> Каталог
+            </a>
+            <div class="dropdown-menu megamenu-content">
+                <div class="categories">
+                    <ul>
+                        {% for category in categories %}
+                            <li class="category-item" data-category-id="{{ category.id }}">
+                                {{ category.name }}
+                                {% if category.subcategory_1.all %}
+                                    <ul class="subcategory-group hidden">
+                                        {% for subcategory in category.subcategory_1.all %}
+                                            <li class="subcategory-item" data-subcategory-id="{{ subcategory.id }}">
+                                                {{ subcategory.name }}
+                                                {% if subcategory.parent_subcategory.all %}
+                                                    <ul class="subsubcategory-group hidden">
+                                                        {% for subsubcategory in subcategory.parent_subcategory.all %}
+                                                            <li>{{ subsubcategory.name }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Гарантии</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">О нас</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Контакты</a>
+          </li>
+        </ul>
+
+        <!-- Контейнер для поиска и иконок -->
+        <div class="container-search-icons">
+          <!-- Блок "Избранное", "Сравнение", "Корзина" -->
+          <div class="navbar-side">
+            <ul class="navbar-nav icons-nav">
+              <li class="nav-item nav-item-icons">
+                <a href="#" class="nav-link">
+                  <i class="fa-regular fa-heart"></i>
+                </a>
+              </li>
+              <li class="nav-item nav-item-icons">
+                <a href="#" class="nav-link">
+                  <i class="fa-solid fa-chart-column"></i>
+                </a>
+              </li>
+              <li class="nav-item nav-item-icons">
+                <a href="#" class="nav-link">
+                  <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- Поисковое поле -->
+          <form class="d-flex search-form">
+            <input class="form-control me-2" type="search" placeholder="Начните искать..." aria-label="Search">
+            <button id="search-form-btn" class="btn btn-outline-success search-btn" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+  {% endblock content %}
+  {% comment %} script bootstrap {% endcomment %}
+  <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/find.js' %}"></script>
+  <script src="{% static 'js/catalog-toggle.js' %}"></script>
+  <script src="{% static 'js/catalog-menu.js' %}"></script>
+</body>
+</html>
