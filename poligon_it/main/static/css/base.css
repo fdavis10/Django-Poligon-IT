@@ -154,17 +154,18 @@ h5{
 
 .subsubcategory-group {
     position: absolute;
-    left: 100%;
+    left: 150px;
     top: 0;
-    width: 200px;
+    width: 250px;
     background: white;
     border: 1px solid #ddd;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .categories {
-    width: 150px;
-    border-right: 1px solid #ddd;
+    min-width: 200px;
+    /* width: 150px;
+    border-right: 1px solid #ddd; */
 }
 
 .categories ul {
@@ -194,6 +195,14 @@ h5{
 
 .subcategories li {
     padding: 10px;
+}
+
+.main-container {
+    width: 100%;
+    max-width: 1320px;
+    margin: auto;
+    margin-top: 50px;
+    padding: 20px;
 }
 
 

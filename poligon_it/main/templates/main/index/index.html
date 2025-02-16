@@ -1,2 +1,30 @@
 {% extends 'main/base.html' %}
 {% load static %}
+
+{% block title %}Главная - Poligon IT{% endblock %}
+
+{% block content %}
+<div class="slider-container">
+    <div class="slider">
+        <img src="{% static 'img/img2.png' %}" alt="img2" class="slide">
+        <img src="{% static 'img/img3.png' %}" alt="img3" class="slide">
+        <img src="{% static 'img/img4.png' %}" alt="img4" class="slide">
+    </div>
+</div>
+
+<div class="category-carousel-container">
+    <button class="carousel-btn left" id="prevBtn">&#10094;</button>
+    <div class="category-carousel" id="carousel">
+        {% for category  in categories  %}
+        <a href="{{category.get_absolute_url}}">
+            <div class="category-item-carousel">{{category.name}}</div>
+        </a>
+        {% endfor %}
+    </div>
+    <button class="carousel-btn right" id="nextBtn">&#10095;</button>
+</div>
+
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<script src="{% static 'js/index.js' %}"></script>
+<script src="{% static 'js/slider.js' %}"></script>
+{% endblock content %}
