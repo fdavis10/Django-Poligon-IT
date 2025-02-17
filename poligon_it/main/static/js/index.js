@@ -26,5 +26,27 @@ document.addEventListener("DOMContentLoaded", function () {
         slider.style.transform = `translateX(-${index * 100}%)`;
     }
 
-    setInterval(nextSlide, 5000);
+    setInterval(nextSlide, 10000);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    new Swiper(".swiper-container", {
+        slidesPerView: 5, 
+        spaceBetween: 0, 
+        loop: true,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            320: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1320: { slidesPerView: 4 },
+        }
+    });
 });

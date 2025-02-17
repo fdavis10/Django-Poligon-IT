@@ -57,10 +57,25 @@ h5{
     background-color: #0056b3;
 } */
 
+
+.container{
+    max-width: 1400px !important;
+    margin: 0 auto;
+}
+
 .container-search-icons {
     display: flex;
     align-items: center;
     width: auto;
+}
+
+.container-custom-nav {
+    width: 1400px;
+    margin: 0 auto;
+}
+
+.navbar {
+    width: 100%;
 }
 
 .navbar-side {
@@ -69,6 +84,7 @@ h5{
 }
 
 .top-navbar{
+    background-color: #ffff;
     border-bottom: 1px solid #C4CDD5;
 }
 
@@ -115,9 +131,10 @@ h5{
     gap: 15px;
 }
 
-#catalogDropdown::after {
+.dropdown-toggle::after {
     display: none !important;
 }
+
 
 .hidden {
     display: none;

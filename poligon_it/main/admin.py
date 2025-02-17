@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Subcategory_1, Subcategory_2, Product, Specifications, ProductSpecification, Galery
+from .models import Category, Subcategory_1, Subcategory_2, Product, Specifications, ProductSpecification
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -36,9 +36,3 @@ class SpecificationsAdmin(admin.ModelAdmin):
 class ProductSpecificationAdmin(admin.ModelAdmin):
     list_display = ('product', 'specification', 'value')
     search_fields = ('product__name', 'specification__name', 'value')
-
-@admin.register(Galery)
-class GalaryAdmin(admin.ModelAdmin):
-    list_display = ('product', 'image', 'is_main')
-    list_filter = ('is_main',)
-    search_fields = ('product__name',)

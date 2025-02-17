@@ -57,6 +57,9 @@ class Subcategory_2(models.Model):
     
     
 class Product(models.Model):
+    image_1 = models.ImageField(upload_to='product/', blank=False, null=False, default='default.webp')
+    image_2 = models.ImageField(upload_to='product/', blank=True, default='default.webp')
+    image_3 = models.ImageField(upload_to='product/', blank=True, default='default.webp')
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     subcategory_1 = models.ForeignKey(Subcategory_1, related_name='product_sub', on_delete=models.CASCADE, blank=True, null=True)
     subcategory_2 = models.ForeignKey(Subcategory_2, related_name='product_sub_cat', on_delete=models.CASCADE, blank=True, null=True)
@@ -96,17 +99,3 @@ class ProductSpecification(models.Model):
     class Meta:
         verbose_name = 'Характеристики Товара'
         verbose_name_plural = 'Характеристики Товара'
-
-class Galery(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='product_images/')
-    is_main = models.BooleanField(default=False) # Флаг для главного изображения
-
-    class Meta:
-        ordering = ['-is_main']
-        verbose_name = 'Изображение товара'
-        verbose_name_plural = 'Изображение товаров'
-
-
-    def __str__(self):
-        return f'Image of product >> {self.product.name}'
