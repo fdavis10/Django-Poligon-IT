@@ -1,2 +1,0 @@
-# Django-Poligon-IT
-Reserve
