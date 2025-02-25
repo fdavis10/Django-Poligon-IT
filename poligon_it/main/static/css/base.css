@@ -66,6 +66,7 @@ h5{
     font-weight: 600;
 }
 
+
 .container-fluid{
     font-weight: 600;
 }
@@ -90,6 +91,7 @@ h5{
 
 
 .search-input {
+    border-radius: 30px;
     width: 0;
     opacity: 0;
     transition: width 0.4s ease, opacity 0.4s ease;
@@ -100,3 +102,29 @@ h5{
     width: 200px; 
     opacity: 1;
   }
+
+.button-search{
+    display: flex;
+    border-color: #707070;
+    height: 38px;
+    width: 38px;
+    border-radius: 30px;
+    color: rgb(70, 70, 70);
+    justify-content: center;
+    align-items: center;
+}
+
+.button-search:hover{
+    background-color: rgb(73, 167, 250);
+    border-color: rgb(73, 167, 250);
+}
+
+.button-search:active{
+    background-color: rgb(73, 167, 250) !important;
+    border-color: rgb(73, 167, 250) !important;
+}
+
+.topnavbar{
+    background-color: white;
+    border-bottom: 2px solid #b3b3b3;
+}

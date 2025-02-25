@@ -81,7 +81,7 @@ class Product(models.Model):
         return f'{self.name} >> {self.category}'
     
     def get_absolute_url(self):
-        return reverse("detail_product", args=[self.slug])
+        return reverse("main:detail_product", args=[self.slug])
     
 class Specifications(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

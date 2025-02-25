@@ -10,7 +10,7 @@ def navigation(request):
 
 def index_page(request):
     categories = Category.objects.all()
-    products = Product.objects.all()
+    products = Product.objects.all()[:8]
     return render(request, 'main/index/index.html', {
         'products': products,
         'categories': categories
