@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Category, Subcategory_1, Subcategory_2, Product, Specifications, ProductSpecification
+from .models import Category, Subcategory_1, Subcategory_2, Product
+from django_json_widget.widgets import JSONEditorWidget
+from django.db import models
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -25,14 +28,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('category', 'available', 'created', 'updated',)
     search_fields = ('name', 'descriprion', 'category__name')
     prepopulated_fields = {'slug':('name',)}
+    formfield_overrides = {
+        models.JSONField: {'widget': JSONEditorWidget},
+    }
+    
 
-@admin.register(Specifications)
-class SpecificationsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category')
-    list_filter = ('category',)
-    search_fields = ('name', 'category__name')
-
-@admin.register(ProductSpecification)
-class ProductSpecificationAdmin(admin.ModelAdmin):
-    list_display = ('product', 'specification', 'value')
-    search_fields = ('product__name', 'specification__name', 'value')

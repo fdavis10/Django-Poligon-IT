@@ -1,0 +1,87 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Товар - {{product.name}}{% endblock title %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/detail_product.css' %}">{% endblock extra_css %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="main-image-box">
+                <img id="main-image" src="{{product.image_1.url}}" class="img-fluid product-image" alt="Товар">
+            </div>
+            <div class="thumbnail-images mt-2">
+                <img src="{{product.image_1.url}}" class="img-thumbnail" onclick="changeImage(this)">
+                <img src="{{product.image_2.url}}" class="img-thumbnail" onclick="changeImage(this)">
+                <img src="{{product.image_3.url}}" class="img-thumbnail" onclick="changeImage(this)">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h1 class="product-title">{{product.name}}</h1>
+            <p class="product-code">Код товара: 36775998</p>
+            <div class="product-price-box p-3 border rounded">
+                <h2 class="product-price">{{product.price}} ₽</h2>
+                <button class="btn btn-primary w-100">В корзину</button>
+                <button class="btn btn-light w-100 mt-2">Быстрый заказ</button>
+            </div>
+            <div class="additional_func p-3">
+                <a href="#" class="favorite_ico">
+                    <i class="fa-regular fa-heart"></i>
+                    В избранное
+                </a>
+                <a href="#" class="diagram_ico" style="margin-left: 20px;">
+                    <i class="fa-solid fa-chart-column"></i>
+                    Добавить в сравнение
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2>Описание и характеристики</h2>
+        <p>{{product.description}}</p>
+    </div>
+    <div class="info-section">
+        <h2>Технические характеристики</h2>
+        <ul>
+            {% for key, value in product.specifications.items %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% empty %}
+                <li>Характеристики не добавлены</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="info-section">
+        <h2>Комплекатция</h2>
+        <ul>
+            {% for key, value in product.complectation.items %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% empty %}
+                <li>Комплектация не добавлена</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="info-section">
+        <h2>Документация</h2>
+        <ul>
+            {% if product.certificate_diller %}
+                <li><a href="{{product.certificate_diller.url}}">Сертификат дилера</a></li>
+            {% else %}
+                <li>Сертификат дилера не добавлен</li>
+            {% endif %}
+            {% if product.guarantee %}
+                <li><a href="{{product.guarantee.url}}">Гарантийный талон</a></li>
+            {% else %}
+                <li> Гарантийный талон не добавлен</li>
+            {% endif %}
+            <li><a href="#">Скачать всю документацию</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function changeImage(element) {
+        document.getElementById('main-image').src = element.src;
+    }
+</script>
+{% endblock content %}

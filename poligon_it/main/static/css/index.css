@@ -35,6 +35,12 @@
     transition: transform 0.3s ease-in-out;
 }
 
+.category-box img{
+    width: 200px;
+    height: 100px;
+}
+
+
 .prev-btn, .next-btn {
     position: absolute;
     top: 50%;

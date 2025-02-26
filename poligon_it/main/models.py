@@ -66,6 +66,10 @@ class Product(models.Model):
     name = models.CharField(max_length=300, db_index=True)
     slug = models.SlugField(max_length=400, db_index=True, unique=True)
     description = models.TextField(max_length=500)
+    specifications = models.JSONField(default=dict, blank=True, verbose_name='Технические характеристики')
+    complectation = models.JSONField(default=dict, blank=True, verbose_name='Комлектация товара')
+    certificate_diller = models.FileField(upload_to='certificates/', blank=True, null=True, verbose_name='Сертификат диллера')
+    guarantee = models.FileField(upload_to='guaranties/', blank=True, null=True, verbose_name='Гарантия товара')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)
     available_quantity = models.DecimalField(max_digits=10, decimal_places=1, default=0)
@@ -83,19 +87,19 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("main:detail_product", args=[self.slug])
     
-class Specifications(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+# class Specifications(models.Model):
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=255)
 
-    class Meta:
-        verbose_name = 'Характеристики'
-        verbose_name_plural = 'Характеристики'
+#     class Meta:
+#         verbose_name = 'Характеристики'
+#         verbose_name_plural = 'Характеристики'
 
-class ProductSpecification(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    specification = models.ForeignKey(Specifications, on_delete=models.CASCADE)
-    value = models.CharField(max_length=150)
+# class ProductSpecification(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     specification = models.ForeignKey(Specifications, on_delete=models.CASCADE)
+#     value = models.CharField(max_length=150)
 
-    class Meta:
-        verbose_name = 'Характеристики Товара'
-        verbose_name_plural = 'Характеристики Товара'
+#     class Meta:
+#         verbose_name = 'Характеристики Товара'
+#         verbose_name_plural = 'Характеристики Товара'

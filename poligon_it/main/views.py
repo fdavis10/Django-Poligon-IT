@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Product, Category, Subcategory_1, Subcategory_2, ProductSpecification
+from .models import Product, Category, Subcategory_1, Subcategory_2
 
 
 def navigation(request):
@@ -51,10 +51,12 @@ def product_list_by_sub_subcategory(request, slug):
 
 def detail_product(request, slug):
     product = get_object_or_404(Product, slug=slug, available = True)
+    categories = Category.objects.prefetch_related('subcategory_1', 'subcategory_1__parent_subcategory').all()
     
     # add cart add form
 
     return render(request, 'main/products/detail_product.html', {
-        'product': product
+        'product': product,
+        'categories': categories
     })
     

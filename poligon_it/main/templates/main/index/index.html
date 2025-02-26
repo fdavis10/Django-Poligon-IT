@@ -26,8 +26,7 @@
             {% for category in categories %}
                 <a href="{{category.get_absolute_url}}" class="category_url">
                     <div class="category-box text-center">
-                        <p class="m-0">{{ category.name }}</p>
-                        <p>Здесь будет картинка</p>
+                        <p class="m-0 category_name">{{ category.name }}</p>
                     </div>
                 </a>
             {% endfor %}
