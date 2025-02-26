@@ -6,6 +6,7 @@ app_name = 'main'
 
 urlpatterns = [
     path('', views.index_page, name="index_page"),
+    path('about_us/', views.about_us, name='about_us'),
     path('category/<slug:slug>/', views.product_list_by_category, name='product_list_by_category'),
     path('subcategory/<slug:slug>', views.product_list_by_subcategory, name='product_list_by_subcategory'),
     path('sub_subcategory/<slug:slug>/', views.product_list_by_sub_subcategory, name='product_list_by_sub_subcategory'),

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Product, Category, Subcategory_1, Subcategory_2
+from django.db.models import Q
 
 
 def navigation(request):
@@ -7,6 +8,14 @@ def navigation(request):
     return render(request, 'base.html', {
         'categories': categories
     })
+
+def about_us(request):
+    categories = Category.objects.prefetch_related('subcategory_1', 'subcategory_1__parent_subcategory').all()
+    return render(request, 'main/index/about_us.html',
+                  {
+                      'categories': categories
+                  })
+
 
 def index_page(request):
     categories = Category.objects.all()
@@ -17,11 +26,36 @@ def index_page(request):
         })
 
 def product_list_by_category(request, slug):
+    categories = Category.objects.prefetch_related('subcategory_1', 'subcategory_1__parent_subcategory').all()
     category = get_object_or_404(Category, slug=slug)
     products = Product.objects.filter(category=category, available=True)
+
+    filters = {}
+    for product in products:
+        if isinstance(product.specifications, dict):
+            for key, value in product.specifications.items():
+                if key not in filters:
+                    filters[key] = set()
+                filters[key].add(str(value))
+    filters = {key: list(values) for key, values in filters.items()}
+
+    print('Параметры запроса:', request.GET)
+
+    query = Q()
+    for key in filters.keys():
+        selected_values = request.GET.getlist(key)
+        if selected_values:
+            for value in selected_values:
+                query |= Q(specifications__contains={key: value})
+
+    if query:
+        products = products.filter(query)
+
     return render(request, 'main/products/category_list.html', {
         'category': category,
-        'products': products
+        'products': products,
+        'filters': filters,
+        'categories': categories,
     })
 
 def product_list_by_subcategory(request, slug):

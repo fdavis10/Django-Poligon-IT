@@ -1,10 +1,20 @@
+* {
+    box-sizing: border-box;
+}
+
+.container_products {
+    display: block; 
+}
+
 .cards_wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+    align-items: stretch;
 }
 
 .card {
+    width: 250px;
     background: #fff;
     border-radius: 10px;
     padding: 15px;
@@ -85,3 +95,27 @@
 .card__func a:hover{
     color: #666666;
 }
+
+.filter-container {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.filter-box {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.filter-box label {
+    font-weight: bold;
+}
+
+.form-check {
+    margin-bottom: 5px;
+}
+
