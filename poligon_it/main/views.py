@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Product, Category, Subcategory_1, Subcategory_2
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Product, Category, Subcategory_1, Subcategory_2, Favorite
 from django.db.models import Q
+from django.http import JsonResponse
 
 
 def navigation(request):
@@ -16,8 +17,37 @@ def about_us(request):
                       'categories': categories
                   })
 
+def get_session_key(request):
+    if not request.session.session_key:
+        request.session.save()
+    return request.session.session_key
+
+
+def add_to_favorites(request, product_id):
+    session_key = get_session_key(request)
+    product = get_object_or_404(Product, id=product_id)
+    Favorite.objects.get_or_create(session_key=session_key, product=product)
+    return redirect('main:index_page')
+
+def remove_from_favorites(request, product_id):
+    session_key = get_session_key(request)
+    product = get_object_or_404(Product, id=product_id)
+    Favorite.objects.filter(session_key=session_key, product=product).delete()
+    return redirect('main:index_page')
+
+def clear_favorites(request):
+    if 'favorites' in request.session:
+        del request.session['favorites']
+        request.session.modified = True
+    return redirect('main:index_page')
+
+def favorites_list(request):
+    session_key = get_session_key(request)
+    favorites = Product.objects.filter(favorite__session_key=session_key)
+    return render(request, 'main/products/favorites.html', {'favorites':favorites})
 
 def index_page(request):
+    session_key = get_session_key(request)
     categories = Category.objects.all()
     products = Product.objects.all()[:8]
     return render(request, 'main/index/index.html', {
@@ -93,4 +123,3 @@ def detail_product(request, slug):
         'product': product,
         'categories': categories
     })
-    

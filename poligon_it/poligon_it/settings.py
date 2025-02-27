@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_json_widget',
     'fontawesomefree',
     'main.apps.MainConfig',
+    'cart.apps.CartConfig',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +68,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'cart.context_processors.cart_item_count',
+                'main.context_processors.favorites_processor'
             ],
         },
     },
@@ -140,3 +143,7 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
+CART_SESSION_ID = 'cart'
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'  
+SESSION_COOKIE_AGE = 86400  

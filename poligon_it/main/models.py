@@ -87,19 +87,11 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("main:detail_product", args=[self.slug])
     
-# class Specifications(models.Model):
-#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=255)
 
-#     class Meta:
-#         verbose_name = 'Характеристики'
-#         verbose_name_plural = 'Характеристики'
 
-# class ProductSpecification(models.Model):
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     specification = models.ForeignKey(Specifications, on_delete=models.CASCADE)
-#     value = models.CharField(max_length=150)
+class Favorite(models.Model):
+    session_key = models.CharField(max_length=64, db_index=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
-#     class Meta:
-#         verbose_name = 'Характеристики Товара'
-#         verbose_name_plural = 'Характеристики Товара'
+    class Meta:
+        unique_together = ('session_key', 'product')
