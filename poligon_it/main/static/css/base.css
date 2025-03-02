@@ -25,6 +25,10 @@
 }
 
 
+html{
+    height: 100%;
+}
+
 body{
     font-family: "PT Sans", serif;
     font-weight: 400;
@@ -33,6 +37,9 @@ body{
     padding: 0;
     margin: 0;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 
@@ -66,6 +73,9 @@ h5{
     font-weight: 600;
 }
 
+.container{
+    flex: 1;
+}
 
 .container-fluid{
     font-weight: 600;

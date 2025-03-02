@@ -8,42 +8,47 @@
 
 
 {% block content %}
-
-<header class="bg-primary text-white text-center py-4">
-    <h1>О компании Import-Telecom</h1>
+<header class="hero-section">
+    <div class="overlay"></div>
+    <div class="hero-text">
+        <h1>Добро пожаловать в Re-Agent</h1>
+        <p>Лидер в области химических реагентов и оборудования</p>
+        <a href="#about" class="btn btn-primary">Узнать больше</a>
+    </div>
 </header>
 
-<section class="container mt-5">
-    <div class="row align-items-center">
-        <div class="col-md-6">
-            <h2>Кто мы?</h2>
-            <p>Компания Import-Telecom – ваш надежный партнер в сфере телекоммуникационных решений. Мы предлагаем широкий ассортимент продукции, включая телекоммуникационные шкафы, сетевое оборудование и аксессуары.</p>
-            <p>Благодаря многолетнему опыту и высокому уровню сервиса, мы успешно сотрудничаем с ведущими компаниями по всей России.</p>
-        </div>
-        <div class="col-md-6 text-center">
-            <img src="/static/images/about_us.jpg" alt="О нас" class="img-fluid rounded shadow">
-        </div>
-    </div>
+<section id="about" class="container py-5">
+    <h2 class="text-center mb-4">О компании</h2>
+    <p>Компания Re-Agent занимается поставками качественных химических реагентов для различных отраслей промышленности. Мы работаем с надежными партнерами и гарантируем высокие стандарты качества.</p>
 </section>
 
-<section class="container mt-5">
-    <div class="row text-center">
-        <div class="col-md-4">
-            <i class="fa-solid fa-network-wired fa-3x text-primary"></i>
-            <h4 class="mt-3">Широкий ассортимент</h4>
-            <p>Более 1000 товаров в каталоге, включая телекоммуникационные шкафы, стойки и аксессуары.</p>
-        </div>
-        <div class="col-md-4">
-            <i class="fa-solid fa-truck-fast fa-3x text-primary"></i>
-            <h4 class="mt-3">Оперативная доставка</h4>
-            <p>Мы обеспечиваем быструю доставку по всей России, используя надежные транспортные компании.</p>
-        </div>
-        <div class="col-md-4">
-            <i class="fa-solid fa-user-shield fa-3x text-primary"></i>
-            <h4 class="mt-3">Гарантия качества</h4>
-            <p>Вся продукция сертифицирована и проходит строгий контроль качества.</p>
+<section class="features py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <img src="/static/images/quality.png" alt="Качество">
+                    <h3>Высокое качество</h3>
+                    <p>Мы обеспечиваем строгий контроль качества всех поставляемых реагентов.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <img src="/static/images/delivery.png" alt="Доставка">
+                    <h3>Быстрая доставка</h3>
+                    <p>Мы оперативно доставляем продукцию по всей стране.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <img src="/static/images/support.png" alt="Поддержка">
+                    <h3>Круглосуточная поддержка</h3>
+                    <p>Наши специалисты всегда готовы помочь вам.</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+<script src="js/about.js"></script>
 
 {% endblock content %}

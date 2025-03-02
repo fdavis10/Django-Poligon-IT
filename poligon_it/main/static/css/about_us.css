@@ -1,44 +1,33 @@
-.about-header {
-    background: #3e7fc5;
-    color: white;
-    padding: 40px 20px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.about-section {
-    display: flex;
-    align-items: center;
-    padding: 40px 20px;
-}
-
-.about-text {
-    flex: 1;
-    padding: 20px;
-    font-size: 18px;
-    line-height: 1.6;
-}
-
-.about-text h2 {
-    color: #0056b3;
-    font-weight: bold;
-}
-
-.about-icons {
+.hero-section {
+    background: url('/static/images/hero-bg.jpg') center/cover no-repeat;
+    height: 80vh;
     display: flex;
     justify-content: center;
-    gap: 40px;
-    margin-top: 20px;
-}
-
-.about-icons div {
+    align-items: center;
+    position: relative;
+    color: white;
     text-align: center;
-    max-width: 200px;
 }
 
-.about-icons i {
-    font-size: 40px;
-    color: #0056b3;
-    margin-bottom: 10px;
+.hero-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-text {
+    position: relative;
+    z-index: 1;
+}
+
+.feature-box {
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: scale(1.1);
 }

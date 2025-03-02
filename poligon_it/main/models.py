@@ -90,7 +90,7 @@ class Product(models.Model):
 
 
 class Favorite(models.Model):
-    session_key = models.CharField(max_length=64, db_index=True)
+    session_key = models.CharField(max_length=1024, db_index=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     class Meta:

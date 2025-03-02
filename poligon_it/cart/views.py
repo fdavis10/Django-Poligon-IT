@@ -15,6 +15,18 @@ def cart_add(request, product_id):
     return redirect('cart:cart_detail')
 
 @require_POST
+def cart_update(request, product_id):
+    cart = Cart(request)
+    product = Product.objects.get(id=product_id)
+    action = request.POST.get('action')
+    if action == 'increase':
+        cart.add(product=product, quantity=1)
+    elif action == 'decrease':
+        cart.add(product=product, quantity=-1)
+    return redirect('cart:cart_detail')
+
+
+@require_POST
 def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id = product_id)
@@ -23,5 +35,6 @@ def cart_remove(request, product_id):
 
 def cart_detail(request):
     cart = Cart(request)
+    cart_items = list(cart)
     total_price = sum(item['quantity'] * item['product'].price for item in cart)
-    return render(request, 'cart/cart_detail.html', {'cart':cart})
+    return render(request, 'cart/cart_detail.html', {'cart_items':cart_items, 'total_price':total_price})

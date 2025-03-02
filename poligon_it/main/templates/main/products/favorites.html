@@ -11,13 +11,13 @@
 <div class="container mt-4">
     <h2 class="mt-3">Избранное</h2>
 
-    <!-- Кнопка для очистки избранного -->
+    {% comment %} <!-- Кнопка для очистки избранного -->
     {% if favorites %}
     <form action="{% url 'main:clear_favorites' %}" method="post" class="mb-3">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Очистить избранное</button>
     </form>
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <div class="row">
         <div class="col-md-3">
