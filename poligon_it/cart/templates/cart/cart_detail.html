@@ -3,6 +3,9 @@
 {% block title %}
 Корзина - Re-Agent
 {% endblock title %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart_detail.css' %}">
+{% endblock extra_css %}
 {% block content %}
 <div class="container mt-4">
     <h2 class="mb-4">Корзина</h2>
@@ -11,16 +14,9 @@
         <!-- Левая колонка: список товаров -->
         <div class="col-md-8">
             <div class="card p-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <input type="checkbox" class="form-check-input"> <span>Выделить все</span>
-                    <button class="btn btn-danger btn-sm">Удалить выбранные</button>
-                </div>
                 <hr>
                 {% for item in cart_items %}
                 <div class="row align-items-center border-bottom py-3">
-                    <div class="col-md-2 text-center">
-                        <input type="checkbox" class="form-check-input">
-                    </div>
                     <div class="col-md-2">
                         <img src="{{ item.product.image_1.url }}" alt="{{ item.product.name }}" class="img-fluid">
                     </div>
@@ -42,7 +38,7 @@
                         <strong>{{ item.total_price }} ₽</strong>
                         <form action="{% url 'cart:cart_remove' item.product.id %}" method="post" class="mt-2">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                            <button type="submit" class="btn btn-danger btn-sm button-delete">Удалить</button>
                         </form>
                     </div>
                 </div>
@@ -56,7 +52,7 @@
             <div class="card p-3">
                 <h4>Итого</h4>
                 <p><strong>{{ total_price }} ₽</strong></p>
-                <button class="btn btn-danger btn-lg w-100">Оформить заказ</button>
+                <button class="btn btn-danger btn-lg w-100 button-order">Оформить заказ</button>
             </div>
         </div>
     </div>

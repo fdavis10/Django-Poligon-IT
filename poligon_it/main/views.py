@@ -4,6 +4,11 @@ from django.db.models import Q
 from django.http import JsonResponse
 
 
+def search_result(request):
+    query = request.GET.get('q', '')
+    results = Product.objects.filter(name__icontains=query) if query else []
+    return render(request, 'main/products/search_results.html', {'query':query, 'results': results})
+
 def navigation(request):
     categories = Category.objects.prefetch_related('subcategory_1', 'subcategory_1__parent_subcategory').all()
     return render(request, 'base.html', {

@@ -125,13 +125,13 @@ h5{
 }
 
 .button-search:hover{
-    background-color: rgb(73, 167, 250);
-    border-color: rgb(73, 167, 250);
+    background-color: rgb(35 65 148);
+    border-color: rgb(35 65 148);
 }
 
 .button-search:active{
-    background-color: rgb(73, 167, 250) !important;
-    border-color: rgb(73, 167, 250) !important;
+    background-color: rgb(35 65 148) !important;
+    border-color: rgb(35 65 148) !important;
 }
 
 .topnavbar{
@@ -159,10 +159,25 @@ h5{
 }
 
 .navbar a {
-    color: #6c757d; /* стандартный серый цвет Bootstrap */
+    color: #6c757d; 
     transition: color 0.1s ease-in-out;
 }
 
 .navbar a:hover {
-    color: #0d6efd; /* Цвет, как у Bootstrap-ссылок при наведении */
+    color: rgb(35 65 148); 
+}
+
+.button-subcribe{
+    border: none;
+    background-color: rgb(35 65 148);
+}
+
+.button-subcribe:hover{
+    border: none;
+    background-color: rgb(25, 47, 105);
+}
+
+.button-subcribe:active{
+    border: none;
+    background-color: rgb(25, 47, 105) !important;
 }

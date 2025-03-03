@@ -1,0 +1,29 @@
+.button-delete{
+    border: none;
+    background-color: rgb(35 65 148);
+}
+
+.button-delete:hover{
+    border: none;
+    background-color: rgb(25, 47, 105);
+}
+
+.button-delete:active{
+    border: none;
+    background-color: rgb(25, 47, 105) !important;
+}
+
+.button-order{
+    border: none;
+    background-color: rgb(35 65 148);
+}
+
+.button-order:hover{
+    border: none;
+    background-color: rgb(25, 47, 105);
+}
+
+.button-order:active{
+    border: none;
+    background-color: rgb(25, 47, 105) !important;
+}
