@@ -31,6 +31,30 @@ def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id = product_id)
     cart.remove(product)
+    removed_items = request.session.get('removed_items', [])
+    removed_items.append({'id':product.id, 'name':product.name, 'price':float(product.price)})
+    request.session['removed_items'] = removed_items
+    request.session.modified = True
+    return redirect('cart:cart_detail')
+
+
+@require_POST
+def cart_restore(request, product_id):
+    cart = Cart(request)
+    removed_items = request.session.get('removed_items', [])
+    restored_item = None
+    for item in removed_items:
+        if item['id'] == product_id:
+            restored_item = item
+            break
+    if restored_item:
+        product = get_object_or_404(Product, id=restored_item['id'])
+        cart.add(product=product, quantity=1)
+        removed_items.remove(restored_item)
+
+    request.session['removed_items'] = removed_items
+    request.session.modified = True
+    
     return redirect('cart:cart_detail')
 
 def cart_detail(request):

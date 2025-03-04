@@ -46,13 +46,27 @@
                 <p class="text-center">Ваша корзина пуста.</p>
                 {% endfor %}
             </div>
+            {% if request.session.removed_items %}
+                <h3>Недавно удаленные товары</h3>
+                <ul>
+                    {% for item in request.session.removed_items %}
+                        <li>
+                            {{ item.name }} - {{ item.price }} ₽
+                            <form action="{% url 'cart:cart_restore' item.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-sm">Вернуть</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
         <!-- Правая колонка: итог и оформление -->
         <div class="col-md-4">
             <div class="card p-3">
                 <h4>Итого</h4>
                 <p><strong>{{ total_price }} ₽</strong></p>
-                <button class="btn btn-danger btn-lg w-100 button-order">Оформить заказ</button>
+                <button class="btn btn-danger btn-lg w-100 button-order"><a href="{% url "orders:order_create" %}">Оформить заказ</a></button>
             </div>
         </div>
     </div>

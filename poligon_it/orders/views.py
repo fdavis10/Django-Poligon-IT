@@ -6,25 +6,32 @@ from cart.cart import Cart
 
 def order_create(request):
     cart = Cart(request)
-    if request.method == "POST":
-        form = OrderCreateForm(request.POST, request=request)
-        if form.is_valid():
-            order = form.save()
-            for item in cart:
-                product = item['product']
-                price = product.price
-                OrderItem.objects.create(
-                    order=order,
-                    product = item['product'],
-                    price = price,
-                    quantity = item['quantity']
-                )
-            cart.clear()
-            request.session['order_id'] = order.id
-            return redirect(reverse 'payment:process')
-        else:
-            form OrderCreateForm(request = request)
-        return render(request,
-                      'orders/order/create.html',
-                      {'cart':cart,
-                       'form':form})
+    form = OrderCreateForm(request.POST or None, request=request)
+
+    if request.method == "POST" and form.is_valid():
+        order = form.save()
+        order_items = []
+        print(f'Заказ успешно создан: {order.id}')
+        for item in cart:
+            product = item['product']
+            price = product.price
+            order_item = OrderItem.objects.create(
+                order=order,
+                product = item['product'],
+                price = price,
+                quantity = item['quantity']
+            )
+            order_items.append(order_item)
+        cart.clear()
+        request.session['order_id'] = order.id
+        return render(request, 'orders/order/checkout.html',{
+            'order': order,
+            'order_items': order_items,
+            'cart': cart
+        })
+    else:
+        print(f'В форме создания заказа ошибка: {form.errors}')
+    return render(request,
+                    'orders/order/create.html',
+                    {'cart':cart,
+                    'form':form})

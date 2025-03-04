@@ -3,14 +3,24 @@ from main.models import Product
 from django.conf import settings
 
 class Order(models.Model):
-    first_name = models.CharField(max_length=50, verbose_name='Имя клиента')
-    last_name = models.CharField(max_lenght=50, verbose_name='Фамилия клиента')
-    email = models.EmailField(verbose_name='Почта клиента')
-    city = models.CharField(max_length=100, verbose_name='Город клиента')
-    address = models.CharField(max_length=250, verbose_name='Адрес клиента')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
-    updated = models.DateTimeField(auto_now=True, verbose_name='Изменен')
-    is_paid = models.BooleanField(default=False, verbose_name='Статус заказа')
+
+    STATUS_PENDING = 'pending'
+    STATUS_APPROVED = 'approved'
+    STATUS_REJECTED = 'rejected'
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Ожидание'),
+        (STATUS_APPROVED, 'Потвержден'),
+        (STATUS_REJECTED, 'Отклонен'),
+    ]
+
+    first_name = models.CharField(max_length=256, verbose_name='Имя клиента') 
+    phone_number = models.CharField(max_length=256, verbose_name='Номер телефона')
+    email = models.EmailField(verbose_name='Почта клиента') 
+    status_of_order = models.CharField(max_length=20, choices=STATUS_CHOICES, default = STATUS_PENDING)
+    is_paid = models.BooleanField(default=False, verbose_name='Статус оплаты')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created']
@@ -19,7 +29,7 @@ class Order(models.Model):
         ]
 
     def __str__(self):
-        return self.id
+        return self.status_of_order
     
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())
