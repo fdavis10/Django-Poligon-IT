@@ -60,6 +60,7 @@ class Product(models.Model):
     image_1 = models.ImageField(upload_to='product/', blank=False, null=False, default='default.webp')
     image_2 = models.ImageField(upload_to='product/', blank=True, default='default.webp')
     image_3 = models.ImageField(upload_to='product/', blank=True, default='default.webp')
+    video = models.FileField(upload_to='product/videos/', blank=True, null=True, verbose_name='Видео товара')
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     subcategory_1 = models.ForeignKey(Subcategory_1, related_name='product_sub', on_delete=models.CASCADE, blank=True, null=True)
     subcategory_2 = models.ForeignKey(Subcategory_2, related_name='product_sub_cat', on_delete=models.CASCADE, blank=True, null=True)

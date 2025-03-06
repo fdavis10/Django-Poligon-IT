@@ -8,17 +8,14 @@
     <div class="row d-flex justify-content-center">
         <div class="col-md-6">
             <div class="main-image-box">
-                <img id="main-image" src="{{product.image_1.url}}" class="img-fluid product-image" alt="Товар">
+                <img id="main-image" src="{{ product.image_1.url }}" class="img-fluid product-image" alt="Товар">
             </div>
             <div class="thumbnail-images mt-2">
-                <img src="{{product.image_1.url}}" class="img-thumbnail" onclick="changeImage(this)">
-                <img src="{{product.image_2.url}}" class="img-thumbnail" onclick="changeImage(this)">
-                <img src="{{product.image_3.url}}" class="img-thumbnail" onclick="changeImage(this)">
+                <img src="{{ product.image_1.url }}" class="img-thumbnail" onclick="changeMedia('image', '{{ product.image_1.url }}')">
+                <img src="{{ product.image_2.url }}" class="img-thumbnail" onclick="changeMedia('image', '{{ product.image_2.url }}')">
+                <img src="{{ product.image_3.url }}" class="img-thumbnail" onclick="changeMedia('image', '{{ product.image_3.url }}')">
                 {% if product.video %}
-                    <video class="img-thumbnail" onclick="changeVideo(this)" width="100">
-                        <source src="{{ product.video.url }}" type="video/mp4">
-                        Ваш браузер не поддерживает видео.
-                    </video>
+                    <img src="{% static 'img/video_placeholder.png' %}" class="img-thumbnail" onclick="openModal('{{ product.video.url }}')" alt="Видео">
                 {% endif %}
             </div>
         </div>
@@ -30,9 +27,7 @@
                 <form action="{% url 'cart:cart_add' product.id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="quantity" value="1">
-                    <button type="submit" class="btn btn-primary w-100 button-cart">
-                        В корзину
-                    </button>
+                    <button type="submit" class="btn btn-primary w-100 button-cart">В корзину</button>
                 </form>
                 <button class="btn btn-light w-100 mt-2">Быстрый заказ ( недоступно )</button>
             </div>
@@ -64,7 +59,7 @@
         </ul>
     </div>
     <div class="info-section">
-        <h2>Комплекатция</h2>
+        <h2>Комплектация</h2>
         <ul>
             {% for key, value in product.complectation.items %}
                 <li><strong>{{ key }}:</strong> {{ value }}</li>
@@ -90,24 +85,42 @@
         </ul>
     </div>
 </div>
+<div id="videoModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <video id="modal-video" controls class="img-fluid">
+            <source id="modal-video-source" src="" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+    </div>
+</div>
 
 <script>
-    function changeImage(element) {
-        document.getElementById('main-image').src = element.src;
-        document.getElementById('main-video').style.display = 'none';  // Скрываем видео
-        document.getElementById('main-image').style.display = 'block'; // Показываем картинку
+    function openModal(videoUrl) {
+        const modal = document.getElementById('videoModal');
+        const modalVideo = document.getElementById('modal-video-source');
+        const videoElement = document.getElementById('modal-video');
+        
+        modalVideo.src = videoUrl;
+        videoElement.load();
+        modal.style.display = 'block';
+        videoElement.play();
     }
 
-    function changeVideo(element) {
-        let mainImage = document.getElementById('main-image');
-        let mainVideo = document.getElementById('main-video');
+    function closeModal() {
+        const modal = document.getElementById('videoModal');
+        const videoElement = document.getElementById('modal-video');
 
-        mainImage.style.display = 'none';  // Скрываем картинку
-        mainVideo.style.display = 'block'; // Показываем видео
+        modal.style.display = 'none';
+        videoElement.pause();
+        videoElement.currentTime = 0;
+    }
 
-        let videoSource = element.querySelector("source").src;
-        mainVideo.querySelector("source").src = videoSource;
-        mainVideo.load(); // Загружаем видео
+    window.onclick = function(event) {
+        const modal = document.getElementById('videoModal');
+        if (event.target === modal) {
+            closeModal();
+        }
     }
 </script>
 {% endblock content %}

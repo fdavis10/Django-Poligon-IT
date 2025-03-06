@@ -11,7 +11,6 @@
     <h2 class="mb-4">Корзина</h2>
     
     <div class="row">
-        <!-- Левая колонка: список товаров -->
         <div class="col-md-8">
             <div class="card p-3">
                 <hr>
@@ -47,21 +46,23 @@
                 {% endfor %}
             </div>
             {% if request.session.removed_items %}
-                <h3>Недавно удаленные товары</h3>
-                <ul>
+                <h3 class="mt-4">Недавно удаленные товары</h3>
+                <div class="removed-items-box p-3 border rounded">
                     {% for item in request.session.removed_items %}
-                        <li>
-                            {{ item.name }} - {{ item.price }} ₽
-                            <form action="{% url 'cart:cart_restore' item.id %}" method="post" style="display:inline;">
+                        <div class="removed-item d-flex justify-content-between align-items-center p-2 mb-2 border-bottom">
+                            <div>
+                                <p class="mb-0"><strong>{{ item.name }}</strong></p>
+                                <p class="text-muted mb-0">{{ item.price }} ₽</p>
+                            </div>
+                            <form action="{% url 'cart:cart_restore' item.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-success btn-sm">Вернуть</button>
+                                <button type="submit" class="btn btn-sm button-restore">Вернуть</button>
                             </form>
-                        </li>
+                        </div>
                     {% endfor %}
-                </ul>
+                </div>
             {% endif %}
         </div>
-        <!-- Правая колонка: итог и оформление -->
         <div class="col-md-4">
             <div class="card p-3">
                 <h4>Итого</h4>
