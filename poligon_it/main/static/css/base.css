@@ -169,15 +169,19 @@ h5{
 
 .button-subcribe{
     border: none;
-    background-color: rgb(35 65 148);
+    background-color: rgb(35 65 148) !important;
 }
 
 .button-subcribe:hover{
     border: none;
-    background-color: rgb(25, 47, 105);
+    background-color: rgb(25, 47, 105) !important;
 }
 
 .button-subcribe:active{
     border: none;
     background-color: rgb(25, 47, 105) !important;
+}
+
+.logo-brand img{
+    height: 40px;
 }

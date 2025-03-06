@@ -3,6 +3,7 @@ from django.urls import reverse
 from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart
+from .tasks import notify_telegram
 
 def order_create(request):
     cart = Cart(request)
@@ -12,6 +13,7 @@ def order_create(request):
         order = form.save()
         order_items = []
         print(f'Заказ успешно создан: {order.id}')
+        notify_telegram.delay(order.id)
         for item in cart:
             product = item['product']
             price = product.price

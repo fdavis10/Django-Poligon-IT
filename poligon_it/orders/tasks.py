@@ -1,13 +1,31 @@
 from celery import shared_task
-import requests
-from django.conf import settings
-from .models import Order
+from django.core.exceptions import ObjectDoesNotExist
+from .models import Order, OrderItem
+from tg_bot.bot_scrypt import send_telegram_message
 
-TELEGRAM_BOT_TOKEN = ""
-
-
-@shared_task
-def send_order_notification(order_id):
+@shared_task(bind=True)
+def notify_telegram(self, order_id):
+    print(f'Запуск задачи для заказа с ID {order_id}')
     try:
         order = Order.objects.get(id=order_id)
-        message = 
+        order_items = order.items.all()
+
+        items_text = '\n'.join(
+            [f'{item.product.name} — {item.quantity} шт. — {item.price}₽' for item in order_items]
+        )
+
+        message = (
+            f'🛒 Новый заказ!\n'
+            f'🛂 ID заказа: {order.id}\n'
+            f'🙍‍♂️ Имя клиента: {order.first_name}\n'
+            f'📤 Email: {order.email}\n'
+            f'📱 Телефон: {order.phone_number}\n\n'
+            f'📦 Список товаров:\n{items_text}'
+        )
+
+        send_telegram_message(message)
+        print(f'Сообщение отправлено: {message}')
+
+    except ObjectDoesNotExist:
+        send_telegram_message(f'❌ Заказ с ID {order_id} не найден')
+        print(f'Ошибка: заказ с ID {order_id} не найден')

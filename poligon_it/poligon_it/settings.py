@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'tg_bot',
 ]
 
 MIDDLEWARE = [
@@ -156,6 +157,6 @@ CART_SESSION_ID = 'cart'
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'  
 SESSION_COOKIE_AGE = 86400  
 
-CELERY_BROKER = "redis://localhost:6379/0"
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
