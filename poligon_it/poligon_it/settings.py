@@ -18,6 +18,8 @@ import codecs
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
+IN_DOCKER = os.getenv("IN_DOCKER", "False").lower() == "true"
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -92,7 +94,7 @@ DATABASES = {
         'NAME': os.getenv("DATABASE_NAME"),
         'USER': os.getenv("DATABASE_USER"),
         'PASSWORD': os.getenv("DATABASE_PASSWORD", "poligonit"),
-        'HOST': os.getenv("DATABASE_HOST", "localhost"),
+        'HOST': 'db' if IN_DOCKER else 'localhost', 
         'PORT': os.getenv("DATABASE_PORT", "5432"),
         'OPTIONS': {
             'client_encoding': 'UTF8', 
@@ -156,7 +158,7 @@ CART_SESSION_ID = 'cart'
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'  
 SESSION_COOKIE_AGE = 86400  
 
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BROKER_URL = "redis://redis:6379/0" if IN_DOCKER else "redis://localhost:6379/0"
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 

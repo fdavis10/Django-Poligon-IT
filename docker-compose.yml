@@ -26,6 +26,8 @@ services:
     entrypoint: ["sh", "/app/entrypoint.sh"]
     command: python manage.py runserver 0.0.0.0:8000
     env_file: .env
+    environment:
+      - IN_DOCKER=True
     volumes:
       - .:/app
     ports:
@@ -40,6 +42,8 @@ services:
     entrypoint: ["sh", "/app/entrypoint.sh"]
     command: celery -A poligon_it.celery worker --loglevel=info
     env_file: .env
+    environment:
+      - IN_DOCKER=True
     depends_on:
       - redis
       - web
