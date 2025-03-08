@@ -33,13 +33,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'unfold',
-    'unfold.contrib.filters',
-    'unfold.contrib.forms',
-    'unfold.contrib.inlines',
-    'unfold.contrib.import_export',
-    'unfold.contrib.guardian',
-    'unfold.contrib.simple_history',
+    'jet.dashboard',
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +46,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'emailsender.apps.EmailsenderConfig',
     'tg_bot',
 ]
 
@@ -160,3 +156,12 @@ SESSION_COOKIE_AGE = 86400
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='localhost'
+EMAIL_PORT=1025
+EMAIL_USE_TLS= False
+EMAIL_USE_SSL= False
+EMAIL_HOST_USER=''
+EMAIL_HOST_PASSWORD=''
+DEFAULT_FROM_EMAIL='test@example.com'

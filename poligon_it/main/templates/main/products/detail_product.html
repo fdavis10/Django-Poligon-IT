@@ -122,5 +122,11 @@
             closeModal();
         }
     }
+
+    function changeMedia(type, url){
+        if (type=='image'){
+            document.getElementById('main-image').src = url;
+        }
+    }
 </script>
 {% endblock content %}
