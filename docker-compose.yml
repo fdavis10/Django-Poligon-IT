@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: reagent_test  
+      POSTGRES_USER: poligonit   
+      POSTGRES_PASSWORD: poligonit  
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_web
+    restart: always
+    depends_on:
+      - db
+      - redis
+    environment:
+      - SECRET_KEY=django-insecure-xf)uuzix!d^n=x%y0995j$gs#_yc5o$yhded+9&2&y!%fsngh0
+      - DEBUG=True
+      - DATABASE_ENGINE=django.db.backends.postgresql
+      - DATABASE_NAME=reagent_test
+      - DATABASE_USER=poligonit
+      - DATABASE_PASSWORD=poligonit
+      - DATABASE_HOST=db  
+      - DATABASE_PORT=5432
+      - EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+      - EMAIL_HOST=localhost
+      - EMAIL_PORT=1025
+      - EMAIL_USE_TLS=False
+      - EMAIL_USE_SSL=False
+      - EMAIL_HOST_USER=
+      - EMAIL_HOST_PASSWORD=
+      - DEFAULT_FROM_EMAIL=test@example.com
+      - BOT_PASSWORD=mysecurepassword
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+
+  celery:
+    build:
+      context: .
+      dockerfile: celery.Dockerfile
+    container_name: celery_worker
+    restart: always
+    depends_on:
+      - db
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - DATABASE_HOST=db  
+      - DATABASE_PORT=5432
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: telegram_bot
+    restart: always
+    depends_on:
+      - web
+    environment:
+      - TOKEN=7353236483:AAGJcRvluRTkVPeYb1DNR83lY4vQdCR6vVg
+      - MESSAGE_CHAT_ID=6028668686
+      - DATABASE_HOST=db  
+      - DATABASE_PORT=5432
+    command: ["python", "tg_bot/run_bot.py"]
+
+volumes:
+  postgres_data:

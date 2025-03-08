@@ -3,12 +3,16 @@ import os
 from dotenv import load_dotenv
 
 
+
 load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.getenv('TOKEN')
-MESSAGE_CHAT_ID = os.getenv('MESSAGE_CHAT_ID').split(',')
 
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
+
+
+
+
 
 def send_telegram_message(text):
     try:

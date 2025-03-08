@@ -5,6 +5,8 @@ import django
 from dotenv import load_dotenv
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
+from django.db.utils import IntegrityError
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -14,11 +16,14 @@ django.setup()
 
 from orders.models import Order, OrderItem
 from emailsender.utils import send_mass_mail
+from tg_bot.models import TelegramUser
 
 load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
+
+BOT_PASSWORD = os.getenv('BOT_PASSWORD')
 
 STATUS_CHOICES = {
     'pending': 'Ожидание',
@@ -26,16 +31,46 @@ STATUS_CHOICES = {
     'rejected': 'Отклонен'
 }
 
+
+
 ORDERS_PER_PAGE = 5
 user_pages = {}
 user_data = {}
 
+def is_authorized(chat_id):
+    return TelegramUser.objects.filter(chat_id=chat_id).exists()
+
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Вас приветствует телеграм-бот RE-AGENT 👋\nЭтот бот предоставляет возможности управления заказами прямо из телеграмма!\n\nКаждый раз при заказе приходит уведомление,\nИ вы можете отредактировать статус заказа и получить детальную информацию о заказе\nКоманды для использования бота - \n\n/orders - получить список заказов\n/find - найти заказ по имени клиента, по номеру телефона и по электронной почте')
+    if is_authorized(message.chat.id):
+        bot.send_message(message.chat.id, "✅ Вы уже авторизованы в системе!")
+    else:
+        bot.send_message(message.chat.id, "🔒 Введите пароль!")
+
+
+@bot.message_handler(func=lambda message: not is_authorized(message.chat.id))
+def check_password(message):
+    if message.text.strip() == BOT_PASSWORD:
+        TelegramUser.objects.create(chat_id=message.chat.id, username=message.from_user.username)
+        bot.send_message(message.chat.id, "🔓 Авторизация успешна, вам разблокированы возможности!\nИспользуйте /help для получения дополнительной информации!")
+    else:
+        bot.send_message(message.chat.id, "🚫 Неверный пароль! Попробуйте снова!")
+
+@bot.message_handler(commands=['help'])
+def start_message_after_authorization(message):
+    if not is_authorized(message.chat.id):
+        bot.send_message(message.chat.id, "🚫 У вас нет доступа к этому боту!")
+        return
+    
+    bot.send_message(message.chat.id, 'Вас приветствует телеграм-бот RE-AGENT 👋\nЭтот бот предоставляет возможности управления заказами прямо из телеграмма!\n\nКаждый раз при заказе приходит уведомление,\nИ вы можете отредактировать статус заказа и получить детальную информацию о заказе\nКоманды для использования бота - \n\n/orders - получить список заказов\n/find - найти заказ по имени клиента, по номеру телефона и по электронной почте\n/send_email - для отправки массовой рассылки всем пользователям, которые при заказе указывали электронную почту!')
+
 
 @bot.message_handler(commands=['send_email'])
 def ask_subjcet(message:Message):
+    if not is_authorized(message.chat.id):
+        bot.send_message(message.chat.id, "🚫 У вас нет доступа к этому боту!")
+        return
+    
     bot.send_message(message.chat.id, '📌 Введите заголовок рассылки:')
     bot.register_next_step_handler(message, ask_message)
 
@@ -63,6 +98,10 @@ def send_mail(message:Message):
 
 @bot.message_handler(commands=['orders'])
 def order_list(message, page=1):
+    if not is_authorized(message.chat.id):
+        bot.send_message(message.chat.id, "🚫 У вас нет доступа к этому боту!")
+        return
+    
     user_pages[message.chat.id] = page
     total_orders = Order.objects.count()
     orders = Order.objects.all()[(page-1)*ORDERS_PER_PAGE:page*ORDERS_PER_PAGE]
@@ -117,6 +156,10 @@ def show_order_details(call):
 
 @bot.message_handler(commands=['find'])
 def find_order(message):
+    if not is_authorized(message.chat.id):
+        bot.send_message(message.chat.id, "🚫 У вас нет доступа к этому боту!")
+        return
+    
     bot.send_message(message.chat.id, "🔍 Введите имя клиента, номер телефона или ID заказа:")
 
 @bot.message_handler(func=lambda message:True)
@@ -180,6 +223,7 @@ def set_status(call):
         )
     except Order.DoesNotExist:
         bot.send_message(call.message.chat.id, '❌ Не удалось изменить статус заказа')
+
 
 
 print('Bot runned and listen commands')

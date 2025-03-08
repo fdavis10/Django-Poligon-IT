@@ -2,6 +2,7 @@ from celery import shared_task
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Order, OrderItem
 from tg_bot.bot_scrypt import send_telegram_message
+from tg_bot.models import TelegramUser
 
 @shared_task(bind=True)
 def notify_telegram(self, order_id):
@@ -23,9 +24,14 @@ def notify_telegram(self, order_id):
             f'📦 Список товаров:\n{items_text}'
         )
 
-        send_telegram_message(message)
+        authorized_users = TelegramUser.objects.values_list('chat_id', flat=True)
+        for chat_id in authorized_users:
+            send_telegram_message(message, chat_id)
         print(f'Сообщение отправлено: {message}')
 
     except ObjectDoesNotExist:
-        send_telegram_message(f'❌ Заказ с ID {order_id} не найден')
+        error_message=f'❌ Заказ с ID {order_id} не найден'
+        authorized_users = TelegramUser.objects.values_list('chat_id', flat=True)
+        for chat_id in authorized_users:
+            send_telegram_message(f'❌ Заказ с ID {order_id} не найден')
         print(f'Ошибка: заказ с ID {order_id} не найден')
