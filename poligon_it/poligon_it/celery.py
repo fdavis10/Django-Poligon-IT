@@ -8,7 +8,9 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.update(
     worker_pool='solo'
 )
+app.conf.broker_connection_retry_on_startup = True
 app.autodiscover_tasks()
+
 
 
 

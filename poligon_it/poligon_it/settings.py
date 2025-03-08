@@ -12,11 +12,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+import codecs
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(os.path.join(BASE_DIR, '.env'))
-
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -25,7 +25,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False").lower() in ["true", "1"]
+DEBUG = os.getenv("DEBUG", "True").lower() in ["true", "1"]
 
 ALLOWED_HOSTS = []
 
@@ -91,9 +91,12 @@ DATABASES = {
         'ENGINE': os.getenv("DATABASE_ENGINE", 'django.db.backends.postgresql'),
         'NAME': os.getenv("DATABASE_NAME"),
         'USER': os.getenv("DATABASE_USER"),
-        'PASSWORD': os.getenv("DATABASE_PASSWORD"),
+        'PASSWORD': os.getenv("DATABASE_PASSWORD", "poligonit"),
         'HOST': os.getenv("DATABASE_HOST", "localhost"),
         'PORT': os.getenv("DATABASE_PORT", "5432"),
+        'OPTIONS': {
+            'client_encoding': 'UTF8', 
+        },
     }
 }
 
@@ -141,11 +144,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL='/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static/'
+    BASE_DIR / 'static'
 ]
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 CART_SESSION_ID = 'cart'
@@ -153,7 +156,7 @@ CART_SESSION_ID = 'cart'
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'  
 SESSION_COOKIE_AGE = 86400  
 
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 

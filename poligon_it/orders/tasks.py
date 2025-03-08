@@ -26,7 +26,7 @@ def notify_telegram(self, order_id):
 
         authorized_users = TelegramUser.objects.values_list('chat_id', flat=True)
         for chat_id in authorized_users:
-            send_telegram_message(message, chat_id)
+            send_telegram_message(message)
         print(f'Сообщение отправлено: {message}')
 
     except ObjectDoesNotExist:
