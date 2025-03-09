@@ -9,18 +9,9 @@ def search_result(request):
     results = Product.objects.filter(name__icontains=query) if query else []
     return render(request, 'main/products/search_results.html', {'query':query, 'results': results})
 
-def navigation(request):
-    categories = Category.objects.prefetch_related('subcategory_1', 'subcategory_1__parent_subcategory').all()
-    return render(request, 'base.html', {
-        'categories': categories
-    })
 
 def about_us(request):
-    categories = Category.objects.prefetch_related('subcategory_1', 'subcategory_1__parent_subcategory').all()
-    return render(request, 'main/index/about_us.html',
-                  {
-                      'categories': categories
-                  })
+    return render(request, 'main/index/about_us.html')
 
 def get_session_key(request):
     if not request.session.session_key:
@@ -53,11 +44,9 @@ def favorites_list(request):
 
 def index_page(request):
     session_key = get_session_key(request)
-    categories = Category.objects.all()
     products = Product.objects.all()[:8]
     return render(request, 'main/index/index.html', {
         'products': products,
-        'categories': categories
         })
 
 def product_list_by_category(request, slug):
@@ -96,7 +85,7 @@ def product_list_by_category(request, slug):
 def product_list_by_subcategory(request, slug):
     sub_category_1 = get_object_or_404(Subcategory_1, slug=slug)
     products = Product.objects.filter(subcategory_1 = sub_category_1)
-    return render(request, 'main/products/sub_category_list.html', {
+    return render(request, 'main/products/product_list_by_subcategory.html', {
         'subcategory': sub_category_1,
         'products': products
     })
@@ -120,11 +109,6 @@ def product_list_by_sub_subcategory(request, slug):
 
 def detail_product(request, slug):
     product = get_object_or_404(Product, slug=slug, available = True)
-    categories = Category.objects.prefetch_related('subcategory_1', 'subcategory_1__parent_subcategory').all()
-    
-    # add cart add form
-
     return render(request, 'main/products/detail_product.html', {
-        'product': product,
-        'categories': categories
+        'product': product, 
     })

@@ -53,7 +53,7 @@ class Subcategory_2(models.Model):
         return f'{self.name} >> {self.subcategory} >> {self.category_main}'
     
     def get_absolute_url(self):
-        return reverse("main:product_list_by_subcategory_sub", args=[self.slug])
+        return reverse('main:product_list_by_sub_subcategory', args=[self.slug])
     
     
 class Product(models.Model):

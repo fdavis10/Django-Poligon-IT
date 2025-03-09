@@ -1,4 +1,6 @@
 from .models import Product, Favorite
+from .models import Category, Subcategory_1, Subcategory_2
+from django.db.models import Prefetch
 
 def favorites_processor(request):
     session_key = request.session.session_key
@@ -6,3 +8,13 @@ def favorites_processor(request):
     favorites = Product.objects.filter(id__in=favorites_ids)
     favorites_count = favorites.count()
     return {'favorites':favorites, 'favorites_count':favorites_count}
+
+def category_context(request):
+    categories = Category.objects.all()
+    subcategories = Subcategory_1.objects.all()
+    subsubcategories = Subcategory_2.objects.all()
+    return{
+        'categories': categories,
+        'subcategories': subcategories,
+        'subsubcategories': subsubcategories
+    }

@@ -13,17 +13,23 @@
     background-color: rgb(25, 47, 105) !important;
 }
 
+.button-order a{
+    color: #fff !important;
+}
+
 .button-order{
     border: none;
     background-color: rgb(35 65 148);
 }
 
 .button-order:hover{
+    color: white;
     border: none;
     background-color: rgb(25, 47, 105);
 }
 
 .button-order:active{
+    color: white;
     border: none;
     background-color: rgb(25, 47, 105) !important;
 }
