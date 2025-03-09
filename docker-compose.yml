@@ -47,6 +47,19 @@ services:
     depends_on:
       - redis
       - web
+  
+  telegram:
+    build: .
+    restart: always
+    command: python tg_bot/run_bot.py
+    env_file: .env
+    environment:
+      - Token=${TOKEN}
+      - BOT_PASSWORD=${BOT_PASSWORD}
+    depends_on:
+      - web
+      - celery
+      - db
 
 volumes:
   postgres_data:
