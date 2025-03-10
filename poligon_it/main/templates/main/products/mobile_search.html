@@ -1,22 +1,21 @@
 {% extends "main/base.html" %}
 {% load static %}
 
-{% block title %}Результаты поиска{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/search_results.css' %}">
+{% block title %}Поиск товаров{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/mobile_search.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
-<div class="container">  <!-- Центрируем весь контент -->
-    <h1 class="text-center">Результаты поиска</h1>
+<div class="container mt-3">
+    <h2 class="text-center">Поиск товаров</h2>
 
-    {% if query %}
-        <p class="text-center">Вы искали: <strong>{{ query }}</strong></p>
-    {% endif %}
+    <form method="GET" action="{% url 'main:mobile_search' %}" class="d-flex mb-3">
+        <input type="text" name="q" class="form-control" placeholder="Введите название товара..." value="{{ query }}">
+        <button type="submit" class="btn btn-primary ms-2 btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
 
     {% if results %}
-        <div class="row justify-content-center mt-4">  
+        <div class="row">
             <div class="container_products">
                 <div class="cards_wrapper">
                     {% for product in results %}
@@ -55,10 +54,10 @@
                         </div>
                     {% endfor %}
                 </div>
-            </div>   
+            </div>            
         </div>
     {% else %}
-        <p class="text-center">По вашему запросу ничего не найдено.</p>
+        <p class="text-center text-muted">Ничего не найдено</p>
     {% endif %}
-</div>  <!-- Закрываем container -->
+</div>
 {% endblock %}

@@ -9,13 +9,13 @@ urlpatterns = [
     path('about_us/', views.about_us, name='about_us'),
     path('category/<slug:slug>/', views.product_list_by_category, name='product_list_by_category'),
     path('subcategory/<slug:slug>', views.product_list_by_subcategory, name='product_list_by_subcategory'),
-    path('sub_subcategory/<slug:slug>/', views.product_list_by_sub_subcategory, name='product_list_by_sub_subcategory'),
     path('product/<slug:slug>/', views.detail_product, name='detail_product'),
     path('favorites/', views.favorites_list, name='favorite_list'),
     path('favorites/add/<int:product_id>/', views.add_to_favorites, name='add_to_favorites'),
     path('favorites/remove/<int:product_id>/', views.remove_from_favorites, name='remove_from_favorites'),
     path('favorites/clear/', views.clear_favorites, name='clear_favorites'),
-    path('search/', views.search_result, name='search_results')
+    path('search/', views.search_result, name='search_results'),
+    path('mobile_search/', views.mobile_search, name='mobile_search'),
 ]
 
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, Category, Subcategory_1, Subcategory_2, Favorite
+from .models import Product, Category, Subcategory_1, Favorite
 from django.db.models import Q
 from django.http import JsonResponse
 
@@ -50,7 +50,7 @@ def index_page(request):
         })
 
 def product_list_by_category(request, slug):
-    categories = Category.objects.prefetch_related('subcategory_1', 'subcategory_1__parent_subcategory').all()
+    categories = Category.objects.prefetch_related('subcategory_1').all()
     category = get_object_or_404(Category, slug=slug)
     products = Product.objects.filter(category=category, available=True)
 
@@ -90,25 +90,13 @@ def product_list_by_subcategory(request, slug):
         'products': products
     })
 
-def product_list_by_sub_subcategory(request, slug):
-    subcategory_2 = get_object_or_404(Subcategory_2, slug=slug)
-    products = Product.objects.filter(subcategory_2=subcategory_2)
-    if products.exists():
-        return render(request, 'main/products/product_list_by_sub_subcategory.html', {
-            'subcategory_2': subcategory_2,
-            'products': products
-        })
-    else:
-        parent_category = subcategory_2.category_main
-        parent_subcategory = subcategory_2.subcategory
-        return render(request, 'main/products/sub_subcategory_empty.html', {
-            'subcategory': subcategory_2,
-            'parent_category': parent_category,
-            'parent_subcategory': parent_subcategory
-        })
-
 def detail_product(request, slug):
     product = get_object_or_404(Product, slug=slug, available = True)
     return render(request, 'main/products/detail_product.html', {
         'product': product, 
     })
+
+def mobile_search(request):
+    query = request.GET.get('q', '')
+    results = Product.objects.filter(name__icontains=query) if query else []
+    return render(request, 'main/products/mobile_search.html', {'query':query, 'results': results})

@@ -91,3 +91,39 @@
 .card__func a:hover{
     color: #666666;
 }
+
+.button-cart{
+    border: none;
+    background-color: rgb(35 65 148);
+}
+
+.button-cart:hover{
+    border: none;
+    background-color: rgb(25, 47, 105);
+}
+
+.button-cart:active{
+    border: none;
+    background-color: rgb(25, 47, 105) !important;
+}
+
+@media (max-width: 768px) {
+    .cards_wrapper {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+
+    .card {
+        width: 100%;
+        max-width: 100%;
+        margin: 10px 0;
+    }
+
+    .card__image img {
+        max-height: 150px;
+        object-fit: contain;
+    }
+
+    .card__func a{
+        display: none;
+    }
+}

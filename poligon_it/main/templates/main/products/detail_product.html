@@ -32,7 +32,7 @@
                 <button class="btn btn-light w-100 mt-2">Быстрый заказ ( недоступно )</button>
             </div>
             <div class="additional_func p-3">
-                <a href="#" class="favorite_ico">
+                <a href="{% url "main:add_to_favorites" product.id %}" class="favorite_ico">
                     <i class="fa-regular fa-heart"></i>
                     В избранное
                 </a>

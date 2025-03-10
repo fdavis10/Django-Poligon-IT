@@ -197,3 +197,34 @@ h5{
     margin-top: -1px;
   }
   
+#navbarDropdown:active{
+    color: rgb(35 65 148) !important; 
+}
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show{
+    color: rgb(35 65 148) !important; 
+}
+
+.nav-mobile{
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .navbar-nav{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        width: 100%;
+    }
+
+    .nav-item{
+        width: 100%;
+        text-align: left;
+    }
+
+    .nav-mobile {
+        display: inline-block !important;
+        font-weight: bold;
+        padding: 10px 0px;
+    }
+}

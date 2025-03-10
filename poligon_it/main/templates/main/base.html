@@ -74,6 +74,17 @@
             <li class="nav-item">
               <a class="nav-link" href="#">Контакты</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link nav-mobile" href="{% url 'main:favorite_list' %}">Избранное</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-mobile" href="#">Сравнение</a>
+              <li class="nav-item">
+                <a class="nav-link nav-mobile" href="{% url "cart:cart_detail" %}">Корзина</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link nav-mobile" href="{% url 'main:mobile_search' %}">Поиск</a>
+              </li>
           </ul>
           <form class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav d-flex align-items-center ms-0 ms-lg-3 mb-0">
@@ -87,15 +98,15 @@
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                <i class="fas fa-chart-bar"></i>
+                  <i class="fas fa-chart-bar"></i>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{% url "cart:cart_detail" %}" class="nav-link">
-                <i class="fas fa-shopping-cart"></i>
-              </a>
-            </li>
-          </ul>
+                  <i class="fas fa-shopping-cart"></i>
+                </a>
+              </li>
+            </ul>
           <input id="searchInput" class="form-control me-2 search-input mb-2 mb-lg-0" type="search" placeholder="Поиск.." aria-label="Search">
           <button id="searchButton" class="btn btn-outline-success button-search mb-2 mb-lg-0 button-search" type="button"><i class="fa-solid fa-magnifying-glass search-ico"></i></button>
         </form>
@@ -134,9 +145,6 @@
       <a class="text-body" href="/">RE-AGENT</a>
     </div>
   </footer>
-  {{ categories|length }} категорий
-{{ subcategories|length }} подкатегорий
-{{ subsubcategories|length }} под-подкатегорий
   <!-- Подключение JS -->
   <script src="{% static 'js/index.js' %}"></script>
   <script src="{% static 'js/base.js' %}"></script>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Subcategory_1, Subcategory_2, Product
+from .models import Category, Subcategory_1, Product
 from django_json_widget.widgets import JSONEditorWidget
 from django.db import models
 
@@ -16,11 +16,6 @@ class SubCategory1Admin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'category__name')
 
-@admin.register(Subcategory_2)
-class Subcategory2Admin(admin.ModelAdmin):
-    list_display = ('name', 'subcategory', 'category_main', 'slug')
-    prepopulated_fields = {'slug':('name',)}
-    search_fields = ('name', 'subcategory__name', 'category_main__name')
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):

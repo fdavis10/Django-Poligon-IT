@@ -1,3 +1,8 @@
+.container_products {
+    display: flex;
+    justify-content: center;
+}
+
 .cards_wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -24,6 +29,7 @@
 }
 
 .card__prices {
+    min-height: 40px;
     margin: 10px 0;
 }
 
@@ -41,7 +47,7 @@
 .card__title {
     white-space: nowrap;
     text-overflow: ellipsis;
-    min-height: 50px;
+    height: 40px;
     font-weight: 600;
     display: block;
     margin: 10px 0;
@@ -94,7 +100,6 @@
 .description {
     flex-grow: 1; 
     min-height: 60px; 
-    max-height: 80px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -115,21 +120,19 @@
     color: #666666;
 }
 
-.dropdown-submenu:hover > .dropdown-menu {
-    display: block;
-}
+@media (max-width: 768px) {
+    .cards_wrapper {
+        grid-template-columns: repeat(2, 1fr); 
+    }
 
-.button-cart{
-    border: none;
-    background-color: rgb(35 65 148);
-}
+    .card {
+        width: 100%;
+        max-width: 100%;
+        margin: 10px 0;
+    }
 
-.button-cart:hover{
-    border: none;
-    background-color: rgb(25, 47, 105);
-}
-
-.button-cart:active{
-    border: none;
-    background-color: rgb(25, 47, 105) !important;
+    .card__image img {
+        max-height: 150px;
+        object-fit: contain;
+    }
 }

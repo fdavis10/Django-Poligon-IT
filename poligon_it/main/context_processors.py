@@ -1,5 +1,5 @@
 from .models import Product, Favorite
-from .models import Category, Subcategory_1, Subcategory_2
+from .models import Category, Subcategory_1
 from django.db.models import Prefetch
 
 def favorites_processor(request):
@@ -12,9 +12,7 @@ def favorites_processor(request):
 def category_context(request):
     categories = Category.objects.all()
     subcategories = Subcategory_1.objects.all()
-    subsubcategories = Subcategory_2.objects.all()
     return{
         'categories': categories,
         'subcategories': subcategories,
-        'subsubcategories': subsubcategories
     }

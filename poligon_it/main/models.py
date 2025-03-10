@@ -37,23 +37,6 @@ class Subcategory_1(models.Model):
     
     def get_absolute_url(self):
         return reverse("main:product_list_by_subcategory", args=[self.slug])
-
-class Subcategory_2(models.Model):
-    category_main = models.ForeignKey(Category, related_name='subcategory_2', on_delete=models.CASCADE)
-    subcategory = models.ForeignKey(Subcategory_1, related_name='parent_subcategory', on_delete=models.CASCADE)
-    name = models.CharField(max_length=255, db_index=True)
-    slug = models.SlugField(max_length=300, db_index=True, unique=True)
-
-    class Meta:
-        ordering = ['name', 'category_main', 'subcategory']
-        verbose_name = 'Подкатегория_2'
-        verbose_name_plural = 'Подкатегории_2'
-    
-    def __str__(self):
-        return f'{self.name} >> {self.subcategory} >> {self.category_main}'
-    
-    def get_absolute_url(self):
-        return reverse('main:product_list_by_sub_subcategory', args=[self.slug])
     
     
 class Product(models.Model):
@@ -63,7 +46,6 @@ class Product(models.Model):
     video = models.FileField(upload_to='product/videos/', blank=True, null=True, verbose_name='Видео товара')
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     subcategory_1 = models.ForeignKey(Subcategory_1, related_name='product_sub', on_delete=models.CASCADE, blank=True, null=True)
-    subcategory_2 = models.ForeignKey(Subcategory_2, related_name='product_sub_cat', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=300, db_index=True)
     slug = models.SlugField(max_length=400, db_index=True, unique=True)
     description = models.TextField(max_length=500)
