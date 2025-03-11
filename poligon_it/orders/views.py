@@ -1,48 +1,70 @@
-from django.http import HttpResponse
+import openpyxl
+from django.core.mail import EmailMessage
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.urls import reverse
+import openpyxl.writer
 from .models import OrderItem, Order
 from .forms import OrderCreateForm
 from cart.cart import Cart
 from .tasks import notify_telegram
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
 from io import BytesIO
 
 
-def generate_order_pdf(order, order_items):
-    buffer = BytesIO()
-    pdf = canvas.Canvas(buffer, pagesize=A4)
+def generate_order_excel(order, order_items):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = f"Заказ_{order.id}"
 
-    font_path = "static/fonts/DejaVuSans.ttf"
-    pdfmetrics.registerFont(TTFont("DejaVu", font_path))
-    pdf.setFont("DejaVu", 12)
-    pdf.drawString(100, 800, f'Чек заказа №{order.id}')
+    ws.append(['Номер заказа', order.id])
+    ws.append(['Дата', order.created.strftime("%Y-%m-%d %H:%M")])
+    ws.append(['Клиент', order.first_name])
+    ws.append(['Email', order.email])
+    ws.append(['Номер телефона', order.phone_number])
+    ws.append([])
+    ws.append(['Наименование', 'Код товара', 'Цена за 1 шт.', 'Количество', 'Стоимость'])
 
-    pdf.setFont("Helvetica", 12)
-    pdf.drawString(100, 770, f'Имя клиента: {order.first_name}')
-    pdf.drawString(100, 750, f'Email: {order.email}')
-    pdf.drawString(100, 730, f'Телефон: {order.phone_number}')
-
-    pdf.setFont('Helvetica', 12)
-    pdf.drawString(100, 700, "Состав заказа:")
-
-    y_position = 680
-    pdf.setFont('Helvetica', 12)
     for item in order_items:
-        pdf.drawString(120, y_position, f'- {item.product.name}: {item.quantity} шт. - {item.price} руб.')
-        y_position -= 20
-    
-    pdf.setFont('Helvetica-Bold', 12)
-    pdf.drawString(100, y_position-20, f'Общая сумма: {order.get_total_cost()} руб.')
+        ws.append([
+            item.product.name,
+            item.product.id,
+            item.price,
+            item.quantity,
+            item.price * item.quantity
+        ])
 
-    pdf.showPage()
-    pdf.save()
+    ws.append([])
+    ws.append(['Итого', '', '', '', order.get_total_cost()])
 
-    buffer.seek(0)
-    return buffer
+    file_stream = BytesIO()
+    wb.save(file_stream)
+    file_stream.seek(0)
+    return file_stream
+
+
+# def send_order_email(order):
+#     order_items = order.items.all()
+#     excel_file = generate_order_excel(order, order_items)
+
+#     subject = f'Ваш заказ №{order.id} потвержден!'
+#     message = (
+#         f'Здравствуйте, {order.first_name}!\n\n'
+#         f'Ваш заказ №{order.id} потвержден. Таблица с деталями во вложении.\n'
+#         f'Для дальнейшей информации обращайтесь по телефону!'
+#     )
+
+#     recipient_list = [order.email]
+
+#     email = EmailMessage(
+#         subject=subject,
+#         body=message,
+#         from_email=settings.DEFAULT_FROM_EMAIL,
+#         to=recipient_list,
+#     )
+
+#     email.attach(f'Заказ_{order.id}.xlsx', excel_file.getvalue(), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+#     email.send()
+
 
 def order_create(request):
     cart = Cart(request)
@@ -65,11 +87,8 @@ def order_create(request):
             order_items.append(order_item)
         cart.clear()
         request.session['order_id'] = order.id
-        
-        pdf_buffer = generate_order_pdf(order, order_items)
-        response = HttpResponse(pdf_buffer, content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="order_{order.id}.pdf"'
-        return response
+        # send_order_email(order)
+        return render(request, 'orders/order/created.html')
     else:
         print(f'В форме создания заказа ошибка: {form.errors}')
     return render(request,

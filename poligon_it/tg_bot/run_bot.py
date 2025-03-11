@@ -66,7 +66,7 @@ def is_admin(chat_id):
 @bot.message_handler(commands=['start'])
 def start_message(message):
     if is_authorized(message.chat.id):
-        bot.send_message(message.chat.id, "✅ Вы уже авторизованы в системе!", reply_markup=main_menu_keyboard())
+        bot.send_message(message.chat.id, "✅ Вы уже авторизованы в системе!")
     else:
         bot.send_message(message.chat.id, "🔒 Введите пароль!")
 
@@ -80,24 +80,26 @@ def check_password(message):
         bot.send_message(message.chat.id, "🚫 Неверный пароль! Попробуйте снова!")
 
 
-def main_menu_keyboard():
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(KeyboardButton("🏠 Главное меню"))
-    keyboard.add(KeyboardButton("🔎 Поиск заказа"))
-    keyboard.add(KeyboardButton("📃 Список заказов"))
-    return keyboard
+# def main_menu_keyboard():
+#     keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+#     keyboard.add(KeyboardButton("🏠 Главное меню"))
+#     keyboard.add(KeyboardButton("🔎 Поиск заказа"))
+#     keyboard.add(KeyboardButton("📃 Список заказов"))
+#     return keyboard
 
-@bot.message_handler(func=lambda message: message.text == "🏠 Главное меню")
-def main_menu(message):
-    bot.send_message(message.chat.id, "📌 Вы в главном меню!", reply_markup=main_menu_keyboard())
+# @bot.message_handler(func=lambda message: message.text == "🏠 Главное меню")
+# def main_menu(message):
+#     bot.send_message(message.chat.id, "📌 Вы в главном меню!", reply_markup=main_menu_keyboard())
+#     start_message_after_authorization()
 
-@bot.message_handler(func=lambda message: message.text == "🔎 Поиск заказа")
-def find_orders(message):
-    bot.send_message(message.chat.id, "Введите имя клиента, номер телефона или ID заказа:")
+# @bot.message_handler(func=lambda message: message.text == "🔎 Поиск заказа")
+# def find_orders(message):
+#     bot.send_message(message.chat.id, "Введите имя клиента, номер телефона или ID заказа:")
+#     find_order(message)
 
-@bot.message_handler(func=lambda message: message.text == "📃 Список заказов")
-def list_orders(message):
-    order_list(message)
+# @bot.message_handler(func=lambda message: message.text == "📃 Список заказов")
+# def list_orders(message):
+#     order_list(message)
 
 @bot.message_handler(commands=['help'])
 def start_message_after_authorization(message):
@@ -114,18 +116,18 @@ def ask_subjcet(message:Message):
         bot.send_message(message.chat.id, "🚫 У вас нет доступа к этому боту!")
         return
     
-    bot.send_message(message.chat.id, '📌 Введите заголовок рассылки:', reply_markup=main_menu_keyboard())
+    bot.send_message(message.chat.id, '📌 Введите заголовок рассылки:')
     bot.register_next_step_handler(message, ask_message)
 
 def ask_message(message:Message):
     user_data[message.chat.id] = {"subject": message.text.strip()}
-    bot.send_message(message.chat.id, "✉ Теперь введите текст рассылки", reply_markup=main_menu_keyboard())
+    bot.send_message(message.chat.id, "✉ Теперь введите текст рассылки")
     bot.register_next_step_handler(message, send_mail)
 
 def send_mail(message:Message):
     chat_id = message.chat.id
     if chat_id not in user_data:
-        bot.send_message(chat_id, "Произошла ошибка, повторите /send_mail", reply_markup=main_menu_keyboard())
+        bot.send_message(chat_id, "Произошла ошибка, повторите /send_mail")
         return
     
     user_data[chat_id]["message"] = message.text.strip()
@@ -134,7 +136,7 @@ def send_mail(message:Message):
     body = user_data[chat_id]["message"]
     send_mass_mail(subject, body)
 
-    bot.send_message(chat_id, '✅ Рассылка успешно отправлена!', reply_markup=main_menu_keyboard())
+    bot.send_message(chat_id, '✅ Рассылка успешно отправлена!')
 
     del user_data[chat_id]
 
@@ -305,7 +307,7 @@ def find_order(message):
         bot.send_message(message.chat.id, "🚫 У вас нет доступа к этому боту!")
         return
     
-    bot.send_message(message.chat.id, "🔍 Введите имя клиента, номер телефона или ID заказа:", reply_markup=main_menu_keyboard())
+    bot.send_message(message.chat.id, "🔍 Введите имя клиента, номер телефона или ID заказа:")
 
 @bot.message_handler(func=lambda message:True)
 def find_results(message):
@@ -352,6 +354,8 @@ def change_status(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('set_status_'))
 def set_status(call):
+    from orders.tasks import send_order_email_task
+
     data = call.data.split("_")
     order_id = int(data[2])
     new_status = data[3]
@@ -359,13 +363,18 @@ def set_status(call):
     try:
         order = Order.objects.get(id=order_id)
         order.status_of_order = new_status
+
+        if new_status == "approved":
+            order.is_paid = True
+            send_order_email_task.delay(order_id)
+            
         order.save()
 
         bot.edit_message_text(
             f'🔄 Статус заказа #{order.id} изменен на "{STATUS_CHOICES[new_status]}"',
             call.message.chat.id,
             call.message.message_id,
-            reply_markup=main_menu_keyboard()
+            
         )
     except Order.DoesNotExist:
         bot.send_message(call.message.chat.id, '❌ Не удалось изменить статус заказа')

@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Заказ успешно создан{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/created.css' %}">{% endblock extra_css %}
+
+{% block content %}
+<div class="container text-center mt-5" style="max-width: 600px;">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Ваш заказ успешно создан!</h4>
+        <p>Наш менеджер скоро свяжется с вами для подтверждения заказа.</p>
+        <hr>
+        <p class="mb-0">Вы можете продолжить покупки или перейти в <a href="{% url 'cart:cart_detail' %}">корзину</a>.</p>
+    </div>
+    <a href="/" class="btn btn-primary btn-main">На главную</a>
+</div>
+{% endblock content %}

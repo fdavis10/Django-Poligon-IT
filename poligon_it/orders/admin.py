@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from .models import Order, OrderItem
 from django.utils.safestring import mark_safe
 
@@ -20,4 +22,19 @@ class OrderAdmin(admin.ModelAdmin):
         'created',
         'updated',
     ]
+    search_fields = ('first_name', 'email', 'phone_number')
+    actions = ['mark_approved']
+
+    def mark_approved(self, request, queryset):
+        for order in queryset:
+            order.status_of_order == Order.STATUS_APPROVED
+            order.save()
+
+    mark_approved.short_description = "✅ Потвердить выбранные заказы!"
     # inlines = []
+
+@receiver(post_save, sender=Order)
+def order_status_changed(sender, instance, **kwargs):
+    if instance.status_of_order == Order.STATUS_APPROVED and instance.is_paid:
+        from .tasks import send_order_email_task
+        send_order_email_task.delay(instance.id)

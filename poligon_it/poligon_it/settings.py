@@ -164,6 +164,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "emails")
 EMAIL_HOST='localhost'
 EMAIL_PORT=1025
 EMAIL_USE_TLS= False
