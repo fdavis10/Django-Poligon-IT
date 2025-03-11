@@ -78,6 +78,37 @@
     background-color: rgb(25, 47, 105) !important;
 }
 
+.btn-quick{
+    border: none;
+    background-color: rgb(65, 99, 194) !important;
+}
+
+.btn-quick:hover{
+    border: none;
+    background-color: rgb(60, 84, 151) !important;
+}
+
+.btn-quick:active{
+    border: none;
+    background-color: rgb(60, 84, 151) !important;
+}
+
+
+.btn-quick-form{
+    border: none;
+    background-color: rgb(35 65 148);
+}
+
+.btn-quick-form:hover{
+    border: none;
+    background-color: rgb(25, 47, 105);
+}
+
+.btn-quick-form:active{
+    border: none;
+    background-color: rgb(25, 47, 105) !important;
+}
+
 @media (max-width: 768px) {
     .row {
         flex-direction: column;

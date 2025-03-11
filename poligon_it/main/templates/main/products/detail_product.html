@@ -29,7 +29,9 @@
                     <input type="hidden" name="quantity" value="1">
                     <button type="submit" class="btn btn-primary w-100 button-cart">В корзину</button>
                 </form>
-                <button class="btn btn-light w-100 mt-2">Быстрый заказ ( недоступно )</button>
+                <button class="btn btn-primary w-100 mt-2 btn-quick" data-bs-toggle="modal" data-bs-target="#quickOrderModal">
+                    Быстрый заказ
+                </button>
             </div>
             <div class="additional_func p-3">
                 <a href="{% url "main:add_to_favorites" product.id %}" class="favorite_ico">
@@ -43,7 +45,6 @@
             </div>
         </div>
     </div>
-
     <div class="info-section">
         <h2>Описание и характеристики</h2>
         <p>{{product.description}}</p>
@@ -95,7 +96,95 @@
     </div>
 </div>
 
+<div class="modal fade" id="quickOrderModal" tabindex="-1" aria-labelledby="quickOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quickOrderModalLabel">Быстрый заказ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Информация о товаре -->
+                <div class="d-flex align-items-center mb-3">
+                    <img src="{{ product.image_1.url }}" alt="{{ product.name }}" class="img-thumbnail" width="80">
+                    <div class="ms-3">
+                        <h5 class="mb-1">{{ product.name }}</h5>
+                        <p class="text-muted mb-0">{{ product.price }} ₽</p>
+                    </div>
+                </div>
+
+                <!-- Форма быстрого заказа -->
+                <form id="quick-order-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+
+                    <!-- Выбор количества -->
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Количество</label>
+                        <div class="input-group">
+                            <button type="button" class="btn btn-outline-secondary" id="decrease-qty">➖</button>
+                            <input type="number" name="quantity" id="quantity" class="form-control text-center" value="1" min="1">
+                            <button type="button" class="btn btn-outline-secondary" id="increase-qty">➕</button>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_first_name" class="form-label">Имя</label>
+                        <input type="text" name="first_name" id="id_first_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_phone_number" class="form-label">Телефон</label>
+                        <input type="text" name="phone_number" id="id_phone_number" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email</label>
+                        <input type="email" name="email" id="id_email" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 btn-quick-form">Оформить заказ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $("#quick-order-form").on("submit", function (e) {
+        e.preventDefault();
+        var formData = $(this).serialize();  
+        
+        $.ajax({
+            type: "POST",
+            url: "{% url 'orders:quick_order' %}",
+            data: formData,
+            success: function (response) {
+                alert(response.message);  
+                $("#quickOrderModal").modal("hide");  
+            },
+            error: function (xhr) {
+                alert(xhr.responseJSON.message); 
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const quantityInput = document.getElementById("quantity");
+        const decreaseBtn = document.getElementById("decrease-qty");
+        const increaseBtn = document.getElementById("increase-qty");
+
+        decreaseBtn.addEventListener("click", function () {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+
+        increaseBtn.addEventListener("click", function () {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        });
+    });
+
     function openModal(videoUrl) {
         const modal = document.getElementById('videoModal');
         const modalVideo = document.getElementById('modal-video-source');
@@ -129,4 +218,5 @@
         }
     }
 </script>
+
 {% endblock content %}

@@ -1,14 +1,16 @@
-import openpyxl
 from django.core.mail import EmailMessage
 from django.conf import settings
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.urls import reverse
 import openpyxl.writer
+from main.models import Product
 from .models import OrderItem, Order
 from .forms import OrderCreateForm
 from cart.cart import Cart
 from .tasks import notify_telegram
 from io import BytesIO
+import openpyxl
 
 
 def generate_order_excel(order, order_items):
@@ -95,3 +97,21 @@ def order_create(request):
                     'orders/order/create.html',
                     {'cart':cart,
                     'form':form})
+
+
+def quick_order(request):
+    if request.method == "POST":
+        form = OrderCreateForm(request.POST)
+        product_id = request.POST.get('product_id')
+        quantity = int(request.POST.get('quantity', 1))
+
+        if form.is_valid() and product_id:
+            product = get_object_or_404(Product, id=product_id)
+            order = form.save()
+
+            OrderItem.objects.create(order=order, product=product, price = product.price, quantity=quantity)
+            notify_telegram.delay(order.id)
+            
+            return JsonResponse({"status":"succes", "message": "Ваш заказ успешно оформлен!"})
+        return JsonResponse({"status":"error", "message":"Ошибка в данных формы!"}, status=400)
+    return JsonResponse({"status":"error", "message":"Неверный метод запроса!"}, status=405)

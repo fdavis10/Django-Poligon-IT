@@ -85,9 +85,30 @@ def product_list_by_category(request, slug):
 def product_list_by_subcategory(request, slug):
     sub_category_1 = get_object_or_404(Subcategory_1, slug=slug)
     products = Product.objects.filter(subcategory_1 = sub_category_1)
+
+    filters = {}
+    for product in products:
+        if isinstance(product.specifications, dict):
+            for key, value in product.specifications.items():
+                if key not in filters:
+                    filters[key] = set()
+                filters[key].add(str(value))
+    filters = {key: list(values) for key, values in filters.items()}
+
+    query = Q()
+    for key in filters.keys():
+        selected_values = request.GET.getlist(key)
+        if selected_values:
+            for value in selected_values:
+                query |= Q(specifications__contains={key: value})
+
+    if query:
+        products = products.filter(query)
+
     return render(request, 'main/products/product_list_by_subcategory.html', {
         'subcategory': sub_category_1,
-        'products': products
+        'products': products,
+        'filters': filters,
     })
 
 def detail_product(request, slug):

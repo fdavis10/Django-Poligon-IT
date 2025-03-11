@@ -48,17 +48,8 @@ user_data = {}
 
 
 
-
-def log_event(event_text):
-    logging.info(event_text)
-
-@bot.message_handler(func=lambda message: not message.text.startswith('/'))
-def log_messages(message):
-    log_event(f"Сообщение от {message.chat.id}: {message.text}")
-
 def is_authorized(chat_id):
     return TelegramUser.objects.filter(chat_id=chat_id).exists()
-
 
 def is_admin(chat_id):
     return TelegramUser.objects.filter(chat_id=chat_id, is_admin=True).exists() or chat_id in ADMIN_IDS
@@ -74,8 +65,11 @@ def start_message(message):
 @bot.message_handler(func=lambda message: not is_authorized(message.chat.id))
 def check_password(message):
     if message.text.strip() == BOT_PASSWORD:
-        TelegramUser.objects.create(chat_id=message.chat.id, username=message.from_user.username)
-        bot.send_message(message.chat.id, "🔓 Авторизация успешна, вам разблокированы возможности!\nИспользуйте /help для получения дополнительной информации!")
+        try:
+            TelegramUser.objects.create(chat_id=message.chat.id, username=message.from_user.username)
+            bot.send_message(message.chat.id, "🔓 Авторизация успешна, вам разблокированы возможности!\nИспользуйте /help для получения дополнительной информации!")
+        except IntegrityError:
+            bot.send_message(message.chat.id, "⚠ Ошибка базы данных! Возможно, вы уже зарегистрированы.")
     else:
         bot.send_message(message.chat.id, "🚫 Неверный пароль! Попробуйте снова!")
 
@@ -107,7 +101,7 @@ def start_message_after_authorization(message):
         bot.send_message(message.chat.id, "🚫 У вас нет доступа к этому боту!")
         return
     
-    bot.send_message(message.chat.id, 'Вас приветствует телеграм-бот RE-AGENT 👋\nЭтот бот предоставляет возможности управления заказами прямо из телеграмма!\n\nКаждый раз при заказе приходит уведомление,\nИ вы можете отредактировать статус заказа и получить детальную информацию о заказе\nКоманды для использования бота - \n\n/orders - получить список заказов\n/find - найти заказ по имени клиента, по номеру телефона и по электронной почте\n/send_email - для отправки массовой рассылки всем пользователям, которые при заказе указывали электронную почту!', reply_markup=main_menu_keyboard())
+    bot.send_message(message.chat.id, 'Вас приветствует телеграм-бот RE-AGENT 👋\nЭтот бот предоставляет возможности управления заказами прямо из телеграмма!\n\nКаждый раз при заказе приходит уведомление,\nИ вы можете отредактировать статус заказа и получить детальную информацию о заказе\nКоманды для использования бота - \n\n/orders - получить список заказов\n/find - найти заказ по имени клиента, по номеру телефона и по электронной почте\n/send_email - для отправки массовой рассылки всем пользователям, которые при заказе указывали электронную почту!')
 
 
 @bot.message_handler(commands=['send_email'])
@@ -378,7 +372,16 @@ def set_status(call):
         )
     except Order.DoesNotExist:
         bot.send_message(call.message.chat.id, '❌ Не удалось изменить статус заказа')
-    
+
+def log_event(event_text):
+    logging.info(event_text)
+
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def log_messages(message):
+    log_event(f"Сообщение от {message.chat.id}: {message.text}")
+    bot.process_new_messages([message])
+
+
 print('Bot runned and listen commands')
 
 bot.polling(none_stop=True)

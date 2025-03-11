@@ -13,6 +13,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 import codecs
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -172,3 +173,11 @@ EMAIL_USE_SSL= False
 EMAIL_HOST_USER=''
 EMAIL_HOST_PASSWORD=''
 DEFAULT_FROM_EMAIL='test@example.com'
+
+
+CELERY_BEAT_SCHEDULE = {
+    'sync_products_every_30_minutes': {
+        'task': 'main.tasks.import_product_from_1c',
+        'schedule': crontab(minute='*/30'),
+    },
+}
