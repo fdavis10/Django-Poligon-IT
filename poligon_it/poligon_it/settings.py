@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_json_widget',
+    'celery',
+    'django_celery_beat',
+    'rest_framework',
     'fontawesomefree',
     'main.apps.MainConfig',
     'cart.apps.CartConfig',
@@ -177,7 +180,7 @@ DEFAULT_FROM_EMAIL='test@example.com'
 
 CELERY_BEAT_SCHEDULE = {
     'sync_products_every_30_minutes': {
-        'task': 'main.tasks.import_product_from_1c',
+        'task': 'main.tasks.fetch_products_from_1c',
         'schedule': crontab(minute='*/30'),
     },
 }

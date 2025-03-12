@@ -16,6 +16,10 @@ urlpatterns = [
     path('favorites/clear/', views.clear_favorites, name='clear_favorites'),
     path('search/', views.search_result, name='search_results'),
     path('mobile_search/', views.mobile_search, name='mobile_search'),
+    path('api/products/', views.product_list, name="product_list"),
+    path('api/categories/', views.get_categories, name='get_categories'),
+    path('api/subcategories', views.get_subcategories, name='get_subcategories')
+    
 ]
 
 

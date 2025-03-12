@@ -11,6 +11,10 @@ from cart.cart import Cart
 from .tasks import notify_telegram
 from io import BytesIO
 import openpyxl
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import OrderSerializer
 
 
 def generate_order_excel(order, order_items):
@@ -115,3 +119,19 @@ def quick_order(request):
             return JsonResponse({"status":"succes", "message": "Ваш заказ успешно оформлен!"})
         return JsonResponse({"status":"error", "message":"Ошибка в данных формы!"}, status=400)
     return JsonResponse({"status":"error", "message":"Неверный метод запроса!"}, status=405)
+
+
+@api_view(['GET'])
+def get_orders(request):
+    orders = Order.objects.all().order_by('-created')
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_order_detail(request, order_id):
+    try:
+        order = Order.objects.get(id=order_id)
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Order.DoesNotExist:
+        return Response({"error":"Заказ не найден!"}, status=status.HTTP_404_NOT_FOUND)

@@ -2,7 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, Subcategory_1, Favorite
 from django.db.models import Q
 from django.http import JsonResponse
-
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import CategorySerializer, ProductSerializer, SubcategorySerializer
+from rest_framework import status
 
 def search_result(request):
     query = request.GET.get('q', '')
@@ -121,3 +124,25 @@ def mobile_search(request):
     query = request.GET.get('q', '')
     results = Product.objects.filter(name__icontains=query) if query else []
     return render(request, 'main/products/mobile_search.html', {'query':query, 'results': results})
+
+
+@api_view(['GET'])
+def get_categories(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_subcategories(request):
+    subcategories = Subcategory_1.objects.all()
+    serializer = SubcategorySerializer(subcategories, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def product_list(request):
+    products = Product.objects.all()
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+

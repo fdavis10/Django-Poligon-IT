@@ -7,6 +7,10 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 from io import BytesIO
 import time
+import requests
+import os
+
+
 
 @shared_task(bind=True, max_retries=5)
 def send_order_email_task(self, order_id):
@@ -83,3 +87,5 @@ def notify_telegram(self, order_id):
         for chat_id in authorized_users:
             send_telegram_message(f'❌ Заказ с ID {order_id} не найден')
         print(f'Ошибка: заказ с ID {order_id} не найден')
+
+
