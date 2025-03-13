@@ -1,54 +1,101 @@
-{% extends "main/base.html" %}
+{% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}О компании RE-AGENT{% endblock title %}
+{% block title %}О нас - Poligon IT{% endblock %}
 
-
-<link rel="stylesheet" href="{% static 'css/about_us.css' %}">
-
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<style>
+    .section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: left;
+        padding: 50px 0;
+        scroll-margin-top: 80px;
+    }
+    .section img {
+        max-width: 100%;
+        border-radius: 15px;
+    }
+    .section-content {
+        padding: 40px;
+    }
+    .navigation-buttons {
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .nav-btn {
+        background: #234194;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background 0.3s;
+    }
+    .nav-btn:hover {
+        background: #16285a;
+    }
+</style>
+{% endblock extra_css %}
 
 {% block content %}
-<header class="hero-section">
-    <div class="overlay"></div>
-    <div class="hero-text">
-        <h1>Добро пожаловать в Re-Agent</h1>
-        <p>Лидер в области химических реагентов и оборудования</p>
-        <a href="#about" class="btn btn-primary">Узнать больше</a>
+<div class="container" style="max-width: 1100px;">
+    <div class="navigation-buttons">
+        <button class="nav-btn" onclick="scrollToSection('about')">О компании</button>
+        <button class="nav-btn" onclick="scrollToSection('services')">Услуги</button>
+        <button class="nav-btn" onclick="scrollToSection('advantages')">Преимущества</button>
     </div>
-</header>
-
-<section id="about" class="container py-5">
-    <h2 class="text-center mb-4">О компании</h2>
-    <p>Компания Re-Agent занимается поставками качественных химических реагентов для различных отраслей промышленности. Мы работаем с надежными партнерами и гарантируем высокие стандарты качества.</p>
-</section>
-
-<section class="features py-5 bg-light">
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-md-4">
-                <div class="feature-box">
-                    <img src="/static/images/quality.png" alt="Качество">
-                    <h3>Высокое качество</h3>
-                    <p>Мы обеспечиваем строгий контроль качества всех поставляемых реагентов.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-box">
-                    <img src="/static/images/delivery.png" alt="Доставка">
-                    <h3>Быстрая доставка</h3>
-                    <p>Мы оперативно доставляем продукцию по всей стране.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-box">
-                    <img src="/static/images/support.png" alt="Поддержка">
-                    <h3>Круглосуточная поддержка</h3>
-                    <p>Наши специалисты всегда готовы помочь вам.</p>
-                </div>
-            </div>
+    
+    <section id="about" class="section d-flex flex-wrap">
+        <div class="col-md-6 section-content">
+            <h2>О компании Poligon IT</h2>
+            <p>Poligon IT — ведущий разработчик IT-решений, предоставляющий инновационные технологии для автоматизации бизнеса...</p>
         </div>
-    </div>
-</section>
-<script src="js/about.js"></script>
+        <div class="col-md-6">
+            <img src="https://source.unsplash.com/600x400/?technology,office" alt="О компании">
+        </div>
+    </section>
+    
+    <section id="services" class="section bg-light d-flex flex-wrap">
+        <div class="col-md-6">
+            <img src="https://source.unsplash.com/600x400/?coding,software" alt="Наши услуги">
+        </div>
+        <div class="col-md-6 section-content">
+            <h2>Наши услуги</h2>
+            <ul>
+                <li><strong>Веб-разработка:</strong> Создание современных, адаптивных веб-сайтов и порталов.</li>
+                <li><strong>Разработка ПО:</strong> Кастомные программные решения для автоматизации бизнеса.</li>
+            </ul>
+        </div>
+    </section>
+    
+    <section id="advantages" class="section d-flex flex-wrap">
+        <div class="col-md-6 section-content">
+            <h2>Почему выбирают нас?</h2>
+            <ul>
+                <li><strong>Опыт и экспертиза:</strong> Более 10 лет на рынке IT-услуг.</li>
+                <li><strong>Индивидуальный подход:</strong> Разрабатываем решения под конкретные бизнес-задачи.</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <img src="https://source.unsplash.com/600x400/?success,teamwork" alt="Преимущества">
+        </div>
+    </section>
+</div>
 
+<script>
+    function scrollToSection(sectionId) {
+        document.getElementById(sectionId).scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+</script>
 {% endblock content %}

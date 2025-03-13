@@ -52,7 +52,7 @@ def send_order_email_task(self, order_id):
         print(f'📩 Email с заказом {order.id} отправлен на {order.email}')
     except Exception as e:
         print(f'❌ Ошибка при отправке email заказа {order_id}: {str(e)}')
-        self.retry(exc=e, coutdown=5)
+        self.retry(exc=e, countdown=5)
 
 
 
@@ -77,15 +77,12 @@ def notify_telegram(self, order_id):
         )
 
         authorized_users = TelegramUser.objects.values_list('chat_id', flat=True)
-        for chat_id in authorized_users:
-            send_telegram_message(message)
+        send_telegram_message(message, authorized_users)
         print(f'Сообщение отправлено: {message}')
 
     except ObjectDoesNotExist:
         error_message=f'❌ Заказ с ID {order_id} не найден'
-        authorized_users = TelegramUser.objects.values_list('chat_id', flat=True)
-        for chat_id in authorized_users:
-            send_telegram_message(f'❌ Заказ с ID {order_id} не найден')
+        send_telegram_message(message, authorized_users)
         print(f'Ошибка: заказ с ID {order_id} не найден')
 
 
