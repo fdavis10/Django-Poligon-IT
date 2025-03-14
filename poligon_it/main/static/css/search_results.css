@@ -120,6 +120,10 @@
     color: #666666;
 }
 
+.favorites{
+    margin-right: 20px;
+}
+
 @media (max-width: 768px) {
     .cards_wrapper {
         grid-template-columns: repeat(2, 1fr); 

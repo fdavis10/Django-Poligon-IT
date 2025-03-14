@@ -1,0 +1,49 @@
+<a href="" class="telegram-btn">
+    <i class="fab fa-telegram"></i>
+    <span class="tooltip">Появились вопросы? Задавайте!</span>
+</a>
+
+<style>
+    .telegram-btn {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: rgb(35 65 148);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 50px;
+        font-size: 18px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: background 0.3s, transform 0.3s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .telegram-btn:hover {
+        background: rgb(25, 47, 105);
+        transform: scale(1.1);
+    }
+
+    .telegram-btn i {
+        font-size: 24px;
+    }
+
+    .tooltip {
+        display: none;
+        position: absolute;
+        left: 60px;
+        bottom: 50%;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    .telegram-btn:hover .tooltip {
+        display: block;
+    }
+</style>

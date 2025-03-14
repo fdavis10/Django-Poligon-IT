@@ -77,8 +77,9 @@
             <li class="nav-item">
               <a class="nav-link nav-mobile" href="{% url 'main:favorite_list' %}">Избранное</a>
             </li>
-            <li class="nav-item">
+            {% comment %} <li class="nav-item">
               <a class="nav-link nav-mobile" href="#">Сравнение</a>
+            </li> {% endcomment %}
               <li class="nav-item">
                 <a class="nav-link nav-mobile" href="{% url "cart:cart_detail" %}">Корзина</a>
               </li>
@@ -96,11 +97,11 @@
                   {% endif %}
                 </a>              
               </li>
-              <li class="nav-item">
+              {% comment %} <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-chart-bar"></i>
                 </a>
-              </li>
+              </li> {% endcomment %}
               <li class="nav-item">
                 <a href="{% url "cart:cart_detail" %}" class="nav-link">
                   <i class="fas fa-shopping-cart"></i>
@@ -116,6 +117,7 @@
   <div class="container d-flex " style="max-width: 1100px; margin-top: 50px;">
   {% block content %}{% endblock content %}
   </div>
+  {% include 'includes/telegram_button.html' %}
   <footer class="bg-body-tertiary text-center footerreagent">
     <div class="container p-4 pb-0">
       <section class="">

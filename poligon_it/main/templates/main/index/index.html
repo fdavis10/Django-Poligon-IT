@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}Главная - Poligon IT{% endblock %}
+{% block title %}Главная - Re-Agent{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/index.css' %}">
 {% endblock extra_css %}
 
@@ -76,10 +76,10 @@
     {% comment %} Краткое био {% endcomment %}
     <div class="d-flex mt-5 boxes">
         <div class="orders">
-            <span>Доставляем все во время</span> 
+            Доставляем все во время
         </div>
         <div class="items_out">
-            <span>Доставляем все во время</span> 
+            Только надежные поставщики
         </div>
         <div class="image_boxes">
             <img src="{% static 'img/image_brand_1.png' %}" alt="">
@@ -110,8 +110,7 @@
                                 <input type="hidden" name="quantity" value="1">  <!-- Количество 1 по умолчанию -->
                                 <button type="submit" class="btn btn-primary button-cart">В корзину</button>
                             </form>
-                            <a href="{% url "main:add_to_favorites" product.id %}"><i class="fa-solid fa-heart"></i></a>
-                            <a href="#"><i class="fa-solid fa-chart-bar"></i></a>
+                            <a href="{% url "main:add_to_favorites" product.id %}"><i class="fa-solid fa-heart favorites"></i></a>
                         </div>
                     </div>
                 </div>
