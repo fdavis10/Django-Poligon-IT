@@ -16,6 +16,12 @@ def search_result(request):
 def about_us(request):
     return render(request, 'main/index/about_us.html')
 
+def guarentee(request):
+    return render(request, 'main/index/guarentee.html')
+
+def contacts(request):
+    return render(request, 'main/index/contacts.html')
+
 def get_session_key(request):
     if not request.session.session_key:
         request.session.save()

@@ -1,5 +1,7 @@
 import logging
 import telebot
+import time
+import re
 import os
 import sys
 import django
@@ -23,7 +25,7 @@ django.setup()
 
 from orders.models import Order, OrderItem
 from emailsender.utils import send_mass_mail
-from tg_bot.models import TelegramUser
+from tg_bot.models import TelegramUser, ProductOrder, UserQuestion
 
 load_dotenv()
 
@@ -44,8 +46,157 @@ STATUS_CHOICES = {
 ORDERS_PER_PAGE = 5
 user_pages = {}
 user_data = {}
+order_data = {}
+questions_timestamps = {}
 
 
+
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add(KeyboardButton("🔎 Заказать товар"))
+    markup.add(KeyboardButton("💬 Задать вопрос"))
+
+    bot.send_message(
+        message.chat.id,
+        "👋 Вас приветствует компания Re-Agent. Вы сейчас находитесь в главном меню.\nВы можете связаться с менеджером, для того, чтобы заказать товар,\nкоторого у нас нет на сайте.Также, вы можете задать вопрос,\nкоторый вас интересует.",
+        reply_markup=markup
+    )
+
+@bot.message_handler(func=lambda message: message.text == "🔎 Заказать товар")
+def order_product(message):
+    bot.send_message(message.chat.id, "📃 Введите ваше имя (только буквы, от 2 до 50 символов):")
+    bot.register_next_step_handler(message, get_name)
+
+def get_name(message):
+    chat_id = message.chat.id
+    name = message.text.strip()
+
+    if not re.match(r"^[А-Яа-яA-Za-z\s-]{2,50}$", name):
+        bot.send_message(chat_id, "🚫 Некорректное имя! Введите заново:")
+        bot.register_next_step_handler(message, get_name)
+        return
+
+    order_data[chat_id] = {"name": name}
+    bot.send_message(chat_id, "🛒 Введите название товара (от 2 до 100 символов):")
+    bot.register_next_step_handler(message, get_product_name)
+
+def get_product_name(message):
+    chat_id = message.chat.id
+    product_name = message.text.strip()
+
+    if len(product_name) < 2 or len(product_name) > 100:
+        bot.send_message(chat_id, "🚫 Название товара слишком короткое или длинное! Введите заново:")
+        bot.register_next_step_handler(message, get_product_name)
+        return
+
+    order_data[chat_id]["product_name"] = product_name
+    bot.send_message(chat_id, "🔢 Укажите количество товара (от 1 до 1000):")
+    bot.register_next_step_handler(message, get_quantity)
+
+def get_quantity(message):
+    chat_id = message.chat.id
+    try:
+        quantity = int(message.text.strip())
+        if quantity < 1 or quantity > 1000:
+            raise ValueError
+    except ValueError:
+        bot.send_message(chat_id, "🚫 Некорректное количество! Введите число от 1 до 1000:")
+        bot.register_next_step_handler(message, get_quantity)
+        return
+
+    order_data[chat_id]["quantity"] = quantity
+    bot.send_message(chat_id, "📞 Укажите ваш контакт (номер телефона или email):")
+    bot.register_next_step_handler(message, get_contact)
+
+def get_contact(message):
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add(KeyboardButton("🔎 Заказать товар"))
+    markup.add(KeyboardButton("💬 Задать вопрос"))
+
+    chat_id = message.chat.id
+    contact_info = message.text.strip()
+
+    phone_regex = r"^\+?\d{10,15}$" 
+    email_regex = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"  
+
+    if not re.match(phone_regex, contact_info) and not re.match(email_regex, contact_info):
+        bot.send_message(chat_id, "🚫 Введите корректный номер телефона (например, +79991234567) или email:")
+        bot.register_next_step_handler(message, get_contact)
+        return
+
+    order_data[chat_id]["contact_info"] = contact_info
+
+    order = ProductOrder.objects.create(**order_data[chat_id])
+
+    bot.send_message(chat_id, f"✅ Ваш заказ сохранён!\n\n"
+                              f"👤 Имя: {order.name}\n"
+                              f"📦 Товар: {order.product_name}\n"
+                              f"🔢 Количество: {order.quantity}\n"
+                              f"📞 Контакт: {order.contact_info}", reply_markup=markup)
+
+    notify_admins(order)
+
+    del order_data[chat_id]
+
+@bot.message_handler(func=lambda message: message.text == "💬 Задать вопрос")
+def ask_question(message):
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add(KeyboardButton("🔎 Заказать товар"))
+    markup.add(KeyboardButton("💬 Задать вопрос"))
+
+    chat_id = message.chat.id
+
+    last_question_time = questions_timestamps.get(chat_id, 0)
+    if time.time() - last_question_time < 30:
+        bot.send_message(chat_id, "⏳ Вы недавно уже задавали вопрос. Подождите немного перед следующим.", reply_markup=markup)
+        return
+    
+    bot.send_message(chat_id, "✏ Пожалуйста, напишите ваш вопрос:")
+    bot.register_next_step_handler(message, save_question)
+
+def save_question(message):
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add(KeyboardButton("🔎 Заказать товар"))
+    markup.add(KeyboardButton("💬 Задать вопрос"))
+
+    chat_id = message.chat.id
+    username = message.from_user.username
+    question_text = message.text.strip()
+
+    if len(question_text) < 5 or len(question_text) > 500:
+        bot.send_message(chat_id, "❗ Вопрос должен содержать от 5 до 500 символов.")
+        bot.register_next_step_handler(message, save_question)
+        return
+
+    if re.search(r'[<>/\|{}]+', question_text):
+        bot.send_message(chat_id, "🚫 Ваш вопрос содержит запрещённые символы. Попробуйте ещё раз.")
+        bot.register_next_step_handler(message, save_question)
+        return
+
+    question = UserQuestion.objects.create(
+        chat_id=chat_id,
+        username=username,
+        question_text=question_text
+    )
+
+    questions_timestamps[chat_id] = time.time()
+
+    bot.send_message(chat_id, "✅ Ваш вопрос отправлен! Менеджер ответит вам в ближайшее время.", reply_markup=markup)
+
+    notify_admins_about_question(question)
+
+def notify_admins_about_question(question):
+    staff = TelegramUser.objects.all()
+    if not staff.exists():
+        return
+    
+    
+    message_text = (f"📩 Новый вопрос от пользователя @{question.username or question.chat_id}:\n\n"
+                        f"💬 {question.question_text}")
+    
+    for officer in staff:
+        bot.send_message(officer.chat_id, message_text)
 
 
 def is_authorized(chat_id):
@@ -54,7 +205,7 @@ def is_authorized(chat_id):
 def is_admin(chat_id):
     return TelegramUser.objects.filter(chat_id=chat_id, is_admin=True).exists() or chat_id in ADMIN_IDS
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['login'])
 def start_message(message):
     if is_authorized(message.chat.id):
         bot.send_message(message.chat.id, "✅ Вы уже авторизованы в системе!")
@@ -95,10 +246,25 @@ def check_password(message):
 # def list_orders(message):
 #     order_list(message)
 
+def notify_admins(order):
+    staff = TelegramUser.objects.all()
+    if not staff.exists():
+        return
+    
+    
+    message_text = (f"📢 Новый заказ!\n\n"
+                    f"👤 Имя: {order.name}\n"
+                    f"📦 Товар: {order.product_name}\n"
+                    f"🔢 Количество: {order.quantity}\n"
+                    f"📞 Контакт: {order.contact_info}")
+    
+    for officer in staff:
+        bot.send_message(officer.chat_id, message_text)
+
 @bot.message_handler(commands=['help'])
 def start_message_after_authorization(message):
     if not is_authorized(message.chat.id):
-        bot.send_message(message.chat.id, "🚫 У вас нет доступа к этому боту!")
+        bot.send_message(message.chat.id, "🚫 У вас нет доступа к этой команде!")
         return
     
     bot.send_message(message.chat.id, 'Вас приветствует телеграм-бот RE-AGENT 👋\nЭтот бот предоставляет возможности управления заказами прямо из телеграмма!\n\nКаждый раз при заказе приходит уведомление,\nИ вы можете отредактировать статус заказа и получить детальную информацию о заказе\nКоманды для использования бота - \n\n/orders - получить список заказов\n/find - найти заказ по имени клиента, по номеру телефона и по электронной почте\n/send_email - для отправки массовой рассылки всем пользователям, которые при заказе указывали электронную почту!')

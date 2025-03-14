@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Контакты - Re-Agent{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contacts.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container">
+    <section id="contact-info" class="section d-flex flex-wrap">
+        <div class="col-md-6 section-content">
+            <h2>Свяжитесь с нами</h2>
+            <p>У вас есть вопросы или предложения? Мы всегда готовы помочь! Свяжитесь с нами удобным для вас способом.</p>
+            <ul>
+                <li><strong>Email:</strong> support@poligonit.com</li>
+                <li><strong>Телефон:</strong> +7 (999) 123-45-67</li>
+                <li><strong>Адрес:</strong> г. Москва, ул. IT-решений, д. 10</li>
+            </ul>
+        </div>
+    </section>
+    
+    <section id="map" class="section d-flex flex-wrap bg-light">
+        <div class="col-md-6 section-content">
+            <h2>Наш офис</h2>
+            <p>Посетите наш офис в удобное для вас время. Мы работаем с понедельника по пятницу с 9:00 до 18:00.</p>
+        </div>
+    </section>
+    
+    {% comment %} <section id="social" class="section d-flex flex-wrap">
+        <div class="col-md-6 section-content">
+            <h2>Мы в соцсетях</h2>
+            <p>Подписывайтесь на нас в социальных сетях, чтобы быть в курсе всех новостей и обновлений.</p>
+            <ul>
+                <li><a href="#">Telegram</a></li>
+                <li><a href="#">VK</a></li>
+                <li><a href="#">Facebook</a></li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <img src="https://source.unsplash.com/600x400/?social,network" alt="Социальные сети">
+        </div>
+    </section> {% endcomment %}
+</div>
+{% endblock content %}

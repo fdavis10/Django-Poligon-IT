@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Гарантии - Re-Agent{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/guarentee.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container">
+    <section id="guarantees" class="section d-flex flex-wrap">
+        <div class="col-md-6 section-content">
+            <h2>Наши гарантии</h2>
+            <p>Мы гарантируем высокое качество всех наших услуг и решений. В случае возникновения проблем мы обеспечиваем поддержку и исправление ошибок в кратчайшие сроки.</p>
+        </div>
+    </section>
+    
+    <section id="support" class="section d-flex flex-wrap bg-light">
+        <div class="col-md-6 section-content">
+            <h2>Поддержка клиентов</h2>
+            <p>Наша команда всегда готова помочь вам. Мы предоставляем круглосуточную техническую поддержку и консультации по всем вопросам.</p>
+        </div>
+    </section>
+    
+    <section id="refund" class="section d-flex flex-wrap">
+        <div class="col-md-6 section-content">
+            <h2>Гарантия возврата</h2>
+            <p>Если наши услуги не соответствуют вашим ожиданиям, мы готовы рассмотреть вопрос о возврате средств или доработке проекта до полного соответствия вашим требованиям.</p>
+        </div>
+    </section>
+</div>
+{% endblock content %}

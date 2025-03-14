@@ -1,73 +1,22 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}О нас - Poligon IT{% endblock %}
+{% block title %}О нас - Re-Agent{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/index.css' %}">
-<style>
-    .section {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: left;
-        padding: 50px 0;
-        scroll-margin-top: 80px;
-    }
-    .section img {
-        max-width: 100%;
-        border-radius: 15px;
-    }
-    .section-content {
-        padding: 40px;
-    }
-    .navigation-buttons {
-        position: fixed;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .nav-btn {
-        background: #234194;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background 0.3s;
-    }
-    .nav-btn:hover {
-        background: #16285a;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/about_us.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
-<div class="container" style="max-width: 1100px;">
-    <div class="navigation-buttons">
-        <button class="nav-btn" onclick="scrollToSection('about')">О компании</button>
-        <button class="nav-btn" onclick="scrollToSection('services')">Услуги</button>
-        <button class="nav-btn" onclick="scrollToSection('advantages')">Преимущества</button>
-    </div>
-    
+<div class="container">
     <section id="about" class="section d-flex flex-wrap">
         <div class="col-md-6 section-content">
             <h2>О компании Poligon IT</h2>
             <p>Poligon IT — ведущий разработчик IT-решений, предоставляющий инновационные технологии для автоматизации бизнеса...</p>
         </div>
-        <div class="col-md-6">
-            <img src="https://source.unsplash.com/600x400/?technology,office" alt="О компании">
-        </div>
     </section>
     
-    <section id="services" class="section bg-light d-flex flex-wrap">
-        <div class="col-md-6">
-            <img src="https://source.unsplash.com/600x400/?coding,software" alt="Наши услуги">
-        </div>
+    <section id="services" class="section d-flex flex-wrap bg-light">
         <div class="col-md-6 section-content">
             <h2>Наши услуги</h2>
             <ul>
@@ -85,17 +34,6 @@
                 <li><strong>Индивидуальный подход:</strong> Разрабатываем решения под конкретные бизнес-задачи.</li>
             </ul>
         </div>
-        <div class="col-md-6">
-            <img src="https://source.unsplash.com/600x400/?success,teamwork" alt="Преимущества">
-        </div>
     </section>
 </div>
-
-<script>
-    function scrollToSection(sectionId) {
-        document.getElementById(sectionId).scrollIntoView({
-            behavior: 'smooth'
-        });
-    }
-</script>
 {% endblock content %}
