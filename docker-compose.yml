@@ -1,4 +1,3 @@
-version: "3.8"
 
 services:
   db:
@@ -47,6 +46,19 @@ services:
     depends_on:
       - redis
       - web
+    
+  celery-beat:
+    build: .
+    restart: always
+    command: celery -A poligon_it.celery beat --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - celery
+    env_file:
+      - .env
+
   
   telegram:
     build: .

@@ -16,4 +16,5 @@ python /app/poligon_it/manage.py migrate
 
 # Запускаем сервер
 echo "Starting server..."
+python /app/manage.py migrate django_celery_beat
 exec "$@"
