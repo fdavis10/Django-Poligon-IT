@@ -107,6 +107,7 @@
     background-color: rgb(25, 47, 105) !important;
 }
 
+
 @media (max-width: 768px) {
     .cards_wrapper {
         grid-template-columns: repeat(2, 1fr); 

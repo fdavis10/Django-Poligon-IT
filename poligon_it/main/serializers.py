@@ -6,7 +6,7 @@ class CategorySerializer(serializers.ModelSerializer):
     absolute_url = serializers.SerializerMethodField()
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'image']
+        fields = ['id', 'name', 'slug', 'image', 'absolute_url']
     
     def get_absolute_url(self, obj):
         return obj.get_absolute_url()
@@ -17,7 +17,7 @@ class SubcategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subcategory_1
-        fields = ['id', 'name', 'slug', 'category']
+        fields = ['id', 'name', 'slug', 'category', 'absolute_url']
 
     def get_absolute_url(self, obj):
         return obj.get_absolute_url()
@@ -35,7 +35,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'id', 'name', 'slug', 'description', 'price', 'available', 'available_quantity',
             'image_1', 'image_2', 'image_3', 'video', 'category', 'subcategory_1',
             'specifications', 'complectation', 'certificate_diller', 'guarantee',
-            'created', 'updated'
+            'created', 'updated', 'absolute_url'
         ]
     
     def get_absolute_url(self, obj):

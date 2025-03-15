@@ -1,7 +1,7 @@
 {% extends "main/base.html" %}
 {% load static %}
 
-{% block title %}Избранные товары{% endblock title %}
+{% block title %}Избранные товары - Re-Agent{% endblock title %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/favorites.css' %}">
@@ -22,37 +22,39 @@
     <div class="row">
         <div class="col-md-3">
             <div class="container_products">
-                <div class="cards_wrapper">
-                    {% for product in favorites %}
-                        <div class="card mb-4">
-                            <div class="card__top">
-                                <a href="{{ product.get_absolute_url }}" class="card__image">
-                                    <img src="{{ product.image_1.url }}" alt="Продукт">
-                                </a>
-                            </div>
-                            <div class="card__bottom">
-                                <div class="card__prices">
-                                    <div class="card__price card__price--discount">{{ product.price }} ₽</div>
+                {% if favorites %}
+                    <div class="cards_wrapper">
+                            {% for product in favorites %}
+                                <div class="card mb-4">
+                                    <div class="card__top">
+                                        <a href="{{ product.get_absolute_url }}" class="card__image">
+                                            <img src="{{ product.image_1.url }}" alt="Продукт">
+                                        </a>
+                                    </div>
+                                    <div class="card__bottom">
+                                        <div class="card__prices">
+                                            <div class="card__price card__price--discount">{{ product.price }} ₽</div>
+                                        </div>
+                                        <a href="{{ product.get_absolute_url }}" class="card__title">{{ product.name }}</a>
+                                        <p class="description">{{ product.description }}</p>
+                                        <div class="card__func">
+                                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="quantity" value="1">  <!-- Количество 1 по умолчанию -->
+                                                <button type="submit" class="btn btn-primary button-cart">В корзину</button>
+                                            </form>
+                                            <a href="{% url 'main:remove_from_favorites' product.id %}">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </a>
+                                            <a href="#"><i class="fa-solid fa-chart-bar"></i></a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <a href="{{ product.get_absolute_url }}" class="card__title">{{ product.name }}</a>
-                                <p class="description">{{ product.description }}</p>
-                                <div class="card__func">
-                                    <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="quantity" value="1">  <!-- Количество 1 по умолчанию -->
-                                        <button type="submit" class="btn btn-primary button-cart">В корзину</button>
-                                    </form>
-                                    <a href="{% url 'main:remove_from_favorites' product.id %}">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
-                                    <a href="#"><i class="fa-solid fa-chart-bar"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    {% empty %}
-                        <p>В избранном пока нет товаров.</p>
-                    {% endfor %}
-                </div>
+                            {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="favorites_p">В избранном пока нет товаров!</p>
+                {% endif %}
             </div>
         </div>
     </div>

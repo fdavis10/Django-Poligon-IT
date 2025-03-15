@@ -34,7 +34,7 @@
                         </form>
                     </div>
                     <div class="col-md-2 text-end">
-                        <strong>{{ item.total_price }} ₽</strong>
+                        <span class="total_price_item">{{ item.total_price }} ₽</span>
                         <form action="{% url 'cart:cart_remove' item.product.id %}" method="post" class="mt-2">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm button-delete">Удалить</button>
