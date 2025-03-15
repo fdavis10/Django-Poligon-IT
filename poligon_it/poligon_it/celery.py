@@ -3,6 +3,7 @@ from celery import Celery
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'poligon_it.settings')
 
+
 app = Celery('poligon_it')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.update(
