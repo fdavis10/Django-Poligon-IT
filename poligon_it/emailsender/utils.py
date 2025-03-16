@@ -1,6 +1,7 @@
 from django.core.mail import send_mail
 from orders.models import Order
 from .models import EmailCampaign
+from django.conf import settings
 
 def send_bulk_email():
     last_campaign = EmailCampaign.objects.last()
@@ -14,7 +15,7 @@ def send_bulk_email():
     send_mail(
         subject=last_campaign.subject,
         message=last_campaign.message,
-        from_email="xn--re-agent@--8qi0bxd4jub1b.xn--p1ai",
+        from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=recipients,
         fail_silently=False,
     )
@@ -26,7 +27,7 @@ def send_mass_mail(subject, body):
     send_mail(
         subject=subject,
         message=body,
-        from_email="xn--re-agent@--8qi0bxd4jub1b.xn--p1ai",
+        from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=list(recipients),
         fail_silently=False,
     )

@@ -81,7 +81,6 @@ def notify_telegram(self, order_id):
         print(f'Сообщение отправлено: {message}')
 
     except ObjectDoesNotExist:
-        error_message=f'❌ Заказ с ID {order_id} не найден'
         send_telegram_message(message, authorized_users)
         print(f'Ошибка: заказ с ID {order_id} не найден')
 

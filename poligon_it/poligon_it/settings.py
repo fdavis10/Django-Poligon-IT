@@ -168,12 +168,12 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'fdavisarz10@gmail.com'  
-EMAIL_HOST_PASSWORD = 'rtwr kzac eqtu sfxk'
+EMAIL_HOST = 'smtp.timeweb.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 're-agent@xn----8sbjfd2cpw.xn--p1ai'  
+EMAIL_HOST_PASSWORD = 'y1cfsdrhf1'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
