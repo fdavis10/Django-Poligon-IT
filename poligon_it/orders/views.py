@@ -48,28 +48,28 @@ def generate_order_excel(order, order_items):
     return file_stream
 
 
-# def send_order_email(order):
-#     order_items = order.items.all()
-#     excel_file = generate_order_excel(order, order_items)
+def send_order_email(order):
+    order_items = order.items.all()
+    excel_file = generate_order_excel(order, order_items)
 
-#     subject = f'Ваш заказ №{order.id} потвержден!'
-#     message = (
-#         f'Здравствуйте, {order.first_name}!\n\n'
-#         f'Ваш заказ №{order.id} потвержден. Таблица с деталями во вложении.\n'
-#         f'Для дальнейшей информации обращайтесь по телефону!'
-#     )
+    subject = f'Ваш заказ №{order.id} потвержден!'
+    message = (
+        f'Здравствуйте, {order.first_name}!\n\n'
+        f'Ваш заказ №{order.id} потвержден. Таблица с деталями во вложении.\n'
+        f'Для дальнейшей информации обращайтесь по телефону!'
+    )
 
-#     recipient_list = [order.email]
+    recipient_list = [order.email]
 
-#     email = EmailMessage(
-#         subject=subject,
-#         body=message,
-#         from_email=settings.DEFAULT_FROM_EMAIL,
-#         to=recipient_list,
-#     )
+    email = EmailMessage(
+        subject=subject,
+        body=message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=recipient_list,
+    )
 
-#     email.attach(f'Заказ_{order.id}.xlsx', excel_file.getvalue(), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-#     email.send()
+    email.attach(f'Заказ_{order.id}.xlsx', excel_file.getvalue(), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    email.send()
 
 
 def order_create(request):
@@ -93,7 +93,7 @@ def order_create(request):
             order_items.append(order_item)
         cart.clear()
         request.session['order_id'] = order.id
-        # send_order_email(order)
+        send_order_email(order)
         return render(request, 'orders/order/created.html')
     else:
         print(f'В форме создания заказа ошибка: {form.errors}')

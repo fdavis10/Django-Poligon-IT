@@ -14,7 +14,7 @@ def send_bulk_email():
     send_mail(
         subject=last_campaign.subject,
         message=last_campaign.message,
-        from_email='test@example.com',
+        from_email="xn--re-agent@--8qi0bxd4jub1b.xn--p1ai",
         recipient_list=recipients,
         fail_silently=False,
     )
@@ -26,7 +26,7 @@ def send_mass_mail(subject, body):
     send_mail(
         subject=subject,
         message=body,
-        from_email='test@example.com',
+        from_email="xn--re-agent@--8qi0bxd4jub1b.xn--p1ai",
         recipient_list=list(recipients),
         fail_silently=False,
     )

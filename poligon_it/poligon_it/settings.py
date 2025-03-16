@@ -167,15 +167,15 @@ CELERY_BROKER_URL = "redis://redis:6379/0" if IN_DOCKER else "redis://localhost:
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
-EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "emails")
-EMAIL_HOST='localhost'
-EMAIL_PORT=1025
-EMAIL_USE_TLS= False
-EMAIL_USE_SSL= False
-EMAIL_HOST_USER=''
-EMAIL_HOST_PASSWORD=''
-DEFAULT_FROM_EMAIL='test@example.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'fdavisarz10@gmail.com'  
+EMAIL_HOST_PASSWORD = 'rtwr kzac eqtu sfxk'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 
 CELERY_BEAT_SCHEDULE = {
