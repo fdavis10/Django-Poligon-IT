@@ -381,6 +381,14 @@
     .image_boxes{
         display: none;
     }
+
+    .items_out p{
+        margin-left: 15px;
+    }
+
+    .orders p{
+        margin-left: 10px;
+    }
 }
 
 @keyframes running-animation {
