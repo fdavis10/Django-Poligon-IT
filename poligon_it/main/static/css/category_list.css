@@ -2,10 +2,6 @@
     box-sizing: border-box;
 }
 
-.container_products {
-    display: flex;
-    justify-content: center;
-}
 
 .cards_wrapper {
     display: grid;
