@@ -124,6 +124,21 @@
     margin-right: 20px;
 }
 
+.button-cart{
+    border: none;
+    background-color: rgb(35 65 148) !important;
+}
+
+.button-cart:hover{
+    border: none;
+    background-color: rgb(25, 47, 105) !important;
+}
+
+.button-cart:active{
+    border: none;
+    background-color: rgb(25, 47, 105) !important;
+}
+
 @media (max-width: 768px) {
     .cards_wrapper {
         grid-template-columns: repeat(2, 1fr); 

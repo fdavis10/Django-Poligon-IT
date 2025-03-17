@@ -20,7 +20,8 @@ urlpatterns = [
     path('mobile_search/', views.mobile_search, name='mobile_search'),
     path('api/products/', views.product_list, name="product_list"),
     path('api/categories/', views.get_categories, name='get_categories'),
-    path('api/subcategories', views.get_subcategories, name='get_subcategories')
+    path('api/subcategories', views.get_subcategories, name='get_subcategories'),
+    path('upload/', views.upload_products, name='upload_products'),
     
 ]
 

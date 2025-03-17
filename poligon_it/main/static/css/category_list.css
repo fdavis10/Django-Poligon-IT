@@ -180,6 +180,22 @@
     margin-right: 20px;
 }
 
+.button-cart{
+    border: none;
+    background-color: rgb(35 65 148);
+}
+
+.button-cart:hover{
+    border: none;
+    background-color: rgb(25, 47, 105);
+}
+
+.button-cart:active{
+    border: none;
+    background-color: rgb(25, 47, 105) !important;
+}
+
+
 @media (max-width: 1024px){
     .container-car{
         display: none;

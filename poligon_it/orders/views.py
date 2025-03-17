@@ -93,7 +93,7 @@ def order_create(request):
             order_items.append(order_item)
         cart.clear()
         request.session['order_id'] = order.id
-        send_order_email(order)
+        # send_order_email(order)
         return render(request, 'orders/order/created.html')
     else:
         print(f'В форме создания заказа ошибка: {form.errors}')

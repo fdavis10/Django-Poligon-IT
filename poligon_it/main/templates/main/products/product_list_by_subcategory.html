@@ -61,7 +61,11 @@
                             <a href="{{product.get_absolute_url}}" class="card__title">{{product.name}}</a>
                             <p class='description'>{{product.description}}</p>
                             <div class="card__func">
-                                <button class="card__add">В корзину</button>
+                                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="quantity" value="1">  <!-- Количество 1 по умолчанию -->
+                                    <button type="submit" class="btn btn-primary button-cart">В корзину</button>
+                                </form>
                                 <a href="{% url 'main:add_to_favorites' product.id %}">
                                     <i class="fa-solid fa-heart favorites"></i>
                                 </a>

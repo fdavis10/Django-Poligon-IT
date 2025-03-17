@@ -27,7 +27,9 @@
                 <a href="{{category.get_absolute_url}}" class="category_url">
                     <div class="category-box text-center">
                         <p class="m-0 category_name">{{ category.name }}</p>
-                        <img src="{{category.image.url}}" alt="category-image" class="category-image">
+                        {% if category.image %}
+                            <img src="{{category.image.url}}" alt="category-image" class="category-image">
+                        {% endif %}
                     </div>
                 </a>
             {% endfor %}

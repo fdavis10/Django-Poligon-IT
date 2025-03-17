@@ -6,11 +6,32 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializers import CategorySerializer, ProductSerializer, SubcategorySerializer
 from rest_framework import status
+import pandas as pd
+from django.core.files.storage import default_storage
+import os
+from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.text import slugify
+from django.conf import settings
+import unidecode
 
 def search_result(request):
     query = request.GET.get('q', '')
-    results = Product.objects.filter(name__icontains=query) if query else []
-    return render(request, 'main/products/search_results.html', {'query':query, 'results': results})
+
+    if not query:
+        return render(request, 'main/products/search_results.html', {'query':query, 'results':[]})
+    
+    categories = Category.objects.filter(name__icontains=query)
+    subcategories = Subcategory_1.objects.filter(name__icontains=query)
+
+    products_by_name = Product.objects.filter(name__icontains=query)
+
+    products_by_category = Product.objects.filter(category__in=categories)
+    products_by_subcategory = Product.objects.filter(subcategory_1__in=subcategories)
+
+    results = products_by_name | products_by_category | products_by_subcategory
+
+    return render(request, 'main/products/search_results.html', {'query':query, 'results':results.distinct()})
 
 
 def about_us(request):
@@ -61,7 +82,7 @@ def index_page(request):
 def product_list_by_category(request, slug):
     categories = Category.objects.prefetch_related('subcategory_1').all()
     category = get_object_or_404(Category, slug=slug)
-    products = Product.objects.filter(category=category, available=True)
+    products = Product.objects.filter(category=category)
 
     filters = {}
     for product in products:
@@ -93,7 +114,7 @@ def product_list_by_category(request, slug):
 
 def product_list_by_subcategory(request, slug):
     sub_category_1 = get_object_or_404(Subcategory_1, slug=slug)
-    products = Product.objects.filter(subcategory_1 = sub_category_1)
+    products = Product.objects.filter(subcategory_1=sub_category_1)
 
     filters = {}
     for product in products:
@@ -121,7 +142,7 @@ def product_list_by_subcategory(request, slug):
     })
 
 def detail_product(request, slug):
-    product = get_object_or_404(Product, slug=slug, available = True)
+    product = get_object_or_404(Product, slug=slug)
     return render(request, 'main/products/detail_product.html', {
         'product': product, 
     })
@@ -152,3 +173,117 @@ def product_list(request):
     return Response(serializer.data)
 
 
+def parse_speficiations(value):
+    if isinstance(value, str):
+        specs = {}
+        pairs = value.split(",")
+        for pair in pairs:
+            if ':' in pair:
+                key, val = pair.split(":", 1)
+                specs[key.strip()] = val.strip()
+        return specs
+    return value if isinstance(value, dict) else {}
+
+def custom_slugify(value):
+    return slugify(unidecode.unidecode(value))
+@staff_member_required
+def upload_products(request):
+    print("Функция upload_products вызвана")
+
+    if request.method == 'POST':
+        print("POST-запрос получен")
+        
+        if 'file' not in request.FILES:
+            messages.error(request, 'Файл не был загружен')
+            return redirect('main:upload_products')
+
+        file = request.FILES['file']
+        file_extension = file.name.split('.')[-1].lower()
+        
+        if file_extension not in ['csv', 'xlsx']:
+            messages.error(request, 'Формат файла должен быть CSV или XLSX')
+            return redirect('main:upload_products')
+
+        
+        upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
+        os.makedirs(upload_dir, exist_ok=True)  
+        file_path = os.path.join(upload_dir, file.name)
+
+        
+        with open(file_path, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+        print(f"Файл сохранен: {file_path}")
+
+        try:
+            
+            if file_extension == 'csv':
+                df = pd.read_csv(file_path, encoding='utf-8', dtype=str)
+            else:
+                df = pd.read_excel(file_path, engine='openpyxl', dtype=str)
+
+            print("Содержимое файла:\n", df.head())
+
+            
+            required_columns = {'Категория', 'Подкатегория', 'Название', 'Описание', 'Цена', 'В наличии', 'Количество'}
+            if not required_columns.issubset(df.columns):
+                messages.error(request, 'Ошибка: В файле отсутствуют необходимые колонки.')
+                return redirect('main:upload_products')
+
+            
+            for _, row in df.iterrows():
+                try:
+                    category_name = row['Категория'].strip()
+                    subcategory_name = row['Подкатегория'].strip()
+                    product_name = row['Название'].strip()
+
+                    
+                    category_slug = custom_slugify(category_name)
+                    subcategory_slug = custom_slugify(subcategory_name)
+                    product_slug = custom_slugify(product_name)
+                    category, _ = Category.objects.get_or_create(name=category_name, defaults={'slug': category_slug})
+
+                    specifications = parse_speficiations(row.get('Характеристики', ''))
+                    complectation = parse_speficiations(row.get('Комлектация', ''))
+
+                    
+                    
+                    subcategory, _ = Subcategory_1.objects.get_or_create(
+                        name=subcategory_name, 
+                        category=category, 
+                        defaults={'slug': subcategory_slug}
+                    )
+
+                    product, created = Product.objects.get_or_create(
+                        name=product_name,
+                        slug=product_slug,
+                        category=category,
+                        subcategory_1=subcategory,
+                        defaults={
+                            'description': row['Описание'],
+                            'price': float(row['Цена']),
+                            'available': row['В наличии'].strip().lower() in ['true', 'да', 'yes', '1'],
+                            'available_quantity': int(row['Количество']),
+                            'specifications': specifications,
+                            'complectation': complectation,
+                        }
+                    )
+
+                    if created:
+                        print(f"Товар создан: {product_name}")
+                    else:
+                        print(f"Товар обновлен: {product_name}")
+
+                except Exception as row_error:
+                    print(f"Ошибка в строке: {row} -> {row_error}")
+
+            messages.success(request, 'Товары успешно загружены!')
+        except Exception as e:
+            messages.error(request, f'Ошибка при обработке файла: {e}')
+        finally:
+            os.remove(file_path)  
+            print(f"Файл удален: {file_path}")
+
+        return redirect('main:upload_products')
+
+    return render(request, 'main/products/upload_products.html')
