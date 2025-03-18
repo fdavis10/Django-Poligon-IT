@@ -8,6 +8,7 @@ from .serializers import CategorySerializer, ProductSerializer, SubcategorySeria
 from rest_framework import status
 import pandas as pd
 from django.core.files.storage import default_storage
+from django.core.files import File
 import os
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
@@ -186,6 +187,15 @@ def parse_speficiations(value):
 
 def custom_slugify(value):
     return slugify(unidecode.unidecode(value))
+
+def save_image_from_path(image_path, product, image_field):
+    if image_path and os.path.exists(image_path):
+        with open(image_path, 'rb') as img_file:
+            file_name = os.path.basename(image_path)
+            getattr(product, image_field).save(file_name, File(img_file), save=True)
+
+
+
 @staff_member_required
 def upload_products(request):
     print("Функция upload_products вызвана")
@@ -269,6 +279,14 @@ def upload_products(request):
                         }
                     )
 
+                    image_columns = {"Изображение 1": "image_1", "Изображение 2": "image_2", "Изображение 3": "image_3"}
+                    for col_name, field_name in image_columns.items():
+                        if col_name in df.columns:
+                            image_path = row[col_name].strip()
+                            save_image_from_path(image_path, product, field_name)
+                            
+
+
                     if created:
                         print(f"Товар создан: {product_name}")
                     else:
@@ -287,3 +305,5 @@ def upload_products(request):
         return redirect('main:upload_products')
 
     return render(request, 'main/products/upload_products.html')
+
+
