@@ -1,29 +1,20 @@
-FROM python:3.11
+FROM python:3.9-slim
 
 
-WORKDIR /app/poligon_it
-
-RUN apt-get update && apt-get install -y netcat-openbsd && apt-get clean
-
-RUN apt-get update && apt-get install -y postgresql-client
-
-
-COPY requirements.txt /app/requirements.txt
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 
-RUN pip install --upgrade pip setuptools wheel
+RUN pip install --upgrade pip
 
 
-RUN pip install --no-cache-dir -r /app/requirements.txt
+WORKDIR /app
+COPY . /app/
 
 
-COPY . /app
+RUN pip install -r requirements.txt
 
 
-RUN chmod +x /app/entrypoint.sh
-
-
-EXPOSE 8000
-
-
-ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["gunicorn", "poligon_it.wsgi:application", "--bind", "0.0.0.0:8000"]
