@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 version: '3.8'
+=======
+version: '3.9'
+>>>>>>> 3281c1d (production)
 
 services:
   web:
     build: .
+<<<<<<< HEAD
     working_dir: /app
     command: ["gunicorn", "poligon_it.wsgi:application", "--bind", "0.0.0.0:8000"]
     volumes:
@@ -48,6 +53,83 @@ services:
       - db
     env_file:
       - .env
+=======
+    command: gunicorn poligon_it.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - ./media:/app/media
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    entrypoint: ["/app/entrypoint.sh"]
+    environment:
+    - RUN_MIGRATIONS=true
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./backend/media:/app/backend/media
+    depends_on:
+      - web
+
+
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command: celery -A poligon_it worker --loglevel=info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - web
+      - redis
+
+  celery-beat:
+    build: .
+    command: celery -A poligon_it beat --loglevel=info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - web
+      - redis
+
+  bot:
+    build: .
+    command: python backend/tg_bot/run_bot.py
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - web
+      - redis
+>>>>>>> 3281c1d (production)
 
 volumes:
   postgres_data:
