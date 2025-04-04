@@ -152,11 +152,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-<<<<<<< HEAD:poligon_it/poligon_it/settings.py
     os.path.join(BASE_DIR,"static"),
-=======
-    BASE_DIR / 'main' / 'static',
->>>>>>> 3281c1d (production):backend/poligon_it/settings.py
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
