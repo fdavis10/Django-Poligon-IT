@@ -10,7 +10,11 @@ if [ "$RUN_MIGRATIONS" = "true" ]; then
     echo "Static files is collected..."
 
     echo "Start Gunicorn..."
-    exec gunicorn poligon_it.wsgi:application --bind 0.0.0.0:8000
+    exec gunicorn backend.poligon_it.wsgi:application \
+    --bind 0.0.0.0:8000 \
+    --workers 3 \
+    --timeout 300 \
+    --log-level debug
     echo "Gunicorn started is succesfull..."
 fi
 
