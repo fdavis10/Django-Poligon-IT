@@ -10,7 +10,7 @@ def favorites_processor(request):
     return {'favorites':favorites, 'favorites_count':favorites_count}
 
 def category_context(request):
-    categories = Category.objects.all()
+    categories = Category.objects.prefetch_related('subcategory_1').all()
     subcategories = Subcategory_1.objects.all()
     return{
         'categories': categories,

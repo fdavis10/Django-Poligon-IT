@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True").lower() in ["true", "1"]
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['45.129.128.21', 'xn----8sbjfd2cpw.xn--p1ai','web','localhost','127.0.0.1','ре-агент.рф']
 
 
 # Application definition
@@ -186,3 +186,5 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/30'),
     },
 }
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

@@ -25,7 +25,7 @@ class Category(models.Model):
 class Subcategory_1(models.Model):
     category = models.ForeignKey(Category, related_name='subcategory_1', on_delete=models.CASCADE)
     name = models.CharField(max_length=255, db_index=True)
-    slug = models.SlugField(max_length=300, db_index=True, unique=True)
+    slug = models.SlugField(max_length=300, db_index=True)
 
     class Meta:
         ordering = ['name', 'category']
@@ -36,7 +36,7 @@ class Subcategory_1(models.Model):
         return f'{self.name} >> {self.category}'
     
     def get_absolute_url(self):
-        return reverse("main:product_list_by_subcategory", args=[self.slug])
+        return reverse("main:product_list_by_subcategory", args=[self.category.slug, self.slug])
     
     
 class Product(models.Model):
@@ -50,7 +50,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=400, db_index=True, unique=True)
     description = models.TextField(max_length=500)
     specifications = models.JSONField(default=dict, blank=True, verbose_name='Технические характеристики')
-    complectation = models.JSONField(default=dict, blank=True, verbose_name='Комлектация товара')
+    complectation = models.TextField(blank=True, verbose_name='Комлектация товара')
     certificate_diller = models.FileField(upload_to='certificates/', blank=True, null=True, verbose_name='Сертификат диллера')
     guarantee = models.FileField(upload_to='guaranties/', blank=True, null=True, verbose_name='Гарантия товара')
     price = models.DecimalField(max_digits=10, decimal_places=2)

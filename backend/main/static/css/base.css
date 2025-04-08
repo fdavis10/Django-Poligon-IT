@@ -209,6 +209,20 @@ h5{
 }
 
 
+.dropdown-submenu .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+    z-index: 1050;
+}
+
+.dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}
+
+
 
 
 @media (max-width: 768px) {

@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load product_extras %}
 
 {% block title %}Товар - {{product.name}} - Re-Agent{% endblock title %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/detail_product.css' %}">{% endblock extra_css %}
@@ -58,11 +59,13 @@
     <div class="info-section">
         <h2>Комплектация</h2>
         <ul>
-            {% for key, value in product.complectation.items %}
-                <li><strong>{{ key }}:</strong> {{ value }}</li>
-            {% empty %}
+            {% if product.complectation %}
+                {% for item in product.complectation|split_complectation %}
+                    <li><strong>•</strong> {{ item.strip }}</li>
+                {% endfor %}
+            {% else %}
                 <li>Комплектация не добавлена</li>
-            {% endfor %}
+            {% endif %}
         </ul>
     </div>
     <div class="info-section">

@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, Subcategory_1, Favorite
 from django.db.models import Q
-from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializers import CategorySerializer, ProductSerializer, SubcategorySerializer
@@ -15,6 +14,19 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.text import slugify
 from django.conf import settings
 import unidecode
+import requests
+from django.core.files.base import ContentFile
+from urllib.parse import urlparse
+import mimetypes
+from urllib.request import urlopen
+from django.core.files.temp import NamedTemporaryFile
+from django.utils.crypto import get_random_string
+import tempfile
+
+
+YANDEX_API_TOKEN = os.getenv('YANDEX_API_TOKEN')
+
+
 
 def search_result(request):
     query = request.GET.get('q', '')
@@ -113,9 +125,10 @@ def product_list_by_category(request, slug):
         'categories': categories,
     })
 
-def product_list_by_subcategory(request, slug):
-    sub_category_1 = get_object_or_404(Subcategory_1, slug=slug)
-    products = Product.objects.filter(subcategory_1=sub_category_1)
+def product_list_by_subcategory(request, category_slug, subcategory_slug):
+    category = get_object_or_404(Category, slug=category_slug)
+    subcategory = get_object_or_404(Subcategory_1, slug=subcategory_slug, category=category)
+    products = Product.objects.filter(subcategory_1=subcategory)
 
     filters = {}
     for product in products:
@@ -137,15 +150,19 @@ def product_list_by_subcategory(request, slug):
         products = products.filter(query)
 
     return render(request, 'main/products/product_list_by_subcategory.html', {
-        'subcategory': sub_category_1,
+        'subcategory': subcategory,
         'products': products,
         'filters': filters,
     })
 
 def detail_product(request, slug):
     product = get_object_or_404(Product, slug=slug)
+    categories = Category.objects.all()
+    subcategories = Subcategory_1.objects.all()
     return render(request, 'main/products/detail_product.html', {
-        'product': product, 
+        'product': product,
+        'categories': categories,
+        'subcategories': subcategories, 
     })
 
 def mobile_search(request):
@@ -185,16 +202,58 @@ def parse_speficiations(value):
         return specs
     return value if isinstance(value, dict) else {}
 
+
 def custom_slugify(value):
     return slugify(unidecode.unidecode(value))
 
-def save_image_from_path(image_path, product, image_field):
-    if image_path and os.path.exists(image_path):
-        with open(image_path, 'rb') as img_file:
-            file_name = os.path.basename(image_path)
-            getattr(product, image_field).save(file_name, File(img_file), save=True)
+
+# def download_yandex_file(yandex_url):
+#     api_url = 'https://cloud-api.yandex.net/v1/disk/public/resources/download'
+#     params = {'public_key': yandex_url}
+#     headers = {'Authorization': f'OAuth {YANDEX_API_TOKEN}'}
+#     response = requests.get(api_url, headers=headers, params=params)
+#     response.raise_for_status()
+#     download_url = response.json()['href']
+#     return download_url
+
+# def download_and_save_image(product, field_name, url, slug):
+#     try:
+#         print(f"Trying to download: {url}")
+#         response = requests.get(url)
+#         if response.status_code == 200:
+#             ext = mimetypes.guess_extension(response.headers.get("Content-Type", "image/jpeg"))
+#             if not ext:
+#                 ext = ".jpg"
+#             filename = f"{slug}_{get_random_string(8)}{ext}"
+            
+#             # Windows fix: use NamedTemporaryFile without delete
+#             temp_file = tempfile.NamedTemporaryFile()
+#             temp_file.write(response.content)
+#             temp_file.flush()
+#             return File(temp_file, name=filename)
+#         else:
+#             print(f"Error: Image not accessible. Status code: {response.status_code}")
+#     except Exception as e:
+#         print(f"Error! Failed to save image from {url}: {e}")
+#     return None
 
 
+# SAVE IMAGE FROM PATH OLDES [06.04.2025]
+
+# def save_image_from_path(image_path, product, image_field):
+#     try:
+#         if image_path.startswith('http://') or image_path.startswith('https://'):
+#             response = requests.get(image_path, timeout=10)
+#             if response.status_code == 200:
+#                 file_name = os.path.basename(image_path)
+#                 content = ContentFile(response.content)
+#                 getattr(product, image_field).save(file_name, content, save=True)
+#         elif os.path.exists(image_path):
+#             with open(image_path, 'rb') as img_file:
+#                 file_name = os.path.basename(image_path)
+#                 getattr(product, image_field).save(file_name, File(img_file), save=True)
+#     except Exception as e:
+#         print(f'Error in save {image_path}: {e}')
 
 @staff_member_required
 def upload_products(request):
@@ -254,7 +313,7 @@ def upload_products(request):
                     category, _ = Category.objects.get_or_create(name=category_name, defaults={'slug': category_slug})
 
                     specifications = parse_speficiations(row.get('Характеристики', ''))
-                    complectation = parse_speficiations(row.get('Комлектация', ''))
+                    complectation = row.get('Комплектация', '').strip()
 
                     
                     
@@ -279,11 +338,12 @@ def upload_products(request):
                         }
                     )
 
-                    image_columns = {"Изображение 1": "image_1", "Изображение 2": "image_2", "Изображение 3": "image_3"}
-                    for col_name, field_name in image_columns.items():
-                        if col_name in df.columns:
-                            image_path = row[col_name].strip()
-                            save_image_from_path(image_path, product, field_name)
+                    # image_columns = {"Изображение 1": "image_1", "Изображение 2": "image_2", "Изображение 3": "image_3"}
+                    # for col_name, field_name in image_columns.items():
+                    #     if col_name in df.columns:
+                    #         image_url = row[col_name].strip()
+                    #         full_url = f'https://getfile.dokpub.com/yandex/get/{image_url}'
+                    #         download_and_save_image(product, field_name, full_url, product_slug)
                             
 
 

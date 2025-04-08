@@ -2,6 +2,8 @@ from django.contrib import admin, messages
 from .models import Category, Subcategory_1, Product
 from django_json_widget.widgets import JSONEditorWidget
 from django.db import models
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')

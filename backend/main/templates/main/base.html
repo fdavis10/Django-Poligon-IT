@@ -44,19 +44,6 @@
                         {% for subcat in subcategories %}
                           <li class="dropdown-submenu position-relative">
                             <a class="dropdown-item" href="{{ subcat.get_absolute_url }}">{{ subcat.name }}</a>
-              
-                            {% with subcat.parent_subcategory.all as subsubcategories %}
-                            {% if subsubcategories %}
-                              <ul class="dropdown-menu position-absolute start-100 top-0">
-                                {% for subsub in subsubcategories %}
-                                  <li>
-                                    <a class="dropdown-item" href="{{ subsub.get_absolute_url }}">{{ subsub.name }}</a>
-                                  </li>
-                                {% endfor %}
-                              </ul>
-                            {% endif %}
-                            {% endwith %}
-              
                           </li>
                         {% endfor %}
                       </ul>
@@ -148,7 +135,6 @@
       <a class="text-body" href="/">RE-AGENT</a>
     </div>
   </footer>
-  <!-- Подключение JS -->
   <script src="{% static 'js/index.js' %}"></script>
   <script src="{% static 'js/base.js' %}"></script>
 </body>
