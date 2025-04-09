@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load product_extras %}
 
 {% block title %}Результаты поиска - Re-Agent{% endblock %}
 
@@ -29,7 +30,7 @@
                             <div class="card__bottom">
                                 <div class="card__prices">
                                     <div class="card__price card__price--discount">
-                                        {{ product.price }} ₽
+                                        {{ product.price|format_price }} ₽
                                     </div>
                                 </div>
                                 <a href="{{ product.get_absolute_url }}" class="card__title">

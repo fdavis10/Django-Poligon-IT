@@ -40,6 +40,13 @@ class Subcategory_1(models.Model):
     
     
 class Product(models.Model):
+
+    class AvailabilityChoices(models.TextChoices):
+        IN_STOCK = 'in_stock', 'В наличии'
+        OUT_OF_STOCK = 'out_of_stock', 'Нет в наличии'
+        BY_ORDER = 'by_order', 'Под заказ'
+
+
     image_1 = models.ImageField(upload_to='product/', blank=False, null=False, default='default.webp')
     image_2 = models.ImageField(upload_to='product/', blank=True, default='default.webp')
     image_3 = models.ImageField(upload_to='product/', blank=True, default='default.webp')
@@ -54,7 +61,7 @@ class Product(models.Model):
     certificate_diller = models.FileField(upload_to='certificates/', blank=True, null=True, verbose_name='Сертификат диллера')
     guarantee = models.FileField(upload_to='guaranties/', blank=True, null=True, verbose_name='Гарантия товара')
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    available = models.BooleanField(default=True)
+    available = models.CharField(choices=AvailabilityChoices.choices, default = AvailabilityChoices.IN_STOCK, verbose_name='Доступность')
     available_quantity = models.DecimalField(max_digits=10, decimal_places=1, default=0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

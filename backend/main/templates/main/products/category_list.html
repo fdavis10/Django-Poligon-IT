@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load product_extras %}
 
 {% block title %}Товары категории - {{ category.name }} - Re-Agent{% endblock title %}
 
@@ -57,7 +58,7 @@
                         </div>
                         <div class="card__bottom">
                             <div class="card__prices">
-                                <div class="card__price card__price--discount">{{product.price}} ₽</div>
+                                <div class="card__price card__price--discount">{{product.price|format_price}} ₽</div>
                             </div>
                             <a href="{{product.get_absolute_url}}" class="card__title">{{product.name}}</a>
                             <p class='description'>{{product.description}}</p>

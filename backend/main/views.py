@@ -42,7 +42,11 @@ def search_result(request):
     products_by_category = Product.objects.filter(category__in=categories)
     products_by_subcategory = Product.objects.filter(subcategory_1__in=subcategories)
 
-    results = products_by_name | products_by_category | products_by_subcategory
+    products_by_pk = Product.objects.none()
+    if query.isdigit():
+        products_by_pk = Product.objects.filter(pk=query)
+
+    results = products_by_name | products_by_category | products_by_subcategory | products_by_pk
 
     return render(request, 'main/products/search_results.html', {'query':query, 'results':results.distinct()})
 

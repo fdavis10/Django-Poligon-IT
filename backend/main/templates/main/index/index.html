@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load product_extras %}
 
 {% block title %}Главная - Re-Agent{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/index.css' %}">
@@ -100,7 +101,7 @@
                     </div>
                     <div class="card__bottom">
                         <div class="card__prices">
-                            <div class="card__price card__price--discount">{{product.price}} ₽</div>
+                            <div class="card__price card__price--discount">{{product.price|format_price}} ₽</div>
                             {% comment %} Скидка {% endcomment %}
                             {% comment %} <div class="card__price card__price--common">150 000 ₽</div> {% endcomment %}
                         </div>

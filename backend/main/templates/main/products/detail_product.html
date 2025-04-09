@@ -23,8 +23,25 @@
         <div class="col-md-6">
             <h1 class="product-title">{{product.name}}</h1>
             <p class="product-code">Код товара: {{product.id}}</p>
-            <div class="product-price-box p-3 border rounded">
-                <h2 class="product-price">{{product.price}} ₽</h2>
+            {% if product.available == 'in_stock' %}
+                <span class="text-success d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-box"></i>
+                    <strong>В наличии</strong>
+                </span>
+            {% elif product.available == 'by_order' %}
+                <span class="text-warning d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation icon_order"></i>
+                    <strong>Под заказ</strong>
+                </span>
+            {% else %}
+                <span class="text-danger d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                    <strong>Нет в наличии</strong>
+                </span>
+            {% endif %}
+            <div class="text-muted mt-1 small">Остаток: {{ product.available_quantity }} шт.</div>
+            <div class="product-price-box p-3 mt-2 border rounded">
+                <h2 class="product-price">{{product.price|format_price}} ₽</h2>
                 <form action="{% url 'cart:cart_add' product.id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="quantity" value="1">

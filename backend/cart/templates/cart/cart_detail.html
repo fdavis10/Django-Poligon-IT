@@ -1,5 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load product_extras %}
+
 {% block title %}
 Корзина - Re-Agent
 {% endblock title %}
@@ -34,7 +36,7 @@
                         </form>
                     </div>
                     <div class="col-md-2 text-end">
-                        <span class="total_price_item">{{ item.total_price }} ₽</span>
+                        <span class="total_price_item">{{ item.total_price|format_price }} ₽</span>
                         <form action="{% url 'cart:cart_remove' item.product.id %}" method="post" class="mt-2">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm button-delete">Удалить</button>
@@ -52,7 +54,7 @@
                         <div class="removed-item d-flex justify-content-between align-items-center p-2 mb-2 border-bottom">
                             <div>
                                 <p class="mb-0"><strong>{{ item.name }}</strong></p>
-                                <p class="text-muted mb-0">{{ item.price }} ₽</p>
+                                <p class="text-muted mb-0">{{ item.price|format_price }} ₽</p>
                             </div>
                             <form action="{% url 'cart:cart_restore' item.id %}" method="post">
                                 {% csrf_token %}
@@ -66,7 +68,7 @@
         <div class="col-md-4">
             <div class="card p-3">
                 <h4>Итого</h4>
-                <p><strong>{{ total_price }} ₽</strong></p>
+                <p><strong>{{ total_price|format_price }} ₽</strong></p>
                 <button class="btn btn-danger btn-lg w-100 button-order"><a href="{% url "orders:order_create" %}">Оформить заказ</a></button>
             </div>
         </div>

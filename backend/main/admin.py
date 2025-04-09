@@ -21,7 +21,7 @@ class SubCategory1Admin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'available', 'available_quantity', 'created', 'description')
+    list_display = ('pk','name', 'category', 'price', 'available', 'available_quantity', 'created', 'description')
     list_filter = ('category', 'available', 'created', 'updated',)
     search_fields = ('name', 'descriprion', 'category__name')
     prepopulated_fields = {'slug':('name',)}
