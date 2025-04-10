@@ -259,58 +259,159 @@ def custom_slugify(value):
 #     except Exception as e:
 #         print(f'Error in save {image_path}: {e}')
 
+# @staff_member_required
+# def upload_products(request):
+#     print("Функция upload_products вызвана")
+
+#     if request.method == 'POST':
+#         print("POST-запрос получен")
+        
+#         if 'file' not in request.FILES:
+#             messages.error(request, 'Файл не был загружен')
+#             return redirect('main:upload_products')
+
+#         file = request.FILES['file']
+#         file_extension = file.name.split('.')[-1].lower()
+        
+#         if file_extension not in ['csv', 'xlsx']:
+#             messages.error(request, 'Формат файла должен быть CSV или XLSX')
+#             return redirect('main:upload_products')
+
+        
+#         upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
+#         os.makedirs(upload_dir, exist_ok=True)  
+#         file_path = os.path.join(upload_dir, file.name)
+
+        
+#         with open(file_path, 'wb+') as destination:
+#             for chunk in file.chunks():
+#                 destination.write(chunk)
+#         print(f"Файл сохранен: {file_path}")
+
+#         try:
+            
+#             if file_extension == 'csv':
+#                 df = pd.read_csv(file_path, encoding='utf-8', dtype=str)
+#             else:
+#                 df = pd.read_excel(file_path, engine='openpyxl', dtype=str)
+
+#             print("Содержимое файла:\n", df.head())
+
+            
+#             required_columns = {'Категория', 'Подкатегория', 'Название', 'Описание', 'Цена', 'В наличии', 'Количество'}
+#             if not required_columns.issubset(df.columns):
+#                 messages.error(request, 'Ошибка: В файле отсутствуют необходимые колонки.')
+#                 return redirect('main:upload_products')
+
+            
+#             AVAILABILITY_MAP = {
+#                 'В наличии': 'in_stock',
+#                 'Под заказ': 'by_order',
+#                 'Нет в наличии': 'out_of_stock',
+#                 'Нет': 'out_of_stock',
+#                 'Да':'in_stock',
+#                 '0': 'out_of_stock',
+#                 '1': 'in_stock',
+#                 'by_order': 'by_order',
+#                 'in_stock': 'in_stock',
+#                 'out_of_stock': 'out_of_stock',
+#             }
+            
+            
+#             df.columns = df.columns.str.strip().str.lower()
+
+
+#             for _, row in df.iterrows():
+#                 try:
+#                     category_name = row['категория'].strip()
+#                     subcategory_name = row['подкатегория'].strip()
+#                     product_name = row['название'].strip()
+
+                    
+#                     category_slug = custom_slugify(category_name)
+#                     subcategory_slug = custom_slugify(subcategory_name)
+#                     product_slug = custom_slugify(product_name)
+#                     category, _ = Category.objects.get_or_create(name=category_name, defaults={'slug': category_slug})
+
+#                     specifications = parse_speficiations(row.get('характеристики', ''))
+#                     complectation = row.get('комплектация', '').strip()
+
+                    
+                    
+#                     subcategory, _ = Subcategory_1.objects.get_or_create(
+#                         name=subcategory_name, 
+#                         category=category, 
+#                         defaults={'slug': subcategory_slug}
+#                     )
+
+#                     product, created = Product.objects.get_or_create(
+#                         name=product_name,
+#                         slug=product_slug,
+#                         category=category,
+#                         subcategory_1=subcategory,
+#                         defaults={
+#                             'description': row['описание'],
+#                             'price': float(row['цена']),
+#                             'available': AVAILABILITY_MAP.get(row['в наличии'].strip().lower(), 'in_stock'),
+#                             'available_quantity': int(row['количество']),
+#                             'specifications': specifications,
+#                             'complectation': complectation,
+#                         }
+#                     )
+
+#                     # image_columns = {"Изображение 1": "image_1", "Изображение 2": "image_2", "Изображение 3": "image_3"}
+#                     # for col_name, field_name in image_columns.items():
+#                     #     if col_name in df.columns:
+#                     #         image_url = row[col_name].strip()
+#                     #         full_url = f'https://getfile.dokpub.com/yandex/get/{image_url}'
+#                     #         download_and_save_image(product, field_name, full_url, product_slug)
+                            
+
+                    
+#                     product.description = row['описание']
+#                     product.price = float(row['цена'])
+#                     product.available = AVAILABILITY_MAP.get(row['в наличии'].strip().lower(), 'in_stock')
+#                     product.available_quantity = int(row['количество'])
+#                     product.specifications = specifications
+#                     product.complectation = complectation
+#                     product.save()
+
+
+#                     if created:
+#                         print(f"Товар создан: {product_name}")
+#                     else:
+#                         print(f"Товар обновлен: {product_name}")
+
+#                 except Exception as row_error:
+#                     print(f"Ошибка в строке: {row} -> {row_error}")
+
+#             messages.success(request, 'Товары успешно загружены!')
+#         except Exception as e:
+#             messages.error(request, f'Ошибка при обработке файла: {e}')
+#         finally:
+#             os.remove(file_path)  
+#             print(f"Файл удален: {file_path}")
+
+#         return redirect('main:upload_products')
+
+#     return render(request, 'main/products/upload_products.html')
+
 @staff_member_required
 def upload_products(request):
-    print("Функция upload_products вызвана")
-
-    if request.method == 'POST':
-        print("POST-запрос получен")
-        
-        if 'file' not in request.FILES:
-            messages.error(request, 'Файл не был загружен')
-            return redirect('main:upload_products')
-
+    if request.method == 'POST' and request.FILES.get('file'):
         file = request.FILES['file']
-        file_extension = file.name.split('.')[-1].lower()
-        
-        if file_extension not in ['csv', 'xlsx']:
-            messages.error(request, 'Формат файла должен быть CSV или XLSX')
-            return redirect('main:upload_products')
-
-        
-        upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
-        os.makedirs(upload_dir, exist_ok=True)  
-        file_path = os.path.join(upload_dir, file.name)
-
-        
-        with open(file_path, 'wb+') as destination:
-            for chunk in file.chunks():
-                destination.write(chunk)
-        print(f"Файл сохранен: {file_path}")
-
         try:
-            
-            if file_extension == 'csv':
-                df = pd.read_csv(file_path, encoding='utf-8', dtype=str)
-            else:
-                df = pd.read_excel(file_path, engine='openpyxl', dtype=str)
+            df = pd.read_excel(file) if file.name.endswith('.xlsx') else pd.read_csv(file)
 
-            print("Содержимое файла:\n", df.head())
+            df.columns = df.columns.str.strip().str.lower()
 
-            
-            required_columns = {'Категория', 'Подкатегория', 'Название', 'Описание', 'Цена', 'В наличии', 'Количество'}
-            if not required_columns.issubset(df.columns):
-                messages.error(request, 'Ошибка: В файле отсутствуют необходимые колонки.')
-                return redirect('main:upload_products')
-
-            
             AVAILABILITY_MAP = {
-                'В наличии': 'in_stock',
-                'Под заказ': 'by_order',
-                'Нет в наличии': 'out_of_stock',
-                'Нет': 'out_of_stock',
-                'Да':'in_stock',
+                'в наличии': 'in_stock',
+                'под заказ': 'by_order',
+                'нет в наличии': 'out_of_stock',
+                'нет': 'out_of_stock',
                 '0': 'out_of_stock',
+                'да': 'in_stock',
                 '1': 'in_stock',
                 'by_order': 'by_order',
                 'in_stock': 'in_stock',
@@ -319,68 +420,55 @@ def upload_products(request):
 
             for _, row in df.iterrows():
                 try:
-                    category_name = row['Категория'].strip()
-                    subcategory_name = row['Подкатегория'].strip()
-                    product_name = row['Название'].strip()
+                    category_name = row['категория'].strip()
+                    subcategory_name = row['подкатегория'].strip()
+                    product_name = row['название'].strip()
+                    description = row['описание']
+                    price = float(row['цена'])
+                    quantity = int(row['количество'])
 
-                    
+                    availability_raw = str(row.get('в наличии', '')).strip().lower()
+                    available = AVAILABILITY_MAP.get(availability_raw, 'in_stock')
+
                     category_slug = custom_slugify(category_name)
                     subcategory_slug = custom_slugify(subcategory_name)
                     product_slug = custom_slugify(product_name)
-                    category, _ = Category.objects.get_or_create(name=category_name, defaults={'slug': category_slug})
 
-                    specifications = parse_speficiations(row.get('Характеристики', ''))
-                    complectation = row.get('Комплектация', '').strip()
+                    category, _ = Category.objects.get_or_create(
+                        name=category_name,
+                        defaults={'slug': category_slug}
+                    )
 
-                    
-                    
                     subcategory, _ = Subcategory_1.objects.get_or_create(
-                        name=subcategory_name, 
-                        category=category, 
+                        name=subcategory_name,
+                        category=category,
                         defaults={'slug': subcategory_slug}
                     )
 
-                    product, created = Product.objects.get_or_create(
+                    specifications = parse_speficiations(row.get('характеристики', ''))
+                    complectation = row.get('комплектация', '').strip()
+
+                    product, _ = Product.objects.update_or_create(
                         name=product_name,
                         slug=product_slug,
                         category=category,
                         subcategory_1=subcategory,
                         defaults={
-                            'description': row['Описание'],
-                            'price': float(row['Цена']),
-                            'available': AVAILABILITY_MAP.get(row['В наличии'].strip().lower(), 'in_stock'),
-                            'available_quantity': int(row['Количество']),
+                            'description': description,
+                            'price': price,
+                            'available': available,
+                            'available_quantity': quantity,
                             'specifications': specifications,
                             'complectation': complectation,
                         }
                     )
 
-                    # image_columns = {"Изображение 1": "image_1", "Изображение 2": "image_2", "Изображение 3": "image_3"}
-                    # for col_name, field_name in image_columns.items():
-                    #     if col_name in df.columns:
-                    #         image_url = row[col_name].strip()
-                    #         full_url = f'https://getfile.dokpub.com/yandex/get/{image_url}'
-                    #         download_and_save_image(product, field_name, full_url, product_slug)
-                            
+                except Exception as e:
+                    print(f"Ошибка в строке:\n{row}\n-> {e}")
 
+            return redirect('main:index_page')
 
-                    if created:
-                        print(f"Товар создан: {product_name}")
-                    else:
-                        print(f"Товар обновлен: {product_name}")
-
-                except Exception as row_error:
-                    print(f"Ошибка в строке: {row} -> {row_error}")
-
-            messages.success(request, 'Товары успешно загружены!')
         except Exception as e:
-            messages.error(request, f'Ошибка при обработке файла: {e}')
-        finally:
-            os.remove(file_path)  
-            print(f"Файл удален: {file_path}")
-
-        return redirect('main:upload_products')
+            print(f"Ошибка обработки файла: {e}")
 
     return render(request, 'main/products/upload_products.html')
-
-
