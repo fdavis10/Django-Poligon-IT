@@ -304,6 +304,19 @@ def upload_products(request):
                 return redirect('main:upload_products')
 
             
+            AVAILABILITY_MAP = {
+                'В наличии': 'in_stock',
+                'Под заказ': 'by_order',
+                'Нет в наличии': 'out_of_stock',
+                'Нет': 'out_of_stock',
+                'Да':'in_stock',
+                '0': 'out_of_stock',
+                '1': 'in_stock',
+                'by_order': 'by_order',
+                'in_stock': 'in_stock',
+                'out_of_stock': 'out_of_stock',
+            }
+
             for _, row in df.iterrows():
                 try:
                     category_name = row['Категория'].strip()
@@ -335,7 +348,7 @@ def upload_products(request):
                         defaults={
                             'description': row['Описание'],
                             'price': float(row['Цена']),
-                            'available': row['В наличии'].strip().lower() in ['true', 'да', 'yes', '1'],
+                            'available': AVAILABILITY_MAP.get(row['В наличии'].strip().lower(), 'in_stock'),
                             'available_quantity': int(row['Количество']),
                             'specifications': specifications,
                             'complectation': complectation,
