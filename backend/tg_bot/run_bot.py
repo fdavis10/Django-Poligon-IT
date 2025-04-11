@@ -1,6 +1,7 @@
 import logging
 import telebot
 import time
+import requests
 import re
 import os
 import sys
@@ -8,7 +9,7 @@ import django
 from dotenv import load_dotenv
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
-
+from telebot import apihelper
 from django.db.utils import IntegrityError
 
 logging.basicConfig(filename="bot_logs.txt", level=logging.INFO, format=f"%(asctime)s - %(message)s")
@@ -23,14 +24,18 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'poligon_it.settings')
 django.setup()
 
+#importing django
+
 from orders.models import Order, OrderItem
 from emailsender.utils import send_mass_mail
 from tg_bot.models import TelegramUser, ProductOrder, UserQuestion
 
 load_dotenv()
 
+# settings
+
 TELEGRAM_BOT_TOKEN = os.getenv('TOKEN')
-bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
+bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN, timeout=60)
 
 BOT_PASSWORD = os.getenv('BOT_PASSWORD')
 ADMIN_IDS = list(map(int, os.getenv("ADMINS", "").split(","))) if os.getenv("ADMINS") else []
@@ -50,6 +55,8 @@ order_data = {}
 questions_timestamps = {}
 
 
+
+# start code
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
@@ -550,4 +557,29 @@ def log_messages(message):
 
 print('Bot runned and listen commands')
 
-bot.polling(none_stop=True)
+def run_bot():
+    retries = 5
+    for i in range(retries):
+        try:
+            bot.polling(none_stop=True)
+            break
+        except apihelper.ApiException as e:
+            logging.error(f'Telegram API error: {e}')
+            if i < retries - 1:
+                logging.info('Try to restart start at 10 seconds...')
+                time.sleep(10)
+            else:
+                logging.critical('Exceeded the number of restart attempts')
+                raise
+        except requests.exceptions.ReadTimeout as e:
+            logging.error(f'Error of timeout: {e}')
+            if i < retries - 1:
+                logging.info('Try to restart at 10 seconds...')
+                time.sleep(10)
+            else:
+                logging.critical('Exceeded the number of restart attempts')
+                raise
+
+
+if __name__=='__main__':
+    run_bot()
