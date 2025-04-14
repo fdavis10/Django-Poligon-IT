@@ -116,8 +116,10 @@ def product_list_by_category(request, slug):
     for key in filters.keys():
         selected_values = request.GET.getlist(key)
         if selected_values:
+            subquery = Q()
             for value in selected_values:
-                query |= Q(specifications__contains={key: value})
+                subquery |= Q(specifications__contains={key: value})
+            query &= subquery 
 
     if query:
         products = products.filter(query)
@@ -250,10 +252,7 @@ def custom_slugify(value):
 #             response = requests.get(image_path, timeout=10)
 #             if response.status_code == 200:
 #                 file_name = os.path.basename(image_path)
-#                 content = ContentFile(response.content)
-#                 getattr(product, image_field).save(file_name, content, save=True)
-#         elif os.path.exists(image_path):
-#             with open(image_path, 'rb') as img_file:
+#                 conen(image_path, 'rb') as img_file:
 #                 file_name = os.path.basename(image_path)
 #                 getattr(product, image_field).save(file_name, File(img_file), save=True)
 #     except Exception as e:
