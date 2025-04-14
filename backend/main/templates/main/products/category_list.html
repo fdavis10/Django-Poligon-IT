@@ -31,9 +31,8 @@
                                 <div class="accordion-body">
                                     {% for value in values %}
                                         <div class="form-check">
-                                            <input class="form-check-input checkbox-css" type="checkbox" name="{{ field }}" value="{{ value }}"
-                                                id="{{ safe_field }}-{{ value }}-{{ forloop.parentloop.counter }}">
-                                            <label class="form-check-label" for="{{ safe_field }}-{{ value }}-{{ forloop.parentloop.counter }}">{{ value }}</label>
+                                            <input class="form-check-input checkbox-css" type="checkbox" name="{{ field }}" value="{{ value }}"/>
+                                            <label class="form-check-label">{{ value }}</label>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -42,39 +41,44 @@
                         {% endwith %}
                     {% endfor %}
                 </div>
-                
                 <button type="submit" class="btn btn-primary w-100 mt-3 btn-accept">Применить</button>
             </form>
         </aside>
         <div class="col-md-9">
             <div class="container_products">
                 <div class="cards_wrapper">
-                    {% for product in products %}
-                    <div class="card">
-                        <div class="card__top">
-                            <a href="{{product.get_absolute_url}}" class="card__image">
-                                <img src="{{product.image_1.url}}" alt="Продукт">
-                            </a>
-                        </div>
-                        <div class="card__bottom">
-                            <div class="card__prices">
-                                <div class="card__price card__price--discount">{{product.price|format_price}} ₽</div>
-                            </div>
-                            <a href="{{product.get_absolute_url}}" class="card__title">{{product.name}}</a>
-                            <p class='description'>{{product.description}}</p>
-                            <div class="card__func">
-                                <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="quantity" value="1">  <!-- Количество 1 по умолчанию -->
-                                    <button type="submit" class="btn btn-primary button-cart">В корзину</button>
-                                </form>
-                                <a href="{% url 'main:add_to_favorites' product.id %}">
-                                    <i class="fa-solid fa-heart favorites"></i>
+                    {% if products %}
+                        {% for product in products %}
+                        <div class="card">
+                            <div class="card__top">
+                                <a href="{{ product.get_absolute_url }}" class="card__image">
+                                    <img src="{{ product.image_1.url }}" alt="Продукт">
                                 </a>
                             </div>
+                            <div class="card__bottom">
+                                <div class="card__prices">
+                                    <div class="card__price card__price--discount">{{ product.price|format_price }} ₽</div>
+                                </div>
+                                <a href="{{ product.get_absolute_url }}" class="card__title">{{ product.name }}</a>
+                                <p class="description">{{ product.description }}</p>
+                                <div class="card__func">
+                                    <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-primary button-cart">В корзину</button>
+                                    </form>
+                                    <a href="{% url 'main:add_to_favorites' product.id %}">
+                                        <i class="fa-solid fa-heart favorites"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-products-message text-center">
+                            <strong>По выбранным фильтрам товаров нет.</strong>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

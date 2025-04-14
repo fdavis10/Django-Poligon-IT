@@ -89,18 +89,29 @@
         <h2>Документация</h2>
         <ul>
             {% if product.certificate_diller %}
-                <li><a href="{{product.certificate_diller.url}}">Сертификат дилера</a></li>
+                <li><span class="text-succes"><strong><a href="{{ product.certificate_diller.url }}">Сертификат</a></strong></span></li>
             {% else %}
-                <li>Сертификат дилера не добавлен</li>
+                <li><span class="text-muted">Сертификат не добавлен</span></li>
+            {% endif %}
+            {% if product.certificate_two %}
+                <li><span class="text-succes"><strong><a href="{{ product.certificate_two.url }}">Сертификат</a></strong></span></li>
+            {% else %}
+                <li><span class="text-muted">Сертификат не добавлен</span></li>
+            {% endif %}
+            {% if product.certificate_tree %}
+                <li><span class="text-succes"><strong><a href="{{ product.certificate_tree.url }}">Сертификат</a></strong></span></li>
+            {% else %}
+                <li><span class="text-muted">Сертификат не добавлен</span></li>
             {% endif %}
             {% if product.guarantee %}
-                <li><a href="{{product.guarantee.url}}">Гарантийный талон</a></li>
+                <li><span class="text-succes"><strong><a href="{{ product.guarantee.url }}">Гарантийный талон</a></strong></span></li>
             {% else %}
-                <li> Гарантийный талон не добавлен</li>
+                <li><span class="text-muted">Гарантийный талон не добавлен</span></li>
             {% endif %}
-            <li><a href="#">Скачать всю документацию</a></li>
+            <li><a href="{% url 'main:download_all_docs' product.id %}">Скачать всю документацию</a></li>
         </ul>
     </div>
+    
 </div>
 <div id="videoModal" class="modal" style="display: none;">
     <div class="modal-content">

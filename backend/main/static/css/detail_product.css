@@ -109,6 +109,16 @@
     background-color: rgb(25, 47, 105) !important;
 }
 
+
+.text-succes a {
+    color: green;  
+}
+
+.text-muted a {
+    color: #6c757d;  
+}
+
+
 @media (max-width: 768px) {
     .row {
         flex-direction: column;

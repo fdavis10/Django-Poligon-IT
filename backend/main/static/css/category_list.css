@@ -195,6 +195,16 @@
     background-color: rgb(25, 47, 105) !important;
 }
 
+.no-products-message {
+    font-size: 1.5rem;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 5px;
+}
+
+
 
 @media (max-width: 1024px){
     .container-car{

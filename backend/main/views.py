@@ -22,6 +22,8 @@ from urllib.request import urlopen
 from django.core.files.temp import NamedTemporaryFile
 from django.utils.crypto import get_random_string
 import tempfile
+import zipfile
+from django.http import HttpResponse
 
 
 YANDEX_API_TOKEN = os.getenv('YANDEX_API_TOKEN')
@@ -124,11 +126,14 @@ def product_list_by_category(request, slug):
     if query:
         products = products.filter(query)
 
+    products_exist = products.exists()
+
     return render(request, 'main/products/category_list.html', {
         'category': category,
         'products': products,
         'filters': filters,
         'categories': categories,
+        'products_exist': products_exist,
     })
 
 def product_list_by_subcategory(request, category_slug, subcategory_slug):
@@ -471,3 +476,31 @@ def upload_products(request):
             print(f"Ошибка обработки файла: {e}")
 
     return render(request, 'main/products/upload_products.html')
+
+
+def download_all_docs(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    temp_dir = os.path.join(settings.MEDIA_ROOT, 'temp')
+    os.makedirs(temp_dir, exist_ok=True)
+
+    files_to_zip = []
+
+    if product.certificate_diller:
+        files_to_zip.append(product.certificate_diller.path)
+    if product.certificate_two:
+        files_to_zip.append(product.certificate_two.path)
+    if product.certificate_tree:
+        files_to_zip.append(product.certificate_tree.path)
+    if product.guarantee:
+        files_to_zip.append(product.guarantee.path)
+    
+    zip_filename = os.path.join(temp_dir, f'{product.name}_documents.zip')
+    with zipfile.ZipFile(zip_filename, 'w') as zipf:
+        for file_path in files_to_zip:
+            zipf.write(file_path, os.path.basename(file_path))
+    
+    with open(zip_filename, 'rb') as zipf:
+        response = HttpResponse(zipf.read(), content_type ='application/zip')
+        response['Content-Disposition'] = f'attachment; filname={os.path.basename(zip_filename)}'
+        return response
