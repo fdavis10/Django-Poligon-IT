@@ -82,6 +82,7 @@ services:
     command: python backend/tg_bot/run_bot.py
     volumes:
       - .:/app
+    restart: always
     env_file:
       - .env
     depends_on:

@@ -72,19 +72,19 @@ def add_to_favorites(request, product_id):
     session_key = get_session_key(request)
     product = get_object_or_404(Product, id=product_id)
     Favorite.objects.get_or_create(session_key=session_key, product=product)
-    return redirect('main:index_page')
+    return redirect('main:favorite_list')
 
 def remove_from_favorites(request, product_id):
     session_key = get_session_key(request)
     product = get_object_or_404(Product, id=product_id)
     Favorite.objects.filter(session_key=session_key, product=product).delete()
-    return redirect('main:index_page')
+    return redirect('main:favorite_list')
 
 def clear_favorites(request):
     if 'favorites' in request.session:
         del request.session['favorites']
         request.session.modified = True
-    return redirect('main:index_page')
+    return redirect('main:favorite_list')
 
 def favorites_list(request):
     session_key = get_session_key(request)
