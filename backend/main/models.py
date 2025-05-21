@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from .utils import compress_image
 
 
 class Category(models.Model):
@@ -79,6 +80,18 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("main:detail_product", args=[self.slug])
     
+
+    def save(self, *args, **kwargs):
+        for field_name in ['image_1', 'image_2', 'image_3']:
+            image = getattr(self, field_name)
+            if image and not image.name.endswith('.webp'):
+                try:
+                    compressed = compress_image(image)
+                    compressed.name = f'compressed_{image.name}'
+                    setattr(self, field_name, compressed)
+                except Exception as err:
+                    print(f'Error at compress: {field_name}: {err}')
+        super().save(*args, **kwargs)
 
 
 class Favorite(models.Model):
