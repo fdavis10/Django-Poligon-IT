@@ -406,7 +406,6 @@ def upload_products(request):
         file = request.FILES['file']
         try:
             df = pd.read_excel(file) if file.name.endswith('.xlsx') else pd.read_csv(file)
-
             df.columns = df.columns.str.strip().str.lower()
 
             AVAILABILITY_MAP = {
@@ -428,12 +427,19 @@ def upload_products(request):
                     subcategory_name = row['подкатегория'].strip()
                     product_name = row['название'].strip()
                     description = row['описание']
-                    price = float(row['цена'])
+                    price_raw = str(row['цена']).strip().lower()
                     quantity = int(row['количество'])
+
+                    if price_raw in ['по запросу', 'по запросу.']:
+                        price = None
+                        price_on_request = True
+                    else:
+                        price = float(price_raw.replace(',', '.'))
+                        price_on_request = False
+
 
                     availability_raw = str(row.get('в наличии', '')).strip().lower()
                     available = AVAILABILITY_MAP.get(availability_raw, 'in_stock')
-
                     category_slug = custom_slugify(category_name)
                     subcategory_slug = custom_slugify(subcategory_name)
                     product_slug = custom_slugify(product_name)
@@ -460,6 +466,7 @@ def upload_products(request):
                         defaults={
                             'description': description,
                             'price': price,
+                            'price_on_request': price_on_request,
                             'available': available,
                             'available_quantity': quantity,
                             'specifications': specifications,

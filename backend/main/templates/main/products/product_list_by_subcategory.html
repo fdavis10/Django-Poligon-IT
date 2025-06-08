@@ -56,9 +56,11 @@
                             </a>
                         </div>
                         <div class="card__bottom">
-                            <div class="card__prices">
-                                <div class="card__price card__price--discount">{{product.price|format_price}} ₽</div>
-                            </div>
+                            {% if product.price_on_request %}
+                                <div class="card__price card__price--discount">Цена по запросу</div> 
+                            {% else %}
+                                <div class="card__price card__price--discount">{{product.price|format_price}} ₽ </div>
+                            {% endif %}
                             <a href="{{product.get_absolute_url}}" class="card__title">{{product.name}}</a>
                             <p class='description'>{{product.description}}</p>
                             <div class="card__func">

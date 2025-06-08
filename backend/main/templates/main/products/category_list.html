@@ -18,7 +18,7 @@
                 <div class="accordion" id="filtersAccordion">
                     {% for field, values in filters.items %}
                         {% with safe_field=field|slugify %}
-                        <div class="accordion-item">
+                        <div class="accordion-item" data-filter-name="{{field|lower}}">
                             <h2 class="accordion-header" id="heading{{ safe_field }}-{{ forloop.counter }}">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapse{{ safe_field }}-{{ forloop.counter }}" aria-expanded="false"
@@ -31,7 +31,7 @@
                                 <div class="accordion-body">
                                     {% for value in values %}
                                         <div class="form-check">
-                                            <input class="form-check-input checkbox-css" type="checkbox" name="{{ field }}" value="{{ value }}"/>
+                                            <input class="form-check-input checkbox-css" type="checkbox" name="{{ field }}" value="{{ value }}" data-filter-parent="{{field|lower}}" data-filter-value="{{value|lower}}"/>
                                             <label class="form-check-label">{{ value }}</label>
                                         </div>
                                     {% endfor %}
@@ -57,7 +57,11 @@
                             </div>
                             <div class="card__bottom">
                                 <div class="card__prices">
-                                    <div class="card__price card__price--discount">{{ product.price|format_price }} ₽</div>
+                                    {% if product.price_on_request %}
+                                        <div class="card__price card__price--discount">Цена по запросу</div> 
+                                    {% else %}
+                                        <div class="card__price card__price--discount">{{product.price|format_price}} ₽ </div>
+                                    {% endif %}
                                 </div>
                                 <a href="{{ product.get_absolute_url }}" class="card__title">{{ product.name }}</a>
                                 <p class="description">{{ product.description }}</p>
