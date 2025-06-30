@@ -1,142 +1,158 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock title %}</title>
-    {% comment %} bootstrap {% endcomment %}
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    {% comment %} css {% endcomment %}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    {% comment %} template css {% endcomment %}
-    {% block extra_css %}{% endblock extra_css %}
-    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
-    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {% comment %} swiper js {% endcomment %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
-    <link rel="icon" href="{% static 'img/favicon.ico' %}">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top topnavbar">
-      <div class="container-fluid" style="max-width: 1100px;">
-        <a class="navbar-brand logo-brand" href="/"><img src="{% static 'img/logo.png' %}" alt=""></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Каталог
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                {% for category in categories %}
-                  <li class="dropdown-submenu position-relative">
-                    <a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
-              
-                    {% with category.subcategory_1.all as subcategories %}
-                    {% if subcategories %}
-                      <ul class="dropdown-menu position-absolute start-100 top-0">
-                        {% for subcat in subcategories %}
-                          <li class="dropdown-submenu position-relative">
-                            <a class="dropdown-item" href="{{ subcat.get_absolute_url }}">{{ subcat.name }}</a>
-                          </li>
-                        {% endfor %}
-                      </ul>
-                    {% endif %}
-                    {% endwith %}
-                  </li>
-                {% endfor %}
-              </ul>              
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url "main:about_us" %}">О нас</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url "main:guarentee" %}">Гарантии</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url "main:contacts" %}">Контакты</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link nav-mobile" href="{% url 'main:favorite_list' %}">Избранное</a>
-            </li>
-            {% comment %} <li class="nav-item">
-              <a class="nav-link nav-mobile" href="#">Сравнение</a>
-            </li> {% endcomment %}
-              <li class="nav-item">
-                <a class="nav-link nav-mobile" href="{% url "cart:cart_detail" %}">Корзина</a>
+  <!DOCTYPE html>
+  {% load static %}
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>{% block title %}{% endblock title %}</title>
+      <script type="text/javascript" >
+       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+       m[i].l=1*new Date();
+       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+       ym(103126864, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true,
+            ecommerce:"dataLayer"
+       });
+      </script>
+      <noscript><div><img src="https://mc.yandex.ru/watch/103126864" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+      {% comment %} bootstrap {% endcomment %}
+      <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+      <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      {% comment %} css {% endcomment %}
+      <link rel="stylesheet" href="{% static 'css/base.css' %}">
+      {% comment %} template css {% endcomment %}
+      {% block extra_css %}{% endblock extra_css %}
+      <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+      <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      {% comment %} swiper js {% endcomment %}
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
+      <link rel="icon" href="{% static 'img/favicon.ico' %}">
+  </head>
+  <body>
+      <nav class="navbar navbar-expand-lg navbar-light sticky-top topnavbar">
+        <div class="container-fluid" style="max-width: 1100px;">
+          <a class="navbar-brand logo-brand" href="/"><img src="{% static 'img/logo.png' %}" alt=""></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Каталог
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  {% for category in categories %}
+                    <li class="dropdown-submenu position-relative">
+                      <a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                
+                      {% with category.subcategory_1.all as subcategories %}
+                      {% if subcategories %}
+                        <ul class="dropdown-menu position-absolute start-100 top-0">
+                          {% for subcat in subcategories %}
+                            <li class="dropdown-submenu position-relative">
+                              <a class="dropdown-item" href="{{ subcat.get_absolute_url }}">{{ subcat.name }}</a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                      {% endwith %}
+                    </li>
+                  {% endfor %}
+                </ul>              
               </li>
               <li class="nav-item">
-                <a class="nav-link nav-mobile" href="{% url 'main:mobile_search' %}">Поиск</a>
+                <a class="nav-link" href="{% url "main:about_us" %}">О нас</a>
               </li>
-          </ul>
-          <form class="collapse navbar-collapse justify-content-end">
-            <ul class="navbar-nav d-flex align-items-center ms-0 ms-lg-3 mb-0">
               <li class="nav-item">
-                <a href="{% url 'main:favorite_list' %}">
-                  <i class="fa-solid fa-heart"></i> 
-                  {% if favorites_count > 0 %}
-                      <span class="badge bg-danger badge-small">{{ favorites_count }}</span>
-                  {% endif %}
-                </a>              
+                <a class="nav-link" href="{% url "main:guarentee" %}">Гарантии</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url "main:contacts" %}">Контакты</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link nav-mobile" href="{% url 'main:favorite_list' %}">Избранное</a>
               </li>
               {% comment %} <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="fas fa-chart-bar"></i>
-                </a>
+                <a class="nav-link nav-mobile" href="#">Сравнение</a>
               </li> {% endcomment %}
-              <li class="nav-item">
-                <a href="{% url "cart:cart_detail" %}" class="nav-link">
-                  <i class="fas fa-shopping-cart"></i>
-                </a>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link nav-mobile" href="{% url "cart:cart_detail" %}">Корзина</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link nav-mobile" href="{% url 'main:mobile_search' %}">Поиск</a>
+                </li>
             </ul>
-          <input id="searchInput" class="form-control me-2 search-input mb-2 mb-lg-0" type="search" placeholder="Поиск.." aria-label="Search">
-          <button id="searchButton" class="btn btn-outline-success button-search mb-2 mb-lg-0 button-search" type="button"><i class="fa-solid fa-magnifying-glass search-ico"></i></button>
-        </form>
+            <form class="collapse navbar-collapse justify-content-end">
+              <ul class="navbar-nav d-flex align-items-center ms-0 ms-lg-3 mb-0">
+                <li class="nav-item">
+                  <a href="{% url 'main:favorite_list' %}">
+                    <i class="fa-solid fa-heart"></i> 
+                    {% if favorites_count > 0 %}
+                        <span class="badge bg-danger badge-small">{{ favorites_count }}</span>
+                    {% endif %}
+                  </a>              
+                </li>
+                {% comment %} <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                  </a>
+                </li> {% endcomment %}
+                <li class="nav-item">
+                  <a href="{% url "cart:cart_detail" %}" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </li>
+              </ul>
+            <input id="searchInput" class="form-control me-2 search-input mb-2 mb-lg-0" type="search" placeholder="Поиск.." aria-label="Search">
+            <button id="searchButton" class="btn btn-outline-success button-search mb-2 mb-lg-0 button-search" type="button"><i class="fa-solid fa-magnifying-glass search-ico"></i></button>
+          </form>
+        </div>
       </div>
+    </nav>
+    <div class="container d-flex " style="max-width: 1100px; margin-top: 50px;">
+    {% block content %}{% endblock content %}
     </div>
-  </nav>
-  <div class="container d-flex " style="max-width: 1100px; margin-top: 50px;">
-  {% block content %}{% endblock content %}
-  </div>
-  {% include 'includes/telegram_button.html' %}
-  <footer class="bg-body-tertiary text-center footerreagent">
-    <div class="container p-4 pb-0">
-      <section class="">
-        <form action="">
-          <div class="row d-flex justify-content-center">
-            <div class="col-auto">
-              <p class="pt-2">
-                <strong>Подпишитесь на нашу рассылку</strong>
-              </p>
-            </div>
-            <div class="col-md-5 col-12">
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input type="email" id="form5Example26" class="form-control" placeholder="re_agent@example.ru" />
+    {% include 'includes/telegram_button.html' %}
+    <footer class="bg-body-tertiary text-center footerreagent">
+      <div class="container p-4 pb-0">
+        <section class="">
+          <form action="">
+            <div class="row d-flex justify-content-center">
+              <div class="col-auto">
+                <p class="pt-2">
+                  <strong>Подпишитесь на нашу рассылку</strong>
+                </p>
+              </div>
+              <div class="col-md-5 col-12">
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="email" id="form5Example26" class="form-control" placeholder="re_agent@example.ru" />
+                </div>
+              </div>
+              <div class="col-auto">
+                <button data-mdb-ripple-init type="submit" class="btn btn-primary mb-4 button-subcribe">
+                  Подписаться
+                </button>
               </div>
             </div>
-            <div class="col-auto">
-              <button data-mdb-ripple-init type="submit" class="btn btn-primary mb-4 button-subcribe">
-                Подписаться
-              </button>
-            </div>
-          </div>
-        </form>
-      </section>
-    </div>
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-      © 2025 Copyright:
-      <a class="text-body" href="/">RE-AGENT</a>
-      <p>Не является публичной офертой </p>
-    </div>
-  </footer>
-  <script src="{% static 'js/index.js' %}"></script>
-  <script src="{% static 'js/base.js' %}"></script>
-</body>
-</html>
+          </form>
+        </section>
+      </div>
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+        © 2025 Copyright:
+        <a class="text-body" href="/">RE-AGENT</a>
+        <p>Не является публичной офертой </p>
+      </div>
+    </footer>
+    <script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+  </body>
+  </html>
