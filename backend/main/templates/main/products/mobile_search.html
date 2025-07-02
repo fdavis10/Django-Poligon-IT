@@ -7,46 +7,77 @@
 {% endblock extra_css %}
 
 {% block content %}
-<div class="container mt-3">
-    <h2 class="text-center">Поиск товаров</h2>
-
-    <form method="GET" action="{% url 'main:mobile_search' %}" class="d-flex mb-3">
-        <input type="text" name="q" class="form-control" placeholder="Введите название товара..." value="{{ query }}">
-        <button type="submit" class="btn btn-primary ms-2 btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+<div class="search-page-container">
+    <div class="search-header">
+        <h2>Поиск товаров</h2>
+        <p class="search-subtitle">Найдите нужные товары быстро и легко</p>
+    </div>
+    <form method="GET" action="{% url 'main:mobile_search' %}" class="search-form">
+        <div class="search-input-wrapper">
+            <input type="text" name="q" placeholder="Введите название товара..." value="{{ query }}" autocomplete="off">
+        </div>
+        <button type="submit" class="btn-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
     </form>
+    <div class="search-results">
+        {% if query %}
+            <div class="results-header">
+                {% if results %}
+                    <div class="results-count">
+                        Найдено товаров: {{ results|length }}
+                        {% if query %}
+                            по запросу "{{ query }}"
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
 
-    {% if results %}
-        <div class="row">
+        {% if results %}
             <div class="container_products">
                 <div class="cards_wrapper">
                     {% for product in results %}
                         <div class="card">
                             <div class="card__top">
                                 <a href="{{ product.get_absolute_url }}" class="card__image">
-                                    <img src="{{ product.image_1.url }}" alt="{{ product.name }}">
+                                    <img src="{{ product.image_1.url }}" alt="{{ product.name }}" loading="lazy">
                                 </a>
                             </div>
+                            
                             <div class="card__bottom">
                                 <div class="card__prices">
                                     {% if product.price_on_request %}
                                         <div class="card__price card__price--discount">Цена по запросу</div> 
                                     {% else %}
-                                        <div class="card__price card__price--discount">{{product.price|format_price}} ₽ </div>
+                                        <div class="card__price card__price--discount">{{product.price|format_price}} ₽</div>
                                     {% endif %}
                                 </div>
+                                
                                 <a href="{{ product.get_absolute_url }}" class="card__title">
                                     {{ product.name }}
                                 </a>
+                                
                                 <p class="description">{{ product.description }}</p>
+                                
                                 <div class="card__func">
-                                    <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="quantity" value="1">
-                                        <button type="submit" class="btn btn-primary button-cart">
-                                            В корзину
+                                    {% if not product.price_on_request %}
+                                        <form action="{% url 'cart:cart_add' product.id %}" method="post" style="flex: 1;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="button-cart">
+                                                <i class="fa-solid fa-cart-plus me-1"></i>
+                                                В корзину
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <button type="button" class="button-cart" disabled style="flex: 1; opacity: 0.6;">
+                                            <i class="fa-solid fa-phone me-1"></i>
+                                            Запросить цену
                                         </button>
-                                    </form>
-                                    <a href="{% url 'main:add_to_favorites' product.id %}">
+                                    {% endif %}
+                                    
+                                    <a href="{% url 'main:add_to_favorites' product.id %}" title="Добавить в избранное">
                                         <i class="fa-solid fa-heart"></i>
                                     </a>
                                 </div>
@@ -54,10 +85,86 @@
                         </div>
                     {% endfor %}
                 </div>
-            </div>            
-        </div>
-    {% else %}
-        <p class="text-center text-muted">Ничего не найдено</p>
-    {% endif %}
+            </div>
+        {% else %}
+            {% if query %}
+                <div class="no-results">
+                    <div class="no-results-icon">
+                        <i class="fa-solid fa-search"></i>
+                    </div>
+                    <h3>Ничего не найдено</h3>
+                    <p>
+                        К сожалению, по вашему запросу "{{ query }}" товары не найдены. 
+                        Попробуйте изменить поисковый запрос или воспользуйтесь каталогом товаров.
+                    </p>
+                </div>
+            {% else %}
+                <div class="no-results">
+                    <div class="no-results-icon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <h3>Начните поиск</h3>
+                    <p>
+                        Введите название товара в поисковую строку выше, 
+                        чтобы найти нужные товары в нашем каталоге.
+                    </p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('input[name="q"]');
+    const searchForm = document.querySelector('.search-form');
+    
+    if (searchInput && !searchInput.value) {
+        searchInput.focus();
+    }
+    
+    searchForm.addEventListener('submit', function() {
+        const submitBtn = searchForm.querySelector('.btn-search');
+        const originalContent = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+            submitBtn.innerHTML = originalContent;
+            submitBtn.disabled = false;
+        }, 3000);
+    });
+    
+    const cards = document.querySelectorAll('.card');
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
+                cardObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        cardObserver.observe(card);
+    });
+    
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            this.blur();
+        }
+    });
+});
+</script>
 {% endblock %}

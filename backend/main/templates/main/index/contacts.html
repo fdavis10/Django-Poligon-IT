@@ -9,47 +9,148 @@
 
 {% block content %}
 <div class="container">
-    <section id="contact-info" class="section d-flex flex-wrap">
-        <div class="col-md-6 section-content">
-            <h2>Свяжитесь с нами</h2>
-            <p>У вас есть вопросы или предложения? Мы всегда готовы помочь! Свяжитесь с нами удобным для вас способом.</p>
-            <ul>
-                <li><strong>Email:</strong> support@reagent.com</li>
-                <li><strong>Telegram:</strong> @reagent_company_bot</li>
-                <li><strong>Телефон:</strong> Soon </li>
-                <li><strong>Адрес:</strong> 115162, г. Москва, Вн. Тер. Г. Муниципальный округ Донской, ул. Шухова, д. 14, стр. 6 </li>
-            </ul>
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Свяжитесь с нами</h1>
+            <p class="hero-subtitle">Мы всегда готовы помочь и ответить на все ваши вопросы</p>
+        </div>
+        <div class="hero-decorative">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
         </div>
     </section>
-    
-    <section id="map" class="section d-flex flex-wrap bg-light">
-        <div class="col-md-6 section-content">
-            <h2>Наш офис</h2>
-            <p>Посетите наш офис в удобное для вас время. Мы работаем с понедельника по пятницу с 9:00 до 18:00.</p>
-            <div class="mt-3">
-                <iframe
-                    src="https://yandex.ru/map-widget/v1/?um=constructor%3Ac08af8e8689eee480263fa265d2b1f243b7e4edeaa889cb04b95d9c3133ae8ea&amp;source=constructor"
-                    width="100%" height="300" frameborder="0"
-                    style="border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                </iframe>
+    <section class="contact-info-section section">
+        <div class="section-wrapper">
+            <div class="contact-grid">
+                <div class="contact-main">
+                    <div class="section-icon">
+                        <div class="icon-circle">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2>Как с нами связаться</h2>
+                    <p class="section-description">У вас есть вопросы или предложения? Мы всегда готовы помочь! Свяжитесь с нами удобным для вас способом.</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                </svg>
+                            </div>
+                            <div class="method-info">
+                                <h4>Email</h4>
+                                <p>support@reagent.com</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+                                </svg>
+                            </div>
+                            <div class="method-info">
+                                <h4>Telegram</h4>
+                                <p>@reagent_company_bot</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                </svg>
+                            </div>
+                            <div class="method-info">
+                                <h4>Телефон</h4>
+                                <p>Soon</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                            </div>
+                            <div class="method-info">
+                                <h4>Адрес</h4>
+                                <p>115162, г. Москва, Вн. Тер. Г. Муниципальный округ Донской, ул. Шухова, д. 14, стр. 6</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-    
-    
-    {% comment %} <section id="social" class="section d-flex flex-wrap">
-        <div class="col-md-6 section-content">
-            <h2>Мы в соцсетях</h2>
-            <p>Подписывайтесь на нас в социальных сетях, чтобы быть в курсе всех новостей и обновлений.</p>
-            <ul>
-                <li><a href="#">Telegram</a></li>
-                <li><a href="#">VK</a></li>
-                <li><a href="#">Facebook</a></li>
-            </ul>
+    <section class="map-section section">
+        <div class="section-wrapper">
+            <div class="section-icon">
+                <div class="icon-circle">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                </div>
+            </div>
+            <h2>Наш офис</h2>
+            <p class="section-description">Посетите наш офис в удобное для вас время. Мы работаем с понедельника по пятницу с 9:00 до 19:00.</p>
+            
+            <div class="map-container">
+                <div class="map-wrapper">
+                    <iframe
+                        src="https://yandex.ru/map-widget/v1/?um=constructor%3Ac08af8e8689eee480263fa265d2b1f243b7e4edeaa889cb04b95d9c3133ae8ea&amp;source=constructor"
+                        width="100%" height="400" frameborder="0">
+                    </iframe>
+                </div>
+                <div class="office-info">
+                    <h3>Информация об офисе</h3>
+                    <div class="office-details">
+                        <div class="office-detail">
+                            <div class="detail-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4>Время работы</h4>
+                                <p>Пн-Пт: 9:00 - 19:00<br>Сб-Вс: Выходной</p>
+                            </div>
+                        </div>
+                        <div class="office-detail">
+                            <div class="detail-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4>Местоположение</h4>
+                                <p>Москва, Донской округ<br>ул. Шухова, 14 стр. 6</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <img src="https://source.unsplash.com/600x400/?social,network" alt="Социальные сети">
+    </section>
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Готовы начать сотрудничество?</h2>
+            <p>Свяжитесь с нами любым удобным способом, и мы поможем вам найти идеальное решение</p>
+            <div class="cta-buttons">
+                <button class="btn-primary" onclick="window.open('mailto:support@reagent.com')">Написать Email</button>
+                <button class="btn-secondary" onclick="window.open('https://t.me/reagent_company_bot')">Telegram</button>
+            </div>
         </div>
-    </section> {% endcomment %}
+        <div class="cta-decoration">
+            <div class="decoration-circle"></div>
+            <div class="decoration-circle"></div>
+            <div class="decoration-circle"></div>
+        </div>
+    </section>
 </div>
 {% endblock content %}

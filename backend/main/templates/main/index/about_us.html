@@ -9,30 +9,122 @@
 
 {% block content %}
 <div class="container">
-    <section id="about" class="section d-flex flex-wrap">
-        <div class="col-md-6 section-content">
-            <h2>О компании Re-Agent</h2>
-            <p>Мы являемся разработчиком уникальных интеллектуальных телекоммуникационных шкафов, которые обеспечивают защиту оборудования круглосуточно, при любых погодных условиях</p>
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">О компании Ре-Агент</h1>
+            <p class="hero-subtitle">Инновационные решения для современного мира</p>
+            <div class="hero-decorative">
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+            </div>
         </div>
     </section>
-    
-    <section id="services" class="section d-flex flex-wrap bg-light">
-        <div class="col-md-6 section-content">
-            <h2>Наши услуги</h2>
-            <ul>
-                <li><strong>Веб-разработка:</strong> Создание современных, адаптивных веб-сайтов и порталов.</li>
-                <li><strong>Разработка ПО:</strong> Кастомные программные решения для автоматизации бизнеса.</li>
-            </ul>
+    <section id="about" class="section about-section">
+        <div class="section-wrapper">
+            <div class="section-content">
+                <div class="section-icon">
+                    <div class="icon-circle">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                </div>
+                <h2>О компании Ре-Агент</h2>
+                <p class="section-description">
+                    Мы являемся разработчиком уникальных интеллектуальных телекоммуникационных шкафов, 
+                    которые обеспечивают защиту оборудования круглосуточно, при любых погодных условиях
+                </p>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-shield"></i></div>
+                        <h4>Надежная защита</h4>
+                        <p>Круглосуточная защита оборудования</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-cloud"></i></div>
+                        <h4>Всепогодность</h4>
+                        <p>Работа в любых климатических условиях</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-robot"></i></div>
+                        <h4>Интеллектуальность</h4>
+                        <p>Умные системы мониторинга</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
-    
-    <section id="advantages" class="section d-flex flex-wrap">
-        <div class="col-md-6 section-content">
-            <h2>Почему выбирают нас?</h2>
-            <ul>
-                <li><strong>Опыт и экспертиза:</strong> Более 10 лет на рынке IT-услуг.</li>
-                <li><strong>Индивидуальный подход:</strong> Разрабатываем решения под конкретные бизнес-задачи.</li>
-            </ul>
+    <section id="advantages" class="section advantages-section">
+        <div class="section-wrapper">
+            <div class="section-content">
+                <div class="section-icon">
+                    <div class="icon-circle">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                        </svg>
+                    </div>
+                </div>
+                <h2>Почему выбирают нас?</h2>
+                <p class="section-description">
+                    Наши конкурентные преимущества делают нас надежным партнером
+                </p>
+                <div class="advantages-grid">
+                    <div class="advantage-card">
+                        <div class="advantage-number">10+</div>
+                        <h3>Опыт и экспертиза</h3>
+                        <p>Более 10 лет на рынке IT-услуг, накопленный опыт и глубокие знания в области технологий</p>
+                        <div class="advantage-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">100+</span>
+                                <span class="stat-label">Проектов</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">50+</span>
+                                <span class="stat-label">Клиентов</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="advantage-card">
+                        <div class="advantage-number">💡</div>
+                        <h3>Индивидуальный подход</h3>
+                        <p>Разрабатываем решения под конкретные бизнес-задачи, учитывая все особенности вашей деятельности</p>
+                        <div class="advantage-features">
+                            <div class="feature-point">
+                                <span class="feature-dot"></span>
+                                <span>Персональная консультация</span>
+                            </div>
+                            <div class="feature-point">
+                                <span class="feature-dot"></span>
+                                <span>Гибкие решения</span>
+                            </div>
+                            <div class="feature-point">
+                                <span class="feature-dot"></span>
+                                <span>Постоянная поддержка</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Готовы начать сотрудничество?</h2>
+            <p>Свяжитесь с нами и получите персональное предложение</p>
+            <div class="cta-buttons">
+                <button class="btn-primary">Связаться с нами</button>
+                <button class="btn-secondary">Узнать больше</button>
+            </div>
+        </div>
+        <div class="cta-decoration">
+            <div class="decoration-circle"></div>
+            <div class="decoration-circle"></div>
+            <div class="decoration-circle"></div>
         </div>
     </section>
 </div>

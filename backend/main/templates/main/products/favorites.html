@@ -10,57 +10,74 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mt-3">Избранное</h2>
-
-    {% comment %} <!-- Кнопка для очистки избранного -->
-    {% if favorites %}
-    <form action="{% url 'main:clear_favorites' %}" method="post" class="mb-3">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Очистить избранное</button>
-    </form>
-    {% endif %} {% endcomment %}
-
-    <div class="row">
-        <div class="col-md-3">
-            <div class="container_products">
-                {% if favorites %}
-                    <div class="cards_wrapper">
-                            {% for product in favorites %}
-                                <div class="card mb-4">
-                                    <div class="card__top">
-                                        <a href="{{ product.get_absolute_url }}" class="card__image">
-                                            <img src="{{ product.image_1.url }}" alt="Продукт">
-                                        </a>
-                                    </div>
-                                    <div class="card__bottom">
-                                        <div class="card__prices">
-                                            {% if product.price_on_request %}
-                                                <div class="card__price card__price--discount">Цена по запросу</div> 
-                                            {% else %}
-                                                <div class="card__price card__price--discount">{{product.price|format_price}} ₽ </div>
-                                            {% endif %}
-                                        </div>
-                                        <a href="{{ product.get_absolute_url }}" class="card__title">{{ product.name }}</a>
-                                        <p class="description">{{ product.description }}</p>
-                                        <div class="card__func">
-                                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="quantity" value="1">  <!-- Количество 1 по умолчанию -->
-                                                <button type="submit" class="btn btn-primary button-cart">В корзину</button>
-                                            </form>
-                                            <a href="{% url 'main:remove_from_favorites' product.id %}">
-                                                <i class="fa-solid fa-xmark"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="favorites_p">В избранном пока нет товаров!</p>
-                {% endif %}
-            </div>
+    <div class="favorites-header">
+        <h2 class="favorites-title">
+            <i class="fa-solid fa-heart favorites-icon"></i>
+            Избранное
+        </h2>
+        <div class="favorites-count">
+            {% if favorites %}
+                <span class="count-badge">{{ favorites|length }}</span>
+            {% endif %}
         </div>
+    </div>
+    <div class="favorites-content">
+        {% if favorites %}
+            <div class="container_products">
+                <div class="cards_wrapper">
+                    {% for product in favorites %}
+                        <div class="card favorites-card">
+                            <div class="card__top">
+                                <a href="{{ product.get_absolute_url }}" class="card__image">
+                                    <img src="{{ product.image_1.url }}" alt="{{ product.name }}" loading="lazy">
+                                </a>
+                                <div class="favorite-remove">
+                                    <a href="{% url 'main:remove_from_favorites' product.id %}" class="remove-btn" title="Удалить из избранного">
+                                        <i class="fa-solid fa-heart-crack"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card__bottom">
+                                <div class="card__prices">
+                                    {% if product.price_on_request %}
+                                        <div class="card__price card__price--discount">Цена по запросу</div> 
+                                    {% else %}
+                                        <div class="card__price card__price--discount">{{product.price|format_price}} ₽</div>
+                                    {% endif %}
+                                </div>
+                                <a href="{{ product.get_absolute_url }}" class="card__title">{{ product.name }}</a>
+                                <p class="description">{{ product.description }}</p>
+                                <div class="card__func">
+                                    <form action="{% url 'cart:cart_add' product.id %}" method="post" class="cart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-primary button-cart">
+                                            В корзину
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="empty-favorites">
+                <div class="empty-favorites-content">
+                    <div class="empty-icon">
+                        <i class="fa-solid fa-heart-crack"></i>
+                    </div>
+                    <h3 class="empty-title">В избранном пока нет товаров</h3>
+                    <p class="empty-description">
+                        Добавляйте понравившиеся товары в избранное, чтобы не потерять их
+                    </p>
+                    <a href="{% url 'main:index_page' %}" class="btn btn-primary browse-products-btn">
+                        <i class="fa-solid fa-search"></i>
+                        Начать покупки
+                    </a>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock content %}

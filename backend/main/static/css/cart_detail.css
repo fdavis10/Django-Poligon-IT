@@ -1,38 +1,106 @@
+
 .button-delete{
     border: none;
-    background-color: rgb(35 65 148);
+    background: linear-gradient(45deg, #ff4757, #ff6b7a);
+    color: white;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
 }
 
 .button-delete:hover{
-    border: none;
-    background-color: rgb(25, 47, 105);
+    background: linear-gradient(45deg, #ff3742, #ff5a68);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
 }
 
 .button-delete:active{
+    transform: translateY(0);
+    background: linear-gradient(45deg, #e63946, #ff495a) !important;
+    box-shadow: 0 2px 10px rgba(255, 71, 87, 0.4);
+}
+
+
+.button-restore {
+    background: linear-gradient(45deg, var(--primary-blue), var(--accent-cyan));
     border: none;
-    background-color: rgb(25, 47, 105) !important;
+    color: white;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(35, 65, 148, 0.3);
+}
+
+.button-restore:hover {
+    background: linear-gradient(45deg, var(--secondary-blue), #00b8e6);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(35, 65, 148, 0.5);
+}
+
+
+.button-order{
+    border: none;
+    background: linear-gradient(45deg, var(--primary-blue), var(--accent-cyan)) !important;
+    color: white !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    padding: 15px 25px;
+    font-size: 18px;
+    box-shadow: 0 6px 20px rgba(35, 65, 148, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.button-order:hover{
+    background: linear-gradient(45deg, var(--secondary-blue), #00b8e6) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(35, 65, 148, 0.6);
+}
+
+.button-order:active{
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(35, 65, 148, 0.5);
 }
 
 .button-order a{
     color: #fff !important;
+    text-decoration: none;
 }
 
-.button-order{
-    border: none;
-    background-color: rgb(35 65 148);
+
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    color: var(--text-light);
 }
 
-.button-order:hover{
-    color: white;
-    border: none;
-    background-color: rgb(25, 47, 105);
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    border-color: rgba(0, 212, 255, 0.3);
 }
 
-.button-order:active{
-    color: white;
-    border: none;
-    background-color: rgb(25, 47, 105) !important;
+
+.card h4, .card h5 {
+    color: var(--text-light);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    font-weight: 600;
 }
+
+.card h2 {
+    color: var(--text-light);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+}
+
 
 .total_price_item{
     display: flex;
@@ -41,4 +109,405 @@
     font-size: 20px;
     font-weight: bold;
     white-space: nowrap;
+    color: var(--accent-cyan);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+
+.input-group .form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    font-weight: 600;
+}
+
+.input-group .form-control:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 0.2rem rgba(0, 212, 255, 0.25);
+    color: var(--text-light);
+}
+
+
+.input-group .btn-outline-secondary {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.input-group .btn-outline-secondary:hover {
+    background: var(--primary-blue);
+    border-color: var(--accent-cyan);
+    color: white;
+    transform: scale(1.05);
+}
+
+.input-group .btn-outline-secondary:active {
+    background: var(--secondary-blue) !important;
+    border-color: var(--accent-cyan) !important;
+    transform: scale(0.95);
+}
+
+
+.removed-items-box {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    color: var(--text-light);
+}
+
+.removed-item {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border-bottom: 1px solid var(--glass-border) !important;
+    transition: all 0.3s ease;
+}
+
+.removed-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.removed-item:last-child {
+    border-bottom: none !important;
+}
+
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.text-center p {
+    color: var(--text-light);
+    font-size: 18px;
+    font-weight: 500;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+
+.card img {
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.card img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+
+.border-bottom {
+    border-bottom-color: var(--glass-border) !important;
+}
+
+hr {
+    border-color: var(--glass-border);
+    opacity: 0.5;
+}
+
+
+h3 {
+    color: var(--text-light);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+}
+
+
+@keyframes glow {
+    0% { box-shadow: 0 6px 20px rgba(35, 65, 148, 0.4); }
+    50% { box-shadow: 0 6px 20px rgba(0, 212, 255, 0.6); }
+    100% { box-shadow: 0 6px 20px rgba(35, 65, 148, 0.4); }
+}
+
+.button-order:hover {
+    animation: glow 2s infinite;
+}
+
+
+@media (max-width: 1199px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .total_price_item {
+        font-size: 18px;
+    }
+}
+
+
+@media (max-width: 991px) {
+    .card {
+        margin-bottom: 20px;
+    }
+    
+    .button-order {
+        font-size: 16px;
+        padding: 12px 20px;
+        margin-top: 15px;
+    }
+    
+
+    .col-md-4 {
+        margin-top: 20px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+
+    .row.align-items-center {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .row.align-items-center > div {
+        margin-bottom: 15px;
+        max-width: 100%;
+    }
+    
+
+    .col-md-2 {
+        max-width: 150px;
+        margin: 0 auto;
+    }
+    
+
+    .col-md-4 h5 {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+    
+    .col-md-4 p {
+        font-size: 0.9rem;
+    }
+    
+
+    .input-group {
+        max-width: 140px;
+        margin: 0 auto;
+        justify-content: center;
+    }
+    
+    .input-group .form-control {
+        min-width: 50px;
+        font-size: 14px;
+    }
+    
+    .input-group .btn-outline-secondary {
+        min-width: 35px;
+        padding: 6px 8px;
+        font-size: 14px;
+    }
+    
+
+    .total_price_item {
+        font-size: 18px;
+        margin-bottom: 10px;
+        justify-content: center;
+    }
+    
+    .button-delete {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+
+    .removed-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+    
+    .removed-item > div {
+        margin-bottom: 10px;
+    }
+    
+    .button-restore {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+
+    .col-md-4 .card {
+        text-align: center;
+    }
+    
+    .col-md-4 .card h4 {
+        font-size: 1.3rem;
+    }
+    
+    .col-md-4 .card p {
+        font-size: 1.2rem;
+    }
+}
+
+
+@media (max-width: 576px) {
+    .container {
+        padding: 0 8px;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    .card {
+        border-radius: 10px;
+        padding: 15px !important;
+        margin-bottom: 15px;
+    }
+    
+
+    .border-bottom {
+        padding: 15px 0 !important;
+    }
+    
+    .col-md-4 h5 {
+        font-size: 1rem;
+    }
+    
+    .col-md-4 p {
+        font-size: 0.85rem;
+    }
+    
+
+    .input-group {
+        max-width: 120px;
+    }
+    
+    .input-group .form-control {
+        font-size: 13px;
+        min-width: 40px;
+    }
+    
+    .input-group .btn-outline-secondary {
+        min-width: 30px;
+        padding: 5px 6px;
+        font-size: 12px;
+    }
+    
+
+    .total_price_item {
+        font-size: 16px;
+    }
+    
+
+    .button-delete {
+        padding: 6px 12px;
+        font-size: 12px;
+        border-radius: 6px;
+    }
+    
+    .button-order {
+        font-size: 14px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        letter-spacing: 0.3px;
+    }
+    
+    .button-restore {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+
+    h3 {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+    
+    .removed-items-box {
+        border-radius: 10px;
+        padding: 15px !important;
+    }
+    
+    .removed-item {
+        padding: 12px;
+        border-radius: 8px;
+    }
+    
+
+    .col-md-4 .card h4 {
+        font-size: 1.2rem;
+    }
+    
+    .col-md-4 .card p {
+        font-size: 1.1rem;
+    }
+    
+
+    .text-center p {
+        font-size: 16px;
+    }
+}
+
+
+@media (max-width: 320px) {
+    .container {
+        padding: 0 5px;
+    }
+    
+    .input-group {
+        max-width: 100px;
+    }
+    
+    .input-group .form-control {
+        min-width: 35px;
+    }
+    
+    .input-group .btn-outline-secondary {
+        min-width: 25px;
+        padding: 4px 5px;
+    }
+    
+    .total_price_item {
+        font-size: 14px;
+    }
+    
+    .button-order {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+}
+
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .card {
+        padding: 10px !important;
+    }
+    
+    .border-bottom {
+        padding: 10px 0 !important;
+    }
+    
+    .button-order {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
 }

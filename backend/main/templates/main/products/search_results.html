@@ -9,15 +9,25 @@
 {% endblock extra_css %}
 
 {% block content %}
-<div class="container">  <!-- Центрируем весь контент -->
-    <h1 class="text-center">Результаты поиска</h1>
-
-    {% if query %}
-        <p class="text-center">Вы искали: <strong>{{ query }}</strong></p>
-    {% endif %}
-
-    {% if results %}
-        <div class="row justify-content-center mt-4">  
+<div class="container search-container">
+    <div class="search-hero">
+        <div class="search-hero-content">
+            <h1 class="search-title">Результаты поиска</h1>
+            {% if query %}
+                <p class="search-query">Вы искали: <span class="query-highlight">{{ query }}</span></p>
+            {% endif %}
+            {% if results %}
+                <p class="search-count">Найдено товаров: <span class="count-highlight">{{ results|length }}</span></p>
+            {% endif %}
+        </div>
+        <div class="search-decorative">
+            <div class="floating-search-element"></div>
+            <div class="floating-search-element"></div>
+            <div class="floating-search-element"></div>
+        </div>
+    </div>
+    <div class="search-results-section">
+        {% if results %}
             <div class="container_products">
                 <div class="cards_wrapper">
                     {% for product in results %}
@@ -32,20 +42,16 @@
                                     {% if product.price_on_request %}
                                         <div class="card__price card__price--discount">Цена по запросу</div> 
                                     {% else %}
-                                        <div class="card__price card__price--discount">{{product.price|format_price}} ₽ </div>
+                                        <div class="card__price card__price--discount">{{product.price|format_price}} ₽</div>
                                     {% endif %}
                                 </div>
-                                <a href="{{ product.get_absolute_url }}" class="card__title">
-                                    {{ product.name }}
-                                </a>
-                                <p class="description">{{ product.description }}</p>
+                                <a href="{{ product.get_absolute_url }}" class="card__title">{{ product.name }}</a>
+                                <p class='description'>{{ product.description }}</p>
                                 <div class="card__func">
                                     <form action="{% url 'cart:cart_add' product.id %}" method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="quantity" value="1">
-                                        <button type="submit" class="btn btn-primary button-cart">
-                                            В корзину
-                                        </button>
+                                        <button type="submit" class="btn btn-primary button-cart">В корзину</button>
                                     </form>
                                     <a href="{% url 'main:add_to_favorites' product.id %}">
                                         <i class="fa-solid fa-heart favorites"></i>
@@ -55,10 +61,28 @@
                         </div>
                     {% endfor %}
                 </div>
-            </div>   
-        </div>
-    {% else %}
-        <p class="text-center">По вашему запросу ничего не найдено.</p>
-    {% endif %}
-</div>  <!-- Закрываем container -->
+            </div>
+        {% else %}
+            <div class="no-results">
+                <div class="no-results-content">
+                    <div class="no-results-icon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <h3>Ничего не найдено</h3>
+                    <p>К сожалению, по вашему запросу товары не найдены.</p>
+                    <p class="no-results-suggestion">Попробуйте изменить поисковый запрос или воспользуйтесь каталогом товаров.</p>
+                    <a href="/" class="btn-back-home">
+                        <i class="fa-solid fa-house"></i>
+                        На главную
+                    </a>
+                </div>
+                <div class="no-results-decoration">
+                    <div class="decoration-element"></div>
+                    <div class="decoration-element"></div>
+                    <div class="decoration-element"></div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

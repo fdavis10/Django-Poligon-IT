@@ -9,24 +9,195 @@
 
 {% block content %}
 <div class="container">
-    <section id="guarantees" class="section d-flex flex-wrap">
-        <div class="col-md-6 section-content">
-            <h2>Наши гарантии</h2>
-            <p>Мы гарантируем высокое качество всех наших услуг и решений. В случае возникновения проблем мы обеспечиваем поддержку и исправление ошибок в кратчайшие сроки.</p>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Наши гарантии</h1>
+            <p class="hero-subtitle">Мы обеспечиваем надежность и качество во всех аспектах нашей работы</p>
+        </div>
+        <div class="hero-decorative">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
         </div>
     </section>
-    
-    <section id="support" class="section d-flex flex-wrap bg-light">
-        <div class="col-md-6 section-content">
-            <h2>Поддержка клиентов</h2>
-            <p>Наша команда всегда готова помочь вам. Мы предоставляем круглосуточную техническую поддержку и консультации по всем вопросам.</p>
+    <section id="guarantees" class="section guarantee-main-section">
+        <div class="section-wrapper">
+            <div class="section-content">
+                <h2>Качество наших услуг</h2>
+                <p class="section-description">
+                    Мы гарантируем высокое качество всех наших услуг и решений. В случае возникновения проблем мы обеспечиваем поддержку и исправление ошибок в кратчайшие сроки.
+                </p>
+                <div class="guarantee-features">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-bullseye"></i></div>
+                        <h4>100% соответствие ТЗ</h4>
+                        <p>Все проекты выполняются строго в соответствии с техническим заданием</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-meteor"></i></div>
+                        <h4>Быстрое исправление</h4>
+                        <p>Устранение любых недочетов в течение 24 часов после обнаружения</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-lock"></i></div>
+                        <h4>Гарантия безопасности</h4>
+                        <p>Полная конфиденциальность данных и безопасность всех решений</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
-    
-    <section id="refund" class="section d-flex flex-wrap">
-        <div class="col-md-6 section-content">
-            <h2>Гарантия возврата</h2>
-            <p>Если наши услуги не соответствуют вашим ожиданиям, мы готовы рассмотреть вопрос о возврате средств или доработке проекта до полного соответствия вашим требованиям.</p>
+    <section id="support" class="section support-section">
+        <div class="section-wrapper">
+            <div class="section-icon">
+                <div class="icon-circle">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        <path d="M8 9h8"/>
+                        <path d="M8 13h6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="section-content">
+                <h2>Круглосуточная поддержка</h2>
+                <p class="section-description">
+                    Наша команда всегда готова помочь вам. Мы предоставляем круглосуточную техническую поддержку и консультации по всем вопросам.
+                </p>
+                
+                <div class="support-methods">
+                    <div class="support-method">
+                        <div class="method-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
+                        <div class="method-info">
+                            <h4>Телефонная поддержка</h4>
+                            <p>Прямая связь с экспертами<br>24/7</p>
+                        </div>
+                    </div>
+                    <div class="support-method">
+                        <div class="method-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </div>
+                        <div class="method-info">
+                            <h4>Email поддержка</h4>
+                            <p>Ответ в течение 2 часов<br>Детальные консультации</p>
+                        </div>
+                    </div>
+                    <div class="support-method">
+                        <div class="method-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                <circle cx="9" cy="12" r="1"/>
+                                <circle cx="15" cy="12" r="1"/>
+                                <circle cx="12" cy="12" r="1"/>
+                            </svg>
+                        </div>
+                        <div class="method-info">
+                            <h4>Онлайн чат</h4>
+                            <p>Мгновенные ответы<br>Решение в реальном времени</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="refund" class="section refund-section">
+        <div class="section-wrapper">
+            <div class="section-icon">
+                <div class="icon-circle">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="section-content">
+                <h2>Гарантия возврата средств</h2>
+                <p class="section-description">
+                    Если наши услуги не соответствуют вашим ожиданиям, мы готовы рассмотреть вопрос о возврате средств или доработке проекта до полного соответствия вашим требованиям.
+                </p>
+                
+                <div class="refund-policy">
+                    <div class="policy-card">
+                        <div class="policy-step">01</div>
+                        <h4>Анализ ситуации</h4>
+                        <p>Тщательное изучение причин несоответствия ожиданиям клиента</p>
+                    </div>
+                    <div class="policy-card">
+                        <div class="policy-step">02</div>
+                        <h4>Предложение решения</h4>
+                        <p>Варианты доработки проекта или возврата средств</p>
+                    </div>
+                    <div class="policy-card">
+                        <div class="policy-step">03</div>
+                        <h4>Быстрое исполнение</h4>
+                        <p>Реализация выбранного решения в кратчайшие сроки</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="additional-guarantees-section">
+        <div class="section-wrapper">
+            <div class="section-content">
+                <h2>Дополнительные гарантии</h2>
+                <p class="section-description">
+                    Мы предоставляем расширенные гарантии для максимального спокойствия наших клиентов
+                </p>
+                
+                <div class="additional-grid">
+                    <div class="additional-card">
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                        </div>
+                        <h4>Постгарантийное обслуживание</h4>
+                        <p>Техническая поддержка и обновления даже после окончания проекта</p>
+                    </div>
+                    <div class="additional-card">
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                        <h4>Премиум качество</h4>
+                        <p>Использование только проверенных технологий и лучших практик</p>
+                    </div>
+                    <div class="additional-card">
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                        <h4>Соблюдение сроков</h4>
+                        <p>Гарантированная сдача проектов в установленные сроки</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Готовы начать работу с гарантиями?</h2>
+            <p>Свяжитесь с нами и получите детальную консультацию по всем нашим гарантийным обязательствам</p>
+            <div class="cta-buttons">
+                <button class="btn-primary">Связаться с нами</button>
+                <button class="btn-secondary">Узнать больше</button>
+            </div>
+        </div>
+        <div class="cta-decoration">
+            <div class="decoration-circle"></div>
+            <div class="decoration-circle"></div>
+            <div class="decoration-circle"></div>
         </div>
     </section>
 </div>

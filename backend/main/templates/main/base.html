@@ -21,17 +21,13 @@
        });
       </script>
       <noscript><div><img src="https://mc.yandex.ru/watch/103126864" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-      {% comment %} bootstrap {% endcomment %}
       <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
       <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-      {% comment %} css {% endcomment %}
       <link rel="stylesheet" href="{% static 'css/base.css' %}">
-      {% comment %} template css {% endcomment %}
       {% block extra_css %}{% endblock extra_css %}
       <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
       <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      {% comment %} swiper js {% endcomment %}
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
       <link rel="icon" href="{% static 'img/favicon.ico' %}">
@@ -81,9 +77,6 @@
               <li class="nav-item">
                 <a class="nav-link nav-mobile" href="{% url 'main:favorite_list' %}">Избранное</a>
               </li>
-              {% comment %} <li class="nav-item">
-                <a class="nav-link nav-mobile" href="#">Сравнение</a>
-              </li> {% endcomment %}
                 <li class="nav-item">
                   <a class="nav-link nav-mobile" href="{% url "cart:cart_detail" %}">Корзина</a>
                 </li>
@@ -101,11 +94,6 @@
                     {% endif %}
                   </a>              
                 </li>
-                {% comment %} <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="fas fa-chart-bar"></i>
-                  </a>
-                </li> {% endcomment %}
                 <li class="nav-item">
                   <a href="{% url "cart:cart_detail" %}" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
@@ -119,37 +107,24 @@
       </div>
     </nav>
     <div class="container d-flex " style="max-width: 1100px; margin-top: 50px;">
+    {% include 'includes/telegram_button.html' %}
     {% block content %}{% endblock content %}
     </div>
-    {% include 'includes/telegram_button.html' %}
-    <footer class="bg-body-tertiary text-center footerreagent">
-      <div class="container p-4 pb-0">
-        <section class="">
-          <form action="">
-            <div class="row d-flex justify-content-center">
-              <div class="col-auto">
-                <p class="pt-2">
-                  <strong>Подпишитесь на нашу рассылку</strong>
-                </p>
-              </div>
-              <div class="col-md-5 col-12">
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="email" id="form5Example26" class="form-control" placeholder="re_agent@example.ru" />
-                </div>
-              </div>
-              <div class="col-auto">
-                <button data-mdb-ripple-init type="submit" class="btn btn-primary mb-4 button-subcribe">
-                  Подписаться
-                </button>
-              </div>
-            </div>
-          </form>
-        </section>
+    <footer class="footerreagent text-white">
+      <div class="container">
+        <form class="footer-subscribe-form">
+          <p class="footer-text">Подпишитесь на нашу рассылку</p>
+          <input type="email" class="form-control" placeholder="re_agent@example.ru">
+          <button type="submit" class="btn button-subcribe px-4">
+            Подписаться
+          </button>
+        </form>
       </div>
-      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-        © 2025 Copyright:
-        <a class="text-body" href="/">RE-AGENT</a>
-        <p>Не является публичной офертой </p>
+
+      <div class="footer-bottom">
+        <p class="mb-0">
+          © 2025 RE-AGENT. Не является публичной офертой. <a href="/">На главную</a>
+        </p>
       </div>
     </footer>
     <script src="{% static 'js/index.js' %}"></script>
