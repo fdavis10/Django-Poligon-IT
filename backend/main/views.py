@@ -93,7 +93,8 @@ def favorites_list(request):
 
 def index_page(request):
     session_key = get_session_key(request)
-    products = Product.objects.all()[:8]
+    execluded_slugs = ['sredstvo-protivodeistviia-bpla']
+    products = Product.objects.exclude(category__slug__in=execluded_slugs)[:8]
     return render(request, 'main/index/index.html', {
         'products': products,
         })
