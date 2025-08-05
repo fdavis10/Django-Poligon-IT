@@ -35,7 +35,7 @@ load_dotenv()
 # settings
 
 TELEGRAM_BOT_TOKEN = os.getenv('TOKEN')
-bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN, timeout=60)
+bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
 BOT_PASSWORD = os.getenv('BOT_PASSWORD')
 ADMIN_IDS = list(map(int, os.getenv("ADMINS", "").split(","))) if os.getenv("ADMINS") else []
