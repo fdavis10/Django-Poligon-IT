@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ['45.129.128.21', 'xn----8sbjfd2cpw.xn--p1ai','web','localhost',
 # Application definition
 
 INSTALLED_APPS = [
+    'storages',
     'jet.dashboard',
     'jet',
     'django.contrib.admin',
@@ -130,6 +131,33 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console':{
+            'class':'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'boto3': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'botocore': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django_storages': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -194,3 +222,22 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+AWS_ACCESS_KEY_ID = os.getenv('YANDEX_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('YANDEX_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('YANDEX_STORAGE_BUCKET_NAME')
+AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'
+AWS_S3_REGION_NAME = 'ru-central1'
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.storage.yandexcloud.net"
+AWS_S3_FILE_OVERWRITE = False
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+

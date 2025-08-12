@@ -6,7 +6,6 @@ from rest_framework.decorators import api_view
 from .serializers import CategorySerializer, ProductSerializer, SubcategorySerializer
 from rest_framework import status
 import pandas as pd
-from django.core.files.storage import default_storage
 from django.core.files import File
 import os
 from django.contrib import messages

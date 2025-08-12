@@ -18,6 +18,4 @@ venv.bak/
 *.env
 *.local
 settings.py
-
-backend/media/product/фотка.jpg
-backend/media/temp/NIE8083GE_documents.zip
+media/
