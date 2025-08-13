@@ -299,6 +299,7 @@
     display: flex;
     align-items: center;
     transition: all 0.3s ease;
+    height: 200px;
 }
 
 .card:hover .card__image img {
