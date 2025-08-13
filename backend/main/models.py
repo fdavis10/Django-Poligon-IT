@@ -47,8 +47,8 @@ class Product(models.Model):
         BY_ORDER = 'by_order', 'Под заказ'
 
     image_1 = models.ImageField(upload_to='product/', blank=False, null=False, default='default.webp')
-    image_2 = models.ImageField(upload_to='product/', blank=True, null=True)
-    image_3 = models.ImageField(upload_to='product/', blank=True, null=True)
+    image_2 = models.ImageField(upload_to='product/', blank=True, null=True, default='default.webp')
+    image_3 = models.ImageField(upload_to='product/', blank=True, null=True, default='default.webp')
     video = models.FileField(upload_to='product/videos/', blank=True, null=True, verbose_name='Видео товара')
     category = models.ForeignKey('Category', related_name='products', on_delete=models.CASCADE)
     subcategory_1 = models.ForeignKey('Subcategory_1', related_name='product_sub', on_delete=models.CASCADE, blank=True, null=True)
