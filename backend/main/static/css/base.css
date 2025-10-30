@@ -448,3 +448,163 @@ h5{
 .footer-bottom a:hover {
     color: var(--accent-cyan);
 }
+
+/* Стили для виджета обратного звонка */
+.callback-widget {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.callback-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, var(--primary-blue), var(--accent-cyan));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(35, 65, 148, 0.4);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.callback-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(35, 65, 148, 0.6);
+}
+
+.callback-modal {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 320px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    display: none;
+    z-index: 1001;
+}
+
+.callback-modal.show {
+    display: block;
+    animation: slideUp 0.3s ease;
+}
+
+.callback-header {
+    background: linear-gradient(45deg, var(--primary-blue), var(--accent-cyan));
+    color: white;
+    padding: 15px 20px;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.callback-header h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.callback-body {
+    padding: 20px;
+}
+
+.callback-body .form-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.callback-body .form-control {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.callback-body .form-control:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.2rem rgba(35, 65, 148, 0.25);
+}
+
+.callback-body .form-check-label {
+    font-size: 12px;
+    color: #666;
+}
+
+.callback-body .form-check-label a {
+    color: var(--primary-blue);
+    text-decoration: none;
+}
+
+.callback-body .form-check-label a:hover {
+    text-decoration: underline;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 4px 20px rgba(35, 65, 148, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(35, 65, 148, 0.7);
+    }
+    100% {
+        box-shadow: 0 4px 20px rgba(35, 65, 148, 0.4);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .callback-widget {
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .callback-modal {
+        width: 280px;
+        right: -10px;
+    }
+}
+
+/* Стили для сообщений в форме обратного звонка */
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    border: 1px solid transparent;
+}
+
+.alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.alert-info {
+    color: #055160;
+    background-color: #cff4fc;
+    border-color: #b6effb;
+}

@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from .models import Category, Subcategory_1, Product
+from .models import Category, Subcategory_1, Product, CallbackRequest
 from django_json_widget.widgets import JSONEditorWidget
 from django.db import models
 
@@ -28,3 +28,12 @@ class ProductAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
+
+
+@admin.register(CallbackRequest)
+class CallbackRequestAdmin(admin.ModelAdmin):
+    list_display = ('name', 'phone', 'created_at', 'processed')
+    list_filter = ('processed', 'created_at')
+    search_fields = ('name', 'phone')
+    list_editable = ('processed',)
+    readonly_fields = ('created_at',)
