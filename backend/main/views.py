@@ -511,3 +511,48 @@ def download_all_docs(request, product_id):
         response = HttpResponse(zipf.read(), content_type ='application/zip')
         response['Content-Disposition'] = f'attachment; filname={os.path.basename(zip_filename)}'
         return response
+
+
+# Представление для обработки обратного звонка
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+import json
+from .models import CallbackRequest
+
+@csrf_exempt
+@require_POST
+def callback_request(request):
+    try:
+        data = json.loads(request.body)
+        name = data.get('name', '').strip()
+        phone = data.get('phone', '').strip()
+        
+        # Валидация данных
+        if not phone:
+            return JsonResponse({'success': False, 'error': 'Номер телефона обязателен'})
+        
+        # Очистка номера телефона от лишних символов
+        phone_clean = ''.join(filter(str.isdigit, phone))
+        if len(phone_clean) < 10:
+            return JsonResponse({'success': False, 'error': 'Некорректный номер телефона'})
+        
+        # Сохранение заявки в базу данных
+        callback_request = CallbackRequest.objects.create(
+            name=name if name else 'Не указано',
+            phone=phone
+        )
+        
+        # Здесь можно добавить отправку email или уведомления в Telegram
+        # Например: send_callback_notification(callback_request)
+        
+        return JsonResponse({
+            'success': True, 
+            'message': 'Спасибо! Мы свяжемся с вами в ближайшее время.'
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False, 
+            'error': 'Произошла ошибка. Пожалуйста, попробуйте позже.'
+        })

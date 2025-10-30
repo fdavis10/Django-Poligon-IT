@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/subcategories', views.get_subcategories, name='get_subcategories'),
     path('upload/', views.upload_products, name='upload_products'),
     path('download_all_docs/<int:product_id>/', views.download_all_docs, name='download_all_docs'),
+    path('callback/', views.callback_request, name='callback_request'),
     
 ]
 

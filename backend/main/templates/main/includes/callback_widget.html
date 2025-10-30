@@ -1,0 +1,34 @@
+
+<!-- Дополнительный виджет обратного звонка -->
+<div id="callbackWidget" class="callback-widget">
+    <div class="callback-icon" id="callbackIcon">
+        <i class="fas fa-phone-alt"></i>
+    </div>
+    
+    <div class="callback-modal" id="callbackModal">
+        <div class="callback-header">
+            <h5>Заказать обратный звонок</h5>
+            <button type="button" class="btn-close" id="closeCallbackModal"></button>
+        </div>
+        <div class="callback-body">
+            <form id="callbackForm">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="callbackName" class="form-label">Ваше имя</label>
+                    <input type="text" class="form-control" id="callbackName" name="name" placeholder="Введите ваше имя" required>
+                </div>
+                <div class="mb-3">
+                    <label for="callbackPhone" class="form-label">Номер телефона *</label>
+                    <input type="tel" class="form-control" id="callbackPhone" name="phone" placeholder="+7 (___) ___-__-__" required>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="callbackAgreement" name="agreement" required>
+                    <label class="form-check-label" for="callbackAgreement">
+                        Согласен с <a href="/privacy-policy/" target="_blank">политикой конфиденциальности</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Заказать звонок</button>
+            </form>
+        </div>
+    </div>
+</div>

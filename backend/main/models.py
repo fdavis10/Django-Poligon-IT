@@ -99,3 +99,18 @@ class Favorite(models.Model):
 
     class Meta:
         unique_together = ('session_key', 'product')
+
+
+class CallbackRequest(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Имя')
+    phone = models.CharField(max_length=20, verbose_name='Номер телефона')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    processed = models.BooleanField(default=False, verbose_name='Обработано')
+    
+    class Meta:
+        verbose_name = 'Заявка на обратный звонок'
+        verbose_name_plural = 'Заявки на обратный звонок'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f'{self.name} - {self.phone}'
