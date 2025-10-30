@@ -515,12 +515,12 @@ def download_all_docs(request, product_id):
 
 # Представление для обработки обратного звонка
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 import json
 from .models import CallbackRequest
 
-@csrf_exempt
+@ensure_csrf_cookie
 @require_POST
 def callback_request(request):
     try:
@@ -540,7 +540,7 @@ def callback_request(request):
         # Сохранение заявки в базу данных
         callback_request = CallbackRequest.objects.create(
             name=name if name else 'Не указано',
-            phone=phone
+            phone=phone_clean
         )
         
         # Здесь можно добавить отправку email или уведомления в Telegram

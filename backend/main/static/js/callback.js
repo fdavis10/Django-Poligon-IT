@@ -7,7 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const callbackPhone = document.getElementById('callbackPhone');
 
     // Получение CSRF токена
-    const csrftoken = getCookie('csrftoken');
+    function getCSRFToken() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (csrfToken) {
+            return csrfToken.value;
+        }
+        return getCookie('csrftoken');
+    }
 
     // Маска для телефона
     if (callbackPhone) {
@@ -39,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (callbackIcon) {
         callbackIcon.addEventListener('click', function() {
             callbackModal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Блокируем скролл страницы
         });
     }
 
@@ -46,15 +53,23 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeCallbackModal) {
         closeCallbackModal.addEventListener('click', function() {
             callbackModal.classList.remove('show');
+            document.body.style.overflow = ''; // Восстанавливаем скролл
         });
     }
 
     // Закрытие при клике вне модального окна
-    document.addEventListener('click', function(e) {
-        if (callbackModal && callbackModal.classList.contains('show')) {
-            if (!callbackModal.contains(e.target) && !callbackIcon.contains(e.target)) {
-                callbackModal.classList.remove('show');
-            }
+    callbackModal.addEventListener('click', function(e) {
+        if (e.target === callbackModal) {
+            callbackModal.classList.remove('show');
+            document.body.style.overflow = ''; // Восстанавливаем скролл
+        }
+    });
+
+    // Закрытие модального окна по клавише Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && callbackModal.classList.contains('show')) {
+            callbackModal.classList.remove('show');
+            document.body.style.overflow = ''; // Восстанавливаем скролл
         }
     });
 
@@ -96,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
+                'X-CSRFToken': getCSRFToken()
             },
             body: JSON.stringify({
                 name: name,
@@ -114,13 +129,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 showMessage(data.message || 'Спасибо! Мы свяжемся с вами в ближайшее время.', 'success');
                 callbackForm.reset();
                 callbackModal.classList.remove('show');
+                document.body.style.overflow = ''; // Восстанавливаем скролл
             } else {
                 showMessage(data.error || 'Произошла ошибка. Пожалуйста, попробуйте позже.', 'error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showMessage('Произошла ошибка. Пожалуйста, попробуйте позже.', 'error');
+            console.error('Error details:', error.message, error.stack);
+            showMessage('Произошла ошибка сети. Пожалуйста, проверьте подключение и попробуйте позже.', 'error');
         })
         .finally(() => {
             // Восстанавливаем кнопку
